@@ -256,7 +256,8 @@ export default function PermissionsSettingsPage() {
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {group.permissions.map((permission) => {
-                  const currentValue = permissions[group.name.toLowerCase() as keyof typeof permissions]?.[permission.key as keyof typeof permissions[group.name.toLowerCase() as keyof typeof permissions]] || false;
+                  const groupKey = group.name.toLowerCase() as keyof typeof permissions;
+                  const currentValue = permissions[groupKey]?.[permission.key as keyof typeof permissions[groupKey]] || false;
                   
                   return (
                     <div key={permission.key} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
