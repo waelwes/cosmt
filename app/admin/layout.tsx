@@ -156,7 +156,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <div className="flex">
         {/* Left Sidebar - Starting from top */}
         <div className="admin-sidebar">
-          <AdminSidebar isOpen={true} onClose={() => {}} />
+          <AdminSidebar isOpen={true} onClose={() => {}} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
         </div>
         
         {/* Right side - Header + Main Content */}
@@ -252,7 +252,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                         ))}
                       </div>
                       <div className="p-3 border-t border-gray-200 dark:border-gray-600">
-                        <Button variant="ghost" className="w-full text-center text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium">
+                        <Button variant="outline" className="w-full text-center text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium">
                           View all notifications
                         </Button>
                       </div>
@@ -282,7 +282,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                         </Link>
                         <Button
                           onClick={handleLogout}
-                          variant="ghost"
+                          variant="outline"
                           className="flex items-center w-full text-left px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition-colors"
                         >
                           <LogOut className="w-4 h-4 mr-3" />

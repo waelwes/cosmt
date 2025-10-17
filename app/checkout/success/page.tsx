@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/Button';
 import { CheckCircle, ArrowLeft, Package, Mail } from 'lucide-react';
 import Link from 'next/link';
 
-export default function CheckoutSuccess() {
+function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -134,5 +134,13 @@ export default function CheckoutSuccess() {
         </div>
       </div>
     </PageLayout>
+  );
+}
+
+export default function CheckoutSuccess() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CheckoutSuccessContent />
+    </Suspense>
   );
 }
