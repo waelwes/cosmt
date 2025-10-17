@@ -168,9 +168,9 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Combined Orders Card */}
-      <div className="dashboard-card p-6">
+      <div className="analytics-card p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -190,11 +190,11 @@ export default function OrdersPage() {
         </div>
         
         {/* Horizontal Line */}
-        <div className="border-t border-gray-200 dark:border-gray-600 mb-4"></div>
+        <div className="border-t mb-4" style={{ borderTopColor: '#eef2f6' }}></div>
         
         {/* Stats Grid */}
         <div className="flex">
-          <div className="flex-1 py-4 px-4 border-r border-gray-200 dark:border-gray-600">
+          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Orders</h3>
               <Package className="w-5 h-5 text-gray-400" />
@@ -205,7 +205,7 @@ export default function OrdersPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r border-gray-200 dark:border-gray-600">
+          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Pending</h3>
               <Clock className="w-5 h-5 text-yellow-400" />
@@ -216,7 +216,7 @@ export default function OrdersPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r border-gray-200 dark:border-gray-600">
+          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Shipped</h3>
               <Truck className="w-5 h-5 text-blue-400" />
@@ -242,7 +242,7 @@ export default function OrdersPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
               <Clock className="w-6 h-6 text-blue-600" />
@@ -253,7 +253,7 @@ export default function OrdersPage() {
             </div>
           </div>
         </div>
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 rounded-lg">
               <Package className="w-6 h-6 text-yellow-600" />
@@ -264,7 +264,7 @@ export default function OrdersPage() {
             </div>
           </div>
         </div>
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
           <div className="flex items-center">
             <div className="p-2 bg-purple-100 rounded-lg">
               <Truck className="w-6 h-6 text-purple-600" />
@@ -275,7 +275,7 @@ export default function OrdersPage() {
             </div>
           </div>
         </div>
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
               <CheckCircle className="w-6 h-6 text-green-600" />
@@ -338,7 +338,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+      <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -369,7 +369,7 @@ export default function OrdersPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y" style={{ borderColor: '#eef2f6' }}>
               {filteredOrders.map((order) => (
                 <tr key={order.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -438,7 +438,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Pagination */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm px-6 py-4">
+      <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-700">
             Showing <span className="font-medium">1</span> to <span className="font-medium">5</span> of{' '}

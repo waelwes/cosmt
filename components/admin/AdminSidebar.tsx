@@ -64,6 +64,22 @@ interface AdminSidebarProps {
 export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const [expandedTabs, setExpandedTabs] = React.useState<string[]>(['Dashboard']);
+  
+  // Get current direction from document
+  const [direction, setDirection] = React.useState('ltr');
+  
+  React.useEffect(() => {
+    const checkDirection = () => {
+      const dir = document.documentElement.dir || 'ltr';
+      setDirection(dir);
+    };
+    
+    checkDirection();
+    
+    // Check every second for direction changes
+    const interval = setInterval(checkDirection, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const toggleTab = (tabTitle: string) => {
     setExpandedTabs(prev => 
@@ -205,11 +221,29 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
       )}
 
               {/* Sidebar */}
-              <div className="w-full h-full flex flex-col border-r border-gray-600 bg-slate-800 dark:bg-slate-800" style={{ backgroundColor: '#1e293b' }}>
+              <div 
+                className="w-full h-full flex flex-col border-r border-gray-600 bg-black dark:bg-black" 
+                style={{ 
+                  backgroundColor: '#000000',
+                  direction: direction,
+                  textAlign: direction === 'rtl' ? 'right' : 'left'
+                }}
+              >
         {/* Header Section - Logo Only */}
-        <div className="p-4 border-b border-gray-600">
-          <div className="flex items-center justify-between">
-            <Link href="/admin/dashboard" className="flex items-center">
+        <div className="px-4 py-4 border-b border-gray-600 relative">
+          {/* Close button - positioned absolutely */}
+          <button
+            onClick={onClose}
+            className="lg:hidden absolute right-4 top-1/2 transform -translate-y-1/2 p-2 text-white hover:bg-gray-700 transition duration-150"
+            style={{ borderRadius: '0.25rem' }}
+            title="Close Navigation Menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          
+          {/* Logo aligned with navigation items */}
+          <div className={`flex items-center ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
+            <Link href="/admin/dashboard" className="flex items-center px-3">
               <Image
                 src="/images/logos/COSMT.png"
                 alt="COSMT Logo"
@@ -218,13 +252,6 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 className="h-6 w-auto"
               />
             </Link>
-            <button
-              onClick={onClose}
-              className="lg:hidden p-2 rounded text-white hover:bg-gray-700 transition duration-150"
-              title="Close Navigation Menu"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
         </div>
 
@@ -236,15 +263,14 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
               <div className="mb-1">
                 <button
                   onClick={() => toggleTab(item.title)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded hover:bg-gray-700 transition duration-150 text-white"
+                  className={`w-full flex items-center ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'} justify-between px-3 py-2 text-sm font-medium hover:bg-gray-800 transition-colors duration-200 text-white`}
                   style={{
                     backgroundColor: isActive(item.href) || isParentActive(item.children) ? '#334155' : 'transparent',
-                    boxShadow: isActive(item.href) || isParentActive(item.children) ? '0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2)' : 'none',
-                    border: isActive(item.href) || isParentActive(item.children) ? '1px solid #475569' : 'none'
+                    borderRadius: '0.25rem'
                   }}
                 >
-                  <div className="flex items-center">
-                    <item.icon className="w-5 h-5 mr-3" />
+                  <div className={`flex items-center ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <item.icon className={`w-5 h-5 ${direction === 'rtl' ? 'ml-3' : 'mr-3'}`} />
                     {item.title}
                   </div>
                   <ChevronDown 
@@ -257,20 +283,16 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
               {/* Children Items */}
               {expandedTabs.includes(item.title) && (
-                <div className="relative ml-6 space-y-1">
-                  {/* Vertical line */}
-                  <div className="absolute left-0 top-0 bottom-0 w-px bg-gray-600"></div>
-                  
+                <div className={`${direction === 'rtl' ? 'mr-6' : 'ml-6'} space-y-1`}>
                   {item.children.map((child, index) => (
                     <Link 
                       key={child.href} 
                       href={child.href}
-                      className="block pl-5 pr-2 py-1.5 text-sm rounded hover:bg-gray-700 transition duration-150 text-white"
+                      className={`block ${direction === 'rtl' ? 'pr-5 pl-2' : 'pl-5 pr-2'} py-1.5 text-sm hover:bg-gray-800 transition-colors duration-200 text-white`}
                       style={{
                         backgroundColor: isActive(child.href) ? '#334155' : 'transparent',
                         fontWeight: isActive(child.href) ? '500' : undefined,
-                        boxShadow: isActive(child.href) ? '0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2)' : 'none',
-                        border: isActive(child.href) ? '1px solid #475569' : 'none'
+                        borderRadius: '0.25rem'
                       }}
                     >
                       {child.title}
@@ -286,20 +308,21 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         <div className="px-4 py-3 border-t border-gray-600">
           <a
             href="/"
-            className="flex items-center px-3 py-2 text-sm text-white rounded hover:bg-gray-700 transition duration-150"
+            className={`flex items-center ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'} px-3 py-2 text-sm text-white hover:bg-gray-800 transition-colors duration-200`}
+            style={{ borderRadius: '0.25rem' }}
           >
-            <ExternalLink className="w-4 h-4 mr-3" />
+            <ExternalLink className={`w-4 h-4 ${direction === 'rtl' ? 'ml-3' : 'mr-3'}`} />
             Back to Site
           </a>
         </div>
 
         {/* Footer */}
         <div className="p-4 border-t border-gray-600">
-          <div className="flex items-center">
+          <div className={`flex items-center ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
             <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center">
               <UserCog className="w-5 h-5 text-gray-300" />
             </div>
-            <div className="ml-3">
+            <div className={`${direction === 'rtl' ? 'mr-3' : 'ml-3'}`}>
               <p className="text-sm font-medium text-gray-100">Admin User</p>
               <p className="text-xs text-gray-400">admin@cosmat.com</p>
             </div>

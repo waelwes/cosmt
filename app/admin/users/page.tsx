@@ -140,7 +140,7 @@ const StatCard = memo(({ title, value, change, icon: Icon, color }: {
   icon: any;
   color: string;
 }) => (
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -165,7 +165,7 @@ const UserCard = memo(({ user, onEdit, onDelete, onView, onToggleStatus }: {
   onView: (id: number) => void;
   onToggleStatus: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+  <div className="analytics-card p-6">
     <div className="flex items-start justify-between">
       <div className="flex items-center space-x-4">
         <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
@@ -217,7 +217,7 @@ const UserCard = memo(({ user, onEdit, onDelete, onView, onToggleStatus }: {
       </div>
     </div>
     
-    <div className="mt-4 pt-4 border-t border-gray-100">
+    <div className="mt-4 pt-4 border-t" style={{ borderTopColor: '#eef2f6' }}>
       <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
         <span>Last login: {formatDateTime(user.lastLogin)}</span>
         <span>Joined: {formatDate(user.createdAt)}</span>
@@ -242,7 +242,7 @@ const RoleCard = memo(({ role, onEdit, onDelete, onView }: {
   onDelete: (id: number) => void;
   onView: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="analytics-card p-4">
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-2">
@@ -357,7 +357,7 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -407,7 +407,7 @@ export default function UserManagement() {
       </div>
 
       {/* Search and Filters */}
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
           <div className="flex-1">
             <div className="relative">
@@ -417,7 +417,7 @@ export default function UserManagement() {
                 placeholder="Search users by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -426,7 +426,7 @@ export default function UserManagement() {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             >
               <option value="all">All Roles</option>
               {roles.map(role => (
@@ -437,7 +437,7 @@ export default function UserManagement() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -448,8 +448,8 @@ export default function UserManagement() {
       </div>
 
       {/* Tabs */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm">
-        <div className="border-b border-gray-200 dark:border-gray-700">
+      <div className="analytics-card">
+        <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
           <nav className="flex space-x-8 px-6">
             {[
               { id: 'users', name: 'Users', count: users.length },
@@ -462,7 +462,7 @@ export default function UserManagement() {
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
                     ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
                 }`}
               >
                 {tab.name} ({tab.count})

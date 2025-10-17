@@ -4,17 +4,18 @@ import React, { useState, useEffect, memo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { AdminSidebar } from '../../components/admin/AdminSidebar';
-import { 
-  Bell, 
-  Settings, 
-  User, 
+import { SimpleCurrencySelector } from '../../components/admin/SimpleCurrencySelector';
+import { useLanguage } from '../../contexts/LanguageContext';
+import {
+  Bell,
+  Settings,
+  User,
   LogOut,
   Moon,
   Sun,
   Globe
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
-// import { CurrencyProvider } from '../../contexts/CurrencyContext';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -23,6 +24,41 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
+  
+  // Test if context is available
+  let languageContext;
+  try {
+    languageContext = useLanguage();
+  } catch (error) {
+    console.error('LanguageContext not available:', error);
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500 text-lg">
+          Language Context Error: {error instanceof Error ? error.message : 'Unknown error'}
+        </div>
+      </div>
+    );
+  }
+  
+  const { currentLanguage, setCurrentLanguage, languages, t, direction } = languageContext;
+  
+  // Apply RTL/LTR direction to the document
+  useEffect(() => {
+    console.log('AdminLayout: Setting document direction:', direction, 'language:', currentLanguage);
+    document.documentElement.dir = direction;
+    document.documentElement.lang = currentLanguage;
+    
+    // Also set the body direction for better RTL support
+    document.body.dir = direction;
+    document.body.className = document.body.className.replace(/rtl|ltr/g, '') + ` ${direction}`;
+    
+    // Force RTL on the admin container
+    const adminContainer = document.querySelector('[data-admin="true"]');
+    if (adminContainer) {
+      adminContainer.setAttribute('dir', direction);
+      adminContainer.style.direction = direction;
+    }
+  }, [direction, currentLanguage]);
   // Sidebar is always visible, no toggle needed
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +66,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
 
   const handleLogout = () => {
     // Clear admin session cookie
@@ -64,23 +99,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const unreadCount = notifications.filter(n => n.unread).length;
 
-  const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-    { code: 'zh', name: '中文', flag: '🇨🇳' },
-  ];
-
   const handleLanguageChange = (languageCode: string) => {
-    setSelectedLanguage(languageCode);
+    console.log('AdminLayout: Language change requested:', languageCode);
+    setCurrentLanguage(languageCode);
     setShowLanguageMenu(false);
-    // Here you would typically:
-    // 1. Update the app's language context
-    // 2. Save to localStorage
-    // 3. Reload translations
-    console.log('Language changed to:', languageCode);
+    // Trigger a custom event to notify other components
+    window.dispatchEvent(new CustomEvent('languageChanged', { 
+      detail: { language: languageCode } 
+    }));
+    console.log('AdminLayout: Language change event dispatched');
   };
 
   useEffect(() => {
@@ -135,44 +162,99 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   // Show loading spinner while checking auth
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div 
-          className="animate-spin h-32 w-32 border-4 border-gray-200 border-t-green-600" 
-          style={{
-            borderRadius: '50%',
-            borderStyle: 'solid',
-            borderWidth: '4px',
-            borderColor: '#e5e7eb transparent #e5e7eb #e5e7eb',
-            borderTopColor: '#059669'
-          }}
-        ></div>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="h-32 w-32">
+            <img
+              src="/images/logos/COSMT.png"
+              alt="COSMT Logo"
+              className="h-full w-full object-contain"
+            />
+          </div>
+          <div className="flex space-x-1">
+            <div className="w-1 h-1 bg-gray-400 rounded animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-1 h-1 bg-gray-400 rounded animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          </div>
+        </div>
       </div>
     );
   }
 
   // Show full admin layout
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100`} data-admin="true">
-      <div className="flex">
-        {/* Left Sidebar - Starting from top */}
-        <div className="admin-sidebar">
+    <div 
+      className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100`}
+      data-admin="true"
+      dir={direction}
+      style={{ 
+        direction: direction,
+        textAlign: direction === 'rtl' ? 'right' : 'left'
+      }}
+    >
+      <div 
+        className={`flex ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}
+        style={{ 
+          direction: direction,
+          flexDirection: direction === 'rtl' ? 'row-reverse' : 'row'
+        }}
+      >
+        {/* Sidebar - Position changes based on direction */}
+        <div 
+          className="admin-sidebar"
+          style={{ 
+            direction: direction,
+            textAlign: direction === 'rtl' ? 'right' : 'left'
+          }}
+        >
           <AdminSidebar isOpen={true} onClose={() => {}} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
         </div>
-        
-        {/* Right side - Header + Main Content */}
-        <div className="flex-1 flex flex-col">
+
+        {/* Main Content Area - Adjusts margin based on direction */}
+        <div 
+          className="flex-1 flex flex-col"
+          style={{ 
+            direction: direction,
+            textAlign: direction === 'rtl' ? 'right' : 'left'
+          }}
+        >
           {/* Top Header with Controls */}
-          <div className="admin-header admin-header-white bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm" style={{ backgroundColor: '#ffffff' }}>
-            <div className="flex items-center justify-between h-12 px-4">
-              {/* Left side - Breadcrumb or Page Title */}
-              <div className="flex items-center">
-                <h2 className="text-base font-semibold text-gray-900 dark:text-white">
-                  Admin Dashboard
+          <div className="admin-header admin-header-white bg-white dark:bg-gray-800 shadow-sm" style={{ backgroundColor: '#ffffff' }}>
+            {/* Header Content */}
+            <div 
+              className={`flex items-center justify-between h-16 px-6 ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}
+              style={{ 
+                direction: direction,
+                flexDirection: direction === 'rtl' ? 'row-reverse' : 'row'
+              }}
+            >
+              {/* Page Title - Position changes based on direction */}
+              <div 
+                className={`flex items-center ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
+                style={{ 
+                  direction: direction,
+                  textAlign: direction === 'rtl' ? 'right' : 'left'
+                }}
+              >
+                <h2 
+                  className={`text-xl font-semibold text-gray-900 dark:text-white ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
+                  style={{ 
+                    direction: direction,
+                    textAlign: direction === 'rtl' ? 'right' : 'left'
+                  }}
+                >
+                  {t.adminDashboard}
                 </h2>
               </div>
               
-              {/* Right side - Controls */}
-              <div className="flex items-center space-x-1">
+              {/* Controls - Position changes based on direction */}
+              <div 
+                className={`flex items-center ${direction === 'rtl' ? 'space-x-reverse space-x-2' : 'space-x-2'}`}
+                style={{ 
+                  direction: direction,
+                  flexDirection: direction === 'rtl' ? 'row-reverse' : 'row'
+                }}
+              >
                 {/* Language Selector */}
                 <div className="relative">
                   <button 
@@ -181,9 +263,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     title="Select Language"
                   >
                     <Globe className="w-4 h-4 mr-2" />
-                    <span className="text-sm">
-                      {languages.find(lang => lang.code === selectedLanguage)?.flag}
-                    </span>
+                        <span className="text-sm">
+                          {languages.find(lang => lang.code === currentLanguage)?.flag}
+                        </span>
                   </button>
                   
                   {showLanguageMenu && (
@@ -194,14 +276,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             key={language.code}
                             onClick={() => handleLanguageChange(language.code)}
                             className={`w-full flex items-center px-4 py-3 text-sm text-left hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors ${
-                              selectedLanguage === language.code 
+                              currentLanguage === language.code 
                                 ? 'bg-green-50 text-green-600 dark:bg-green-800 dark:text-green-300' 
                                 : 'text-gray-700 dark:text-gray-100'
                             }`}
                           >
                             <span className="mr-3 text-lg">{language.flag}</span>
                             <span className="font-medium">{language.name}</span>
-                            {selectedLanguage === language.code && (
+                            {currentLanguage === language.code && (
                               <span className="ml-auto text-green-600 dark:text-green-300">✓</span>
                             )}
                           </button>
@@ -210,6 +292,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     </div>
                   )}
                 </div>
+
+                {/* Currency Selector */}
+                <SimpleCurrencySelector />
 
                 {/* Dark Mode Toggle */}
                 <button
@@ -237,7 +322,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   {showNotifications && (
                     <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-lg z-50">
                       <div className="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-600">
-                        Notifications
+                        {t.notifications}
                       </div>
                       <div className="divide-y divide-gray-100 dark:divide-gray-600">
                         {notifications.map((notification) => (
@@ -253,7 +338,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                       </div>
                       <div className="p-3 border-t border-gray-200 dark:border-gray-600">
                         <Button variant="outline" className="w-full text-center text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium">
-                          View all notifications
+                          {t.viewAllNotifications}
                         </Button>
                       </div>
                     </div>
@@ -278,7 +363,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                           className="flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                         >
                           <Settings className="w-4 h-4 mr-3" />
-                          <span className="font-medium">Settings</span>
+                          <span className="font-medium">{t.settings}</span>
                         </Link>
                         <Button
                           onClick={handleLogout}
@@ -286,7 +371,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                           className="flex items-center w-full text-left px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition-colors"
                         >
                           <LogOut className="w-4 h-4 mr-3" />
-                          <span className="font-medium">Sign out</span>
+                          <span className="font-medium">{t.signOut}</span>
                         </Button>
                       </div>
                     </div>
@@ -298,8 +383,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           
                       {/* Main Content */}
                       <div className="admin-main" style={{ backgroundColor: '#f9fafb' }}>
-            <main className="py-2">
-              <div className="max-w-5xl mx-auto px-2 sm:px-3 lg:px-4">
+            <main className="py-4">
+              <div className="w-full px-2 sm:px-3 lg:px-4 pr-2">
                 {children}
               </div>
             </main>

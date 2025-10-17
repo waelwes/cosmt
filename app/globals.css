@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
   --cosmt-primary: #00833F;
@@ -43,6 +44,130 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-weight: 400;
   line-height: 1.6;
+}
+
+/* RTL Support - More specific selectors */
+html[dir="rtl"] {
+  text-align: right;
+}
+
+html[dir="rtl"] body {
+  text-align: right;
+}
+
+html[dir="rtl"] .flex {
+  flex-direction: row-reverse !important;
+}
+
+html[dir="rtl"] .space-x-2 > * + * {
+  margin-left: 0 !important;
+  margin-right: 0.5rem !important;
+}
+
+html[dir="rtl"] .space-x-4 > * + * {
+  margin-left: 0 !important;
+  margin-right: 1rem !important;
+}
+
+html[dir="rtl"] .space-x-6 > * + * {
+  margin-left: 0 !important;
+  margin-right: 1.5rem !important;
+}
+
+html[dir="rtl"] .text-left {
+  text-align: right !important;
+}
+
+html[dir="rtl"] .text-right {
+  text-align: left !important;
+}
+
+html[dir="rtl"] .ml-2 {
+  margin-left: 0 !important;
+  margin-right: 0.5rem !important;
+}
+
+html[dir="rtl"] .mr-2 {
+  margin-right: 0 !important;
+  margin-left: 0.5rem !important;
+}
+
+html[dir="rtl"] .pl-3 {
+  padding-left: 0 !important;
+  padding-right: 0.75rem !important;
+}
+
+html[dir="rtl"] .pr-3 {
+  padding-right: 0 !important;
+  padding-left: 0.75rem !important;
+}
+
+html[dir="rtl"] .pl-4 {
+  padding-left: 0 !important;
+  padding-right: 1rem !important;
+}
+
+html[dir="rtl"] .pr-4 {
+  padding-right: 0 !important;
+  padding-left: 1rem !important;
+}
+
+html[dir="rtl"] .pl-6 {
+  padding-left: 0 !important;
+  padding-right: 1.5rem !important;
+}
+
+html[dir="rtl"] .pr-6 {
+  padding-right: 0 !important;
+  padding-left: 1.5rem !important;
+}
+
+html[dir="rtl"] .left-0 {
+  left: auto !important;
+  right: 0 !important;
+}
+
+html[dir="rtl"] .right-0 {
+  right: auto !important;
+  left: 0 !important;
+}
+
+html[dir="rtl"] .justify-start {
+  justify-content: flex-end !important;
+}
+
+html[dir="rtl"] .justify-end {
+  justify-content: flex-start !important;
+}
+
+/* Additional RTL fixes */
+html[dir="rtl"] .flex-row {
+  flex-direction: row-reverse !important;
+}
+
+html[dir="rtl"] .flex-row-reverse {
+  flex-direction: row !important;
+}
+
+html[dir="rtl"] .items-start {
+  align-items: flex-end !important;
+}
+
+html[dir="rtl"] .items-end {
+  align-items: flex-start !important;
+}
+
+html[dir="rtl"] .text-center {
+  text-align: center !important;
+}
+
+/* Force RTL on specific elements */
+html[dir="rtl"] [data-admin="true"] {
+  direction: rtl !important;
+}
+
+html[dir="rtl"] [data-admin="true"] * {
+  direction: inherit !important;
 }
 
 /* Admin Dashboard Main Background */
@@ -182,47 +307,47 @@ textarea,
 .admin-sidebar {
   flex-shrink: 0;
   width: 14rem; /* 224px */
-  background: #1e293b !important; /* Dark blue-gray background */
+  background: #000000 !important; /* Black background */
   border-right: 1px solid #334155;
   will-change: transform;
   min-height: 100vh; /* Full height */
 }
 
-/* Force admin sidebar background to be dark blue-gray */
+/* Force admin sidebar background to be black */
 [data-admin="true"] .admin-sidebar {
-  background: #1e293b !important;
-  background-color: #1e293b !important;
+  background: #000000 !important;
+  background-color: #000000 !important;
 }
 
 /* Exclude sidebar from admin cards gray background rules */
 [data-admin="true"] .admin-sidebar.bg-white,
 [data-admin="true"] .admin-sidebar[class*="bg-white"] {
-  background-color: #1e293b !important;
+  background-color: #000000 !important;
 }
 
-/* Force admin sidebar container to be dark blue-gray */
+/* Force admin sidebar container to be black */
 [data-admin="true"] .admin-sidebar {
-  background-color: #1e293b !important;
+  background-color: #000000 !important;
 }
 
-/* Force admin sidebar main container to be dark blue-gray */
+/* Force admin sidebar main container to be black */
 [data-admin="true"] .admin-sidebar > div {
-  background-color: #1e293b !important;
+  background-color: #000000 !important;
 }
 
 /* Override any gray background on admin sidebar */
 [data-admin="true"] .admin-sidebar[style*="background-color: #f9f9f9"],
 [data-admin="true"] .admin-sidebar[style*="background: #f9f9f9"] {
-  background-color: #1e293b !important;
-  background: #1e293b !important;
+  background-color: #000000 !important;
+  background: #000000 !important;
 }
 
-/* Force sidebar to stay dark blue-gray - highest priority */
+/* Force sidebar to stay black - highest priority */
 [data-admin="true"] .admin-sidebar,
 [data-admin="true"] .admin-sidebar > div,
 [data-admin="true"] .admin-sidebar > div > div {
-  background-color: #1e293b !important;
-  background: #1e293b !important;
+  background-color: #000000 !important;
+  background: #000000 !important;
 }
 
 /* Ensure hover text color works properly - highest specificity */
@@ -358,15 +483,19 @@ textarea,
 }
 
 [data-admin="true"] .admin-sidebar button:hover {
-  background-color: white !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
-  border: 1px solid #e5e7eb !important;
+  background-color: #1f2937 !important;
+  border-radius: 0.25rem !important;
 }
 
 [data-admin="true"] .admin-sidebar a:hover {
-  background-color: white !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
-  border: 1px solid #e5e7eb !important;
+  background-color: #1f2937 !important;
+  border-radius: 0.25rem !important;
+}
+
+/* Set default border radius for all admin sidebar elements */
+[data-admin="true"] .admin-sidebar button,
+[data-admin="true"] .admin-sidebar a {
+  border-radius: 0.25rem !important;
 }
 
 /* Google-Style Input Base Class - Light & Dark Mode */
@@ -526,6 +655,14 @@ body:not([data-admin="true"]) .rounded-lg {
   background-color: #ffffff !important;
   border-radius: 8px !important;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important; /* shadow-md */
+}
+
+/* Analytics cards specific styling */
+[data-admin="true"] .analytics-card {
+  background-color: #ffffff !important;
+  border-radius: 0.25rem !important;
+  box-shadow: none !important;
+  border: 1px solid #eef2f6 !important;
 }
 
 /* Force all admin cards to use 6px border radius (except dashboard cards) */
@@ -712,4 +849,182 @@ input[type="search"]::-webkit-search-cancel-button {
 input[type="search"]::-webkit-search-cancel-button:hover {
   background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' L6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' L18' y2='18'%3E%3C/line%3E%3C/svg%3E") no-repeat center;
   background-size: 16px 16px;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
+}
+
+[dir="rtl"] .rtl\:text-right {
+  text-align: right;
+}
+
+[dir="rtl"] .rtl\:text-left {
+  text-align: left;
+}
+
+[dir="rtl"] .rtl\:ml-auto {
+  margin-left: auto;
+}
+
+[dir="rtl"] .rtl\:mr-auto {
+  margin-right: auto;
+}
+
+[dir="rtl"] .rtl\:pl-4 {
+  padding-left: 1rem;
+}
+
+[dir="rtl"] .rtl\:pr-4 {
+  padding-right: 1rem;
+}
+
+/* RTL-specific adjustments for admin dashboard */
+[dir="rtl"] .admin-sidebar {
+  right: 0;
+  left: auto;
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: 280px;
+  z-index: 50;
+}
+
+[dir="rtl"] .admin-main {
+  margin-right: 280px;
+  margin-left: 0;
+  width: calc(100% - 280px);
+}
+
+[dir="rtl"] .admin-header {
+  margin-right: 280px;
+  margin-left: 0;
+  width: calc(100% - 280px);
+}
+
+/* RTL text alignment for Arabic */
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 {
+  text-align: right;
+}
+
+[dir="rtl"] p, [dir="rtl"] span, [dir="rtl"] div {
+  text-align: right;
+}
+
+/* RTL flex direction adjustments */
+[dir="rtl"] .flex {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .space-x-2 > * + * {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .space-x-6 > * + * {
+  margin-left: 0;
+  margin-right: 1.5rem;
+}
+
+/* RTL specific layout fixes */
+[dir="rtl"] .grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .grid-cols-1 {
+  direction: rtl;
+}
+
+[dir="rtl"] .grid-cols-2 {
+  direction: rtl;
+}
+
+[dir="rtl"] .grid-cols-3 {
+  direction: rtl;
+}
+
+[dir="rtl"] .grid-cols-4 {
+  direction: rtl;
+}
+
+/* RTL button and input alignment */
+[dir="rtl"] button {
+  text-align: right;
+}
+
+[dir="rtl"] input {
+  text-align: right;
+}
+
+[dir="rtl"] textarea {
+  text-align: right;
+}
+
+/* RTL card content alignment */
+[dir="rtl"] .dashboard-card {
+  direction: rtl;
+}
+
+[dir="rtl"] .dashboard-card h1,
+[dir="rtl"] .dashboard-card h2,
+[dir="rtl"] .dashboard-card h3,
+[dir="rtl"] .dashboard-card h4,
+[dir="rtl"] .dashboard-card h5,
+[dir="rtl"] .dashboard-card h6 {
+  text-align: right;
+}
+
+[dir="rtl"] .dashboard-card p,
+[dir="rtl"] .dashboard-card span,
+[dir="rtl"] .dashboard-card div {
+  text-align: right;
+}
+
+/* RTL sidebar navigation */
+[dir="rtl"] .admin-sidebar {
+  direction: rtl;
+}
+
+[dir="rtl"] .admin-sidebar nav {
+  direction: rtl;
+}
+
+[dir="rtl"] .admin-sidebar ul {
+  direction: rtl;
+}
+
+[dir="rtl"] .admin-sidebar li {
+  text-align: right;
+}
+
+/* RTL header alignment */
+[dir="rtl"] .admin-header {
+  direction: rtl;
+}
+
+[dir="rtl"] .admin-header .flex {
+  flex-direction: row-reverse;
+}
+
+/* RTL chart and content areas */
+[dir="rtl"] .space-y-6 > * {
+  direction: rtl;
+}
+
+[dir="rtl"] .space-y-4 > * {
+  direction: rtl;
+}
+
+[dir="rtl"] .space-y-3 > * {
+  direction: rtl;
 }

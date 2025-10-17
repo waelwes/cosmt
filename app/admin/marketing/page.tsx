@@ -150,7 +150,7 @@ const StatCard = memo(({ title, value, change, icon: Icon, color }: {
   icon: any;
   color: string;
 }) => (
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -179,7 +179,7 @@ const CampaignCard = memo(({ campaign, onEdit, onDelete, onView, onToggle }: {
   const conversionRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(1) : 0;
   
   return (
-    <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+    <div className="analytics-card p-6">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
@@ -253,7 +253,7 @@ const CouponCard = memo(({ coupon, onEdit, onDelete, onView }: {
   const usagePercentage = (coupon.used / coupon.usageLimit * 100).toFixed(1);
   
   return (
-    <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+    <div className="analytics-card p-4">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
@@ -318,7 +318,7 @@ const EmailTemplateCard = memo(({ template, onEdit, onDelete, onView, onSend }: 
   onView: (id: number) => void;
   onSend: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="analytics-card p-4">
     <div className="flex items-center justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-2">
@@ -433,7 +433,7 @@ export default function MarketingTools() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -482,8 +482,8 @@ export default function MarketingTools() {
       </div>
 
       {/* Tabs */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm">
-        <div className="border-b border-gray-200 dark:border-gray-700">
+      <div className="analytics-card">
+        <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
           <nav className="flex space-x-8 px-6">
             {[
               { id: 'campaigns', name: 'Campaigns', count: campaigns.length },
@@ -496,7 +496,7 @@ export default function MarketingTools() {
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
                     ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
                 }`}
               >
                 {tab.name} ({tab.count})

@@ -5,6 +5,7 @@ import { CartProvider } from "../contexts/CartContext";
 import { SearchProvider } from "../contexts/SearchContext";
 import { AuthProvider } from "../contexts/AuthContext";
 import { WishlistProvider } from "../contexts/WishlistContext";
+import { LanguageProvider } from "../contexts/LanguageContext";
 import { ErrorBoundary } from "../components/ui/ErrorBoundary";
 
 const geistSans = Geist({
@@ -32,6 +33,14 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://cosmt.com'),
   alternates: {
     canonical: '/',
+  },
+  icons: {
+    icon: [
+      { url: '/images/logos/COSMT.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/logos/COSMT.png', sizes: '16x16', type: 'image/png' },
+    ],
+    shortcut: '/images/logos/COSMT.png',
+    apple: '/images/logos/COSMT.png',
   },
   openGraph: {
     title: "COSMAT - Premium Beauty & Hair Care Products",
@@ -80,15 +89,17 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <ErrorBoundary>
-          <AuthProvider>
-            <WishlistProvider>
-              <CartProvider>
-                <SearchProvider>
-                  {children}
-                </SearchProvider>
-              </CartProvider>
-            </WishlistProvider>
-          </AuthProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              <WishlistProvider>
+                <CartProvider>
+                  <SearchProvider>
+                    {children}
+                  </SearchProvider>
+                </CartProvider>
+              </WishlistProvider>
+            </AuthProvider>
+          </LanguageProvider>
         </ErrorBoundary>
       </body>
     </html>

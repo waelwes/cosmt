@@ -90,7 +90,7 @@ export default function GeneralSettingsPage() {
             type="text"
             value={settings.siteName}
             onChange={(e) => handleInputChange('siteName', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
         <div>
@@ -99,7 +99,7 @@ export default function GeneralSettingsPage() {
             type="url"
             value={settings.siteUrl}
             onChange={(e) => handleInputChange('siteUrl', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
       </div>
@@ -110,7 +110,7 @@ export default function GeneralSettingsPage() {
           value={settings.siteDescription}
           onChange={(e) => handleInputChange('siteDescription', e.target.value)}
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         />
       </div>
 
@@ -121,7 +121,7 @@ export default function GeneralSettingsPage() {
             type="email"
             value={settings.adminEmail}
             onChange={(e) => handleInputChange('adminEmail', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
         <div>
@@ -130,7 +130,7 @@ export default function GeneralSettingsPage() {
             type="email"
             value={settings.supportEmail}
             onChange={(e) => handleInputChange('supportEmail', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
       </div>
@@ -142,7 +142,7 @@ export default function GeneralSettingsPage() {
             type="tel"
             value={settings.phone}
             onChange={(e) => handleInputChange('phone', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
         <div>
@@ -151,7 +151,7 @@ export default function GeneralSettingsPage() {
             type="text"
             value={settings.address}
             onChange={(e) => handleInputChange('address', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
       </div>
@@ -162,7 +162,7 @@ export default function GeneralSettingsPage() {
           <select
             value={settings.currency}
             onChange={(e) => handleInputChange('currency', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             <option value="TRY">Turkish Lira (₺)</option>
             <option value="USD">US Dollar ($)</option>
@@ -174,7 +174,7 @@ export default function GeneralSettingsPage() {
           <select
             value={settings.language}
             onChange={(e) => handleInputChange('language', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             <option value="tr">Türkçe</option>
             <option value="en">English</option>
@@ -185,7 +185,7 @@ export default function GeneralSettingsPage() {
           <select
             value={settings.timezone}
             onChange={(e) => handleInputChange('timezone', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             <option value="Europe/Istanbul">Europe/Istanbul</option>
             <option value="UTC">UTC</option>
@@ -202,7 +202,7 @@ export default function GeneralSettingsPage() {
         <select
           value={settings.paymentGateway}
           onChange={(e) => handleInputChange('paymentGateway', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         >
           <option value="iyzico">iyzico</option>
           <option value="stripe">Stripe</option>
@@ -249,7 +249,7 @@ export default function GeneralSettingsPage() {
             type="number"
             value={settings.freeShippingThreshold}
             onChange={(e) => handleInputChange('freeShippingThreshold', parseFloat(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
         <div>
@@ -258,7 +258,7 @@ export default function GeneralSettingsPage() {
             type="number"
             value={settings.shippingCost}
             onChange={(e) => handleInputChange('shippingCost', parseFloat(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
       </div>
@@ -346,7 +346,7 @@ export default function GeneralSettingsPage() {
           type="number"
           value={settings.sessionTimeout}
           onChange={(e) => handleInputChange('sessionTimeout', parseInt(e.target.value))}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         />
       </div>
     </div>
@@ -360,7 +360,7 @@ export default function GeneralSettingsPage() {
           <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
             <ImageIcon className="w-8 h-8 text-gray-400" />
           </div>
-          <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+          <button className="px-4 py-2 border rounded-lg hover:bg-gray-50">
             Upload Logo
           </button>
         </div>
@@ -374,13 +374,13 @@ export default function GeneralSettingsPage() {
               type="color"
               value={settings.primaryColor}
               onChange={(e) => handleInputChange('primaryColor', e.target.value)}
-              className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
+              className="w-12 h-10 border rounded cursor-pointer"
             />
             <input
               type="text"
               value={settings.primaryColor}
               onChange={(e) => handleInputChange('primaryColor', e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
         </div>
@@ -391,13 +391,13 @@ export default function GeneralSettingsPage() {
               type="color"
               value={settings.secondaryColor}
               onChange={(e) => handleInputChange('secondaryColor', e.target.value)}
-              className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
+              className="w-12 h-10 border rounded cursor-pointer"
             />
             <input
               type="text"
               value={settings.secondaryColor}
               onChange={(e) => handleInputChange('secondaryColor', e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
         </div>
@@ -425,16 +425,16 @@ export default function GeneralSettingsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Settings</h1>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your store configuration and preferences</p>
       </div>
 
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="analytics-card">
         {/* Tabs */}
-        <div className="border-b border-gray-200 dark:border-gray-700">
+        <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
           <nav className="flex space-x-8 px-6">
             {tabs.map((tab) => (
               <button
@@ -443,7 +443,7 @@ export default function GeneralSettingsPage() {
                 className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center ${
                   activeTab === tab.id
                     ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
                 }`}
               >
                 <tab.icon className="w-4 h-4 mr-2" />
@@ -459,7 +459,7 @@ export default function GeneralSettingsPage() {
         </div>
 
         {/* Save Button */}
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+        <div className="px-6 py-4 bg-gray-50 border-t flex justify-end" style={{ borderTopColor: '#eef2f6' }}>
           <button
             onClick={handleSave}
             disabled={isLoading}

@@ -181,7 +181,7 @@ const StatCard = memo(({ title, value, change, icon: Icon, color }: {
   icon: any;
   color: string;
 }) => (
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -206,7 +206,7 @@ const HelpArticleCard = memo(({ article, onEdit, onDelete, onView, onPublish }: 
   onView: (id: number) => void;
   onPublish: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="analytics-card p-4">
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-2">
@@ -268,7 +268,7 @@ const FAQCard = memo(({ faq, onEdit, onDelete, onView }: {
   onDelete: (id: number) => void;
   onView: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="analytics-card p-4">
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">{faq.question}</h3>
@@ -311,7 +311,7 @@ const SupportTicketCard = memo(({ ticket, onEdit, onDelete, onView, onAssign }: 
   onView: (id: number) => void;
   onAssign: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="analytics-card p-4">
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-2">
@@ -368,7 +368,7 @@ const DocumentationCard = memo(({ doc, onEdit, onDelete, onView, onDownload }: {
   onView: (id: number) => void;
   onDownload: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="analytics-card p-4">
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-2">
@@ -479,7 +479,7 @@ export default function SupportCenter() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -530,7 +530,7 @@ export default function SupportCenter() {
       </div>
 
       {/* Search */}
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <input
@@ -538,14 +538,15 @@ export default function SupportCenter() {
             placeholder="Search help articles, FAQs, and documentation..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            style={{ borderColor: '#eef2f6' }}
           />
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm">
-        <div className="border-b border-gray-200 dark:border-gray-700">
+      <div className="analytics-card">
+        <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
           <nav className="flex space-x-8 px-6">
             {[
               { id: 'articles', name: 'Help Articles', count: helpArticles.length },
@@ -559,7 +560,7 @@ export default function SupportCenter() {
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
                     ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
                 }`}
               >
                 {tab.name} ({tab.count})

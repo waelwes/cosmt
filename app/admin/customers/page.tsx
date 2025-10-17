@@ -154,7 +154,7 @@ export default function CustomersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -162,7 +162,7 @@ export default function CustomersPage() {
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your customer database</p>
         </div>
         <div className="flex items-center space-x-3">
-          <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+          <button className="flex items-center px-4 py-2 border rounded-lg hover:bg-gray-50" style={{ borderColor: '#eef2f6' }}>
             <Mail className="w-4 h-4 mr-2" />
             Send Email
           </button>
@@ -174,7 +174,7 @@ export default function CustomersPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
               <UserPlus className="w-6 h-6 text-blue-600" />
@@ -185,7 +185,7 @@ export default function CustomersPage() {
             </div>
           </div>
         </div>
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
               <UserCheck className="w-6 h-6 text-green-600" />
@@ -196,7 +196,7 @@ export default function CustomersPage() {
             </div>
           </div>
         </div>
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-purple-100 rounded-lg">
               <Star className="w-6 h-6 text-purple-600" />
@@ -207,7 +207,7 @@ export default function CustomersPage() {
             </div>
           </div>
         </div>
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 rounded-lg">
               <AlertTriangle className="w-6 h-6 text-yellow-600" />
@@ -221,7 +221,7 @@ export default function CustomersPage() {
       </div>
 
       {/* Filters */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+      <div className="analytics-card p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Search */}
           <div className="md:col-span-2">
@@ -232,7 +232,8 @@ export default function CustomersPage() {
                 placeholder="Search customers..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                style={{ borderColor: '#eef2f6' }}
               />
             </div>
           </div>
@@ -242,7 +243,8 @@ export default function CustomersPage() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              style={{ borderColor: '#eef2f6' }}
             >
               {statuses.map(status => (
                 <option key={status} value={status}>
@@ -257,7 +259,8 @@ export default function CustomersPage() {
             <select
               value={selectedTier}
               onChange={(e) => setSelectedTier(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              style={{ borderColor: '#eef2f6' }}
             >
               {tiers.map(tier => (
                 <option key={tier} value={tier}>
@@ -270,7 +273,7 @@ export default function CustomersPage() {
       </div>
 
       {/* Customers Table */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+      <div className="analytics-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -301,7 +304,7 @@ export default function CustomersPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y" style={{ borderColor: '#eef2f6' }}>
               {filteredCustomers.map((customer) => (
                 <tr key={customer.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -380,7 +383,7 @@ export default function CustomersPage() {
       </div>
 
       {/* Pagination */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm px-6 py-4">
+      <div className="analytics-card px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-700">
             Showing <span className="font-medium">1</span> to <span className="font-medium">5</span> of{' '}

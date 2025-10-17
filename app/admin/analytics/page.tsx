@@ -79,7 +79,7 @@ const StatCard = memo(({ title, value, change, icon: Icon, color, trend }: {
   color: string;
   trend?: 'up' | 'down' | 'neutral';
 }) => (
-  <div className="bg-white dark:bg-gray-800/50 p-5 rounded-md border border-gray-200 dark:border-gray-700 shadow-sm">
+  <div className="p-5 rounded-md" style={{ border: '1px solid #eef2f6' }}>
     <div className="flex items-center justify-between mb-2">
       <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{title}</h3>
       <Icon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
@@ -104,9 +104,14 @@ const ChartCard = memo(({ title, children, className = "" }: {
   children: React.ReactNode;
   className?: string;
 }) => (
-  <div className={`dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6 ${className}`}>
-    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{title}</h3>
-    {children}
+  <div className={`analytics-card p-0 ${className}`}>
+    <div className="px-6 pt-6 pb-4">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+    </div>
+    <div className="border-t mb-4" style={{ borderTopColor: '#eef2f6', borderTopWidth: '1px' }}></div>
+    <div className="px-6 pb-6">
+      {children}
+    </div>
   </div>
 ));
 
@@ -284,9 +289,9 @@ export default function AnalyticsDashboard() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Combined Analytics Card */}
-      <div className="dashboard-card p-6">
+      <div className="analytics-card p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -294,27 +299,27 @@ export default function AnalyticsDashboard() {
           </div>
           
           {/* Time Period Filter */}
-          <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+          <div className="flex items-center rounded-lg overflow-hidden" style={{ border: '1px solid #eef2f6' }}>
             <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               All
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
             <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               Today
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
             <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               This Week
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
             <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               This Month
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
             <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               This Year
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
             <div className="relative date-picker-container">
               <button 
                 onClick={() => setShowDatePicker(!showDatePicker)}
@@ -325,7 +330,7 @@ export default function AnalyticsDashboard() {
               
               {/* Date Picker Popover */}
               {showDatePicker && (
-                <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-xl z-[9999] p-4 w-80">
+                <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-[9999] p-4 w-80" style={{ border: '1px solid #eef2f6' }}>
                   {/* Calendar Header */}
                   <div className="flex items-center justify-between mb-4">
                     <button
@@ -390,7 +395,7 @@ export default function AnalyticsDashboard() {
                   </div>
                   
                   {/* Today Button */}
-                  <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-600">
+                  <div className="mt-4 pt-3 border-t" style={{ borderTopColor: '#eef2f6' }}>
                     <button
                       onClick={() => {
                         setSelectedDate(new Date());
@@ -408,12 +413,12 @@ export default function AnalyticsDashboard() {
         </div>
         
         {/* Horizontal Line */}
-        <div className="border-t border-gray-200 dark:border-gray-600 mb-4"></div>
+        <div className="border-t mb-4 -mx-6" style={{ borderTopColor: '#eef2f6', borderTopWidth: '1px' }}></div>
         
         {/* Stats Grid */}
         <div className="flex">
           {analyticsStats.map((stat, index) => (
-            <div key={index} className="flex-1 py-4 px-4 border-r border-gray-200 dark:border-gray-600 last:border-r-0">
+            <div key={index} className="flex-1 py-4 px-4 border-r last:border-r-0" style={{ borderRightColor: '#eef2f6' }}>
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{stat.title}</h3>
                 {stat.icon}

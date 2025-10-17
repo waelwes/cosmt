@@ -12,17 +12,21 @@ export default function AdminPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div 
-        className="animate-spin h-32 w-32 border-4 border-gray-200 border-t-green-600" 
-        style={{
-          borderRadius: '50%',
-          borderStyle: 'solid',
-          borderWidth: '4px',
-          borderColor: '#e5e7eb transparent #e5e7eb #e5e7eb',
-          borderTopColor: '#059669'
-        }}
-      ></div>
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="h-32 w-32">
+          <img
+            src="/images/logos/COSMT.png"
+            alt="COSMT Logo"
+            className="h-full w-full object-contain"
+          />
+        </div>
+        <div className="flex space-x-1">
+          <div className="w-1 h-1 bg-gray-400 rounded animate-bounce" style={{ animationDelay: '0ms' }}></div>
+          <div className="w-1 h-1 bg-gray-400 rounded animate-bounce" style={{ animationDelay: '150ms' }}></div>
+          <div className="w-1 h-1 bg-gray-400 rounded animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        </div>
+      </div>
     </div>
   );
 }

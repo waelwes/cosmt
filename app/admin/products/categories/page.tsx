@@ -198,7 +198,7 @@ export default function CategoriesPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -212,7 +212,7 @@ export default function CategoriesPage() {
       </div>
 
       {/* Filters and Search */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+      <div className="analytics-card p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div className="md:col-span-2">
@@ -252,7 +252,7 @@ export default function CategoriesPage() {
       {/* Empty State */}
       {filteredCategories.length === 0 && (
         <div className="text-center py-12">
-          <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-12">
+          <div className="analytics-card p-12">
             <Layers className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No categories found</h3>
             <p className="text-gray-500 dark:text-gray-400 mb-6">

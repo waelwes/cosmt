@@ -63,8 +63,10 @@ export function SimpleCurrencySelector() {
                   onClick={() => {
                     setCurrentCurrency(currency.code);
                     setIsOpen(false);
-                    // Trigger a page refresh to update all prices
-                    window.location.reload();
+                    // Trigger a custom event to notify other components
+                    window.dispatchEvent(new CustomEvent('currencyChanged', { 
+                      detail: { currency: currency.code } 
+                    }));
                   }}
                   className={`w-full flex items-center justify-between px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
                     currentCurrency === currency.code ? 'bg-green-50 text-green-700' : 'text-gray-700'

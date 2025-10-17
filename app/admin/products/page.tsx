@@ -116,9 +116,9 @@ export default function ProductsPage() {
   const topRatedCount = products.filter(product => product.rating >= 4.5).length;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Combined Products Card */}
-      <div className="dashboard-card p-6">
+      <div className="analytics-card p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -135,11 +135,11 @@ export default function ProductsPage() {
         </div>
         
         {/* Horizontal Line */}
-        <div className="border-t border-gray-200 dark:border-gray-600 mb-4"></div>
+        <div className="border-t mb-4" style={{ borderTopColor: '#eef2f6' }}></div>
         
         {/* Stats Grid */}
         <div className="flex">
-          <div className="flex-1 py-4 px-4 border-r border-gray-200 dark:border-gray-600">
+          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Products</h3>
               <Package className="w-5 h-5 text-gray-400" />
@@ -150,7 +150,7 @@ export default function ProductsPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r border-gray-200 dark:border-gray-600">
+          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Low Stock</h3>
               <AlertTriangle className="w-5 h-5 text-orange-400" />
@@ -161,7 +161,7 @@ export default function ProductsPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r border-gray-200 dark:border-gray-600">
+          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Top Rated</h3>
               <Star className="w-5 h-5 text-yellow-400" />
@@ -186,7 +186,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Filters and Search */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+      <div className="analytics-card p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Search */}
           <div className="md:col-span-2">
@@ -234,7 +234,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Products Table */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+      <div className="analytics-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50 dark:bg-gray-700">
@@ -262,7 +262,7 @@ export default function ProductsPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="bg-white dark:bg-gray-800 divide-y" style={{ borderColor: '#eef2f6' }}>
               {filteredProducts.map((product) => (
                 <tr key={product.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="px-6 py-4 whitespace-nowrap">

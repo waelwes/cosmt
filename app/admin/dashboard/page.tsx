@@ -24,6 +24,7 @@ import {
   Zap
 } from 'lucide-react';
 import { formatPrice } from '../../../utils/currency';
+import { useLanguage } from '../../../contexts/LanguageContext';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -76,7 +77,7 @@ const LiveVisitorCount = memo(() => {
   }, []);
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-800/30 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+    <div className="bg-gray-50 dark:bg-gray-800/30 p-4 rounded-lg" style={{ border: '1px solid #eef2f6' }}>
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Live Visitors</h3>
         <div className="flex items-center">
@@ -99,7 +100,7 @@ const LiveVisitorCount = memo(() => {
 });
 
 // Traffic Sources Component
-const TrafficSources = memo(() => {
+const TrafficSources = ({ t }: { t: any }) => {
   const trafficData = [
     {
       source: 'Organic Search',
@@ -144,14 +145,18 @@ const TrafficSources = memo(() => {
   ];
 
   return (
-    <div className="dashboard-card p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Traffic Sources</h3>
+    <div className="analytics-card p-0">
+      {/* Card Header with full-width border line */}
+      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.trafficSources}</h3>
         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
           <Activity className="w-3 h-3 mr-1" />
           30 days
         </div>
       </div>
+
+      {/* Card Content */}
+      <div className="px-6 py-6">
       
       <div className="space-y-3">
         {trafficData.map((source, index) => (
@@ -187,12 +192,13 @@ const TrafficSources = memo(() => {
           </div>
         ))}
       </div>
+      </div>
     </div>
   );
-});
+};
 
 // Device Analytics Component
-const DeviceAnalytics = memo(() => {
+const DeviceAnalytics = ({ t }: { t: any }) => {
   const deviceData = [
     {
       device: 'Desktop',
@@ -218,10 +224,15 @@ const DeviceAnalytics = memo(() => {
   ];
 
   return (
-    <div className="dashboard-card p-4">
-      <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">Device Analytics</h3>
-      
-      <div className="space-y-3">
+    <div className="analytics-card p-0">
+      {/* Card Header with full-width border line */}
+      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.deviceAnalytics}</h3>
+      </div>
+
+      {/* Card Content */}
+      <div className="px-6 py-6">
+        <div className="space-y-3">
         {deviceData.map((device, index) => (
           <div key={index} className="flex items-center justify-between">
             <div className="flex items-center flex-1">
@@ -247,13 +258,14 @@ const DeviceAnalytics = memo(() => {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );
-});
+};
 
 // Conversion Funnel Component
-const ConversionFunnel = memo(() => {
+const ConversionFunnel = ({ t }: { t: any }) => {
   const funnelData = [
     {
       step: 'Total Visitors',
@@ -298,16 +310,19 @@ const ConversionFunnel = memo(() => {
   ];
 
   return (
-    <div className="dashboard-card p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Conversion Funnel</h3>
+    <div className="analytics-card p-0">
+      {/* Card Header with full-width border line */}
+      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.conversionFunnel}</h3>
         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
           <Zap className="w-3 h-3 mr-1" />
           Optimize ✨
         </div>
       </div>
-      
-      <div className="space-y-2">
+
+      {/* Card Content */}
+      <div className="px-6 py-6">
+        <div className="space-y-2">
         {funnelData.map((step, index) => (
           <div key={index}>
             {/* Funnel Step - No inner card */}
@@ -356,7 +371,7 @@ const ConversionFunnel = memo(() => {
       </div>
       
       {/* Funnel Summary */}
-      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-600">
+      <div className="mt-4 pt-3 border-t" style={{ borderTopColor: '#eef2f6' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Target className="w-4 h-4 text-gray-400 mr-2" />
@@ -368,13 +383,14 @@ const ConversionFunnel = memo(() => {
           </div>
         </div>
       </div>
+      </div>
     </div>
   );
-});
+};
 
 // Memoized components for better performance
 const StatCard = memo(({ stat, index }: { stat: any; index: number }) => (
-  <div className="bg-gray-50 dark:bg-gray-800/30 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+  <div className="bg-gray-50 dark:bg-gray-800/30 p-4 rounded-lg" style={{ border: '1px solid #eef2f6' }}>
     <div className="flex items-center justify-between mb-2">
       <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{stat.title}</h3>
       {stat.icon}
@@ -397,20 +413,10 @@ const StatCard = memo(({ stat, index }: { stat: any; index: number }) => (
 
 
 // Modern Chart Component
-const ModernChart = memo(() => {
-  const [timeRange, setTimeRange] = useState('1M');
+const ModernChart = ({ timeRange = 'All', selectedDate, currentCurrency = 'USD', t }: { timeRange?: string; selectedDate?: Date | null; currentCurrency?: string; t: any }) => {
   
   const salesData = {
-    '1W': [
-      { date: '2024-01-08', sales: 1200 },
-      { date: '2024-01-09', sales: 1900 },
-      { date: '2024-01-10', sales: 1500 },
-      { date: '2024-01-11', sales: 2200 },
-      { date: '2024-01-12', sales: 2800 },
-      { date: '2024-01-13', sales: 3200 },
-      { date: '2024-01-14', sales: 2900 }
-    ],
-    '1M': [
+    'All': [
       { date: '2024-01-01', sales: 1200 },
       { date: '2024-01-02', sales: 1900 },
       { date: '2024-01-03', sales: 1500 },
@@ -426,7 +432,41 @@ const ModernChart = memo(() => {
       { date: '2024-01-13', sales: 3200 },
       { date: '2024-01-14', sales: 2900 }
     ],
-    '6M': [
+    'Today': [
+      { date: '2024-01-15T00:00', sales: 800 },
+      { date: '2024-01-15T04:00', sales: 1200 },
+      { date: '2024-01-15T08:00', sales: 1800 },
+      { date: '2024-01-15T12:00', sales: 2200 },
+      { date: '2024-01-15T16:00', sales: 2800 },
+      { date: '2024-01-15T20:00', sales: 2500 },
+      { date: '2024-01-15T23:59', sales: 1900 }
+    ],
+    'This Week': [
+      { date: '2024-01-08', sales: 1200 },
+      { date: '2024-01-09', sales: 1900 },
+      { date: '2024-01-10', sales: 1500 },
+      { date: '2024-01-11', sales: 2200 },
+      { date: '2024-01-12', sales: 2800 },
+      { date: '2024-01-13', sales: 3200 },
+      { date: '2024-01-14', sales: 2900 }
+    ],
+    'This Month': [
+      { date: '2024-01-01', sales: 1200 },
+      { date: '2024-01-02', sales: 1900 },
+      { date: '2024-01-03', sales: 1500 },
+      { date: '2024-01-04', sales: 2200 },
+      { date: '2024-01-05', sales: 2800 },
+      { date: '2024-01-06', sales: 3200 },
+      { date: '2024-01-07', sales: 2900 },
+      { date: '2024-01-08', sales: 1200 },
+      { date: '2024-01-09', sales: 1900 },
+      { date: '2024-01-10', sales: 1500 },
+      { date: '2024-01-11', sales: 2200 },
+      { date: '2024-01-12', sales: 2800 },
+      { date: '2024-01-13', sales: 3200 },
+      { date: '2024-01-14', sales: 2900 }
+    ],
+    'This Year': [
       { date: '2024-01-01', sales: 1200 },
       { date: '2024-01-02', sales: 1900 },
       { date: '2024-01-03', sales: 1500 },
@@ -435,15 +475,12 @@ const ModernChart = memo(() => {
       { date: '2024-01-06', sales: 3200 },
       { date: '2024-01-07', sales: 2900 }
     ],
-    '1Y': [
-      { date: '2024-01-01', sales: 1200 },
-      { date: '2024-01-02', sales: 1900 },
-      { date: '2024-01-03', sales: 1500 },
-      { date: '2024-01-04', sales: 2200 },
-      { date: '2024-01-05', sales: 2800 },
-      { date: '2024-01-06', sales: 3200 },
-      { date: '2024-01-07', sales: 2900 }
-    ]
+    'Custom Date': selectedDate ? [
+      { 
+        date: selectedDate.toISOString().split('T')[0], 
+        sales: Math.floor(Math.random() * 3000) + 1000 
+      }
+    ] : []
   };
 
   const data = salesData[timeRange as keyof typeof salesData];
@@ -463,9 +500,11 @@ const ModernChart = memo(() => {
   const formatXAxisTick = (dateStr: string) => {
     const date = new Date(dateStr);
     switch(timeRange) {
-      case '1W': return date.toLocaleDateString('en-US', { weekday: 'short' });
-      case '1M': return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      default: return date.toLocaleDateString('en-US', { month: 'short' });
+      case 'Today': return date.toLocaleTimeString('en-US', { hour: '2-digit', hour12: false });
+      case 'This Week': return date.toLocaleDateString('en-US', { weekday: 'short' });
+      case 'This Month': return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      case 'This Year': return date.toLocaleDateString('en-US', { month: 'short' });
+      default: return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
   };
 
@@ -475,16 +514,16 @@ const ModernChart = memo(() => {
       {
         label: 'Sales',
         data: data.map(d => d.sales),
-        borderColor: '#4f46e5',
-        backgroundColor: 'rgba(79, 70, 229, 0.1)',
-        borderWidth: 2,
-        fill: true,
-        tension: 0.4,
-        pointBackgroundColor: '#4f46e5',
+        borderColor: '#00833F',
+        backgroundColor: 'rgba(0, 131, 63, 0.05)',
+        borderWidth: 1.5,
+        fill: false,
+        tension: 0.2,
+        pointBackgroundColor: '#00833F',
         pointBorderColor: '#ffffff',
-        pointBorderWidth: 2,
-        pointRadius: 4,
-        pointHoverRadius: 6,
+        pointBorderWidth: 1,
+        pointRadius: 0,
+        pointHoverRadius: 4,
       }
     ]
   }), [data]);
@@ -497,23 +536,23 @@ const ModernChart = memo(() => {
         display: false
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
         titleColor: '#ffffff',
         bodyColor: '#ffffff',
-        borderColor: '#4f46e5',
+        borderColor: '#00833F',
         borderWidth: 1,
-        cornerRadius: 8,
+        cornerRadius: 6,
         displayColors: false,
+        padding: 8,
         callbacks: {
           title: function(context: any) {
             return new Date(context[0].label).toLocaleDateString('en-US', { 
               month: 'short', 
-              day: 'numeric', 
-              year: 'numeric' 
+              day: 'numeric'
             });
           },
           label: function(context: any) {
-            return `Sales: $${context.parsed.y.toLocaleString()}`;
+            return formatPrice(context.parsed.y, currentCurrency, 'USD');
           }
         }
       }
@@ -525,31 +564,40 @@ const ModernChart = memo(() => {
           display: false
         },
         ticks: {
-          color: '#6b7280',
+          color: '#9ca3af',
           font: {
-            size: 12
+            size: 11
+          },
+          maxTicksLimit: 6,
+          callback: function(value: any, index: any) {
+            const label = this.getLabelForValue(value);
+            return formatXAxisTick(label);
           }
         },
-        axisLine: { stroke: '#4b5563' },
-        tickLine: { stroke: '#4b5563' }
+        border: {
+          display: false
+        }
       },
       y: {
         display: true,
         grid: {
-          color: 'rgba(156, 163, 175, 0.3)',
-          drawBorder: false
+          color: '#f3f4f6',
+          drawBorder: false,
+          drawTicks: false
         },
         ticks: {
-          color: '#6b7280',
+          color: '#9ca3af',
           font: {
-            size: 12
+            size: 11
           },
           callback: function(value: any) {
-            return `$${(value / 1000)}k`;
-          }
+            return formatPrice(value, currentCurrency, 'USD');
+          },
+          maxTicksLimit: 5
         },
-        axisLine: false,
-        tickLine: false
+        border: {
+          display: false
+        }
       }
     },
     interaction: {
@@ -559,52 +607,107 @@ const ModernChart = memo(() => {
   }), []);
 
   return (
-    <div className="dashboard-card p-6 md:p-8">
-      <div className="flex flex-col md:flex-row justify-between items-start mb-6">
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Overview</h2>
-          <div className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white">${totalSales.toLocaleString()}</div>
-          <div className={`flex items-center text-sm font-medium mt-1 ${percentageChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {percentageChange >= 0 ? <TrendingUp className="w-4 h-4 mr-1" /> : <TrendingDown className="w-4 h-4 mr-1" />}
-            <span>{percentageChange.toFixed(1)}% from previous period</span>
-          </div>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.salesOverview}</h2>
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">{formatPrice(totalSales, currentCurrency, 'USD')}</div>
         </div>
-        <div className="flex items-center space-x-1 mt-4 md:mt-0 bg-gray-100 dark:bg-gray-900/50 p-1 rounded-lg">
-          {['1W', '1M', '6M', '1Y'].map((range) => (
-            <button 
-              key={range} 
-              onClick={() => setTimeRange(range)} 
-              className={`px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors duration-200 ${
-                timeRange === range 
-                  ? 'bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 shadow-sm' 
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-              }`}
-            >
-              {range}
-            </button>
-          ))}
+        <div className={`flex items-center text-sm ${percentageChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          {percentageChange >= 0 ? <TrendingUp className="w-4 h-4 mr-1" /> : <TrendingDown className="w-4 h-4 mr-1" />}
+          <span>{percentageChange.toFixed(1)}%</span>
         </div>
       </div>
-      <div className="h-80 w-full">
+      <div className="h-64 w-full">
         <Line data={chartData} options={options} />
       </div>
     </div>
   );
-});
+};
 
 function AdminDashboard() {
+  // Test if context is available
+  let languageContext;
+  try {
+    languageContext = useLanguage();
+  } catch (error) {
+    console.error('LanguageContext not available in dashboard:', error);
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500 text-lg">
+          Language Context Error in Dashboard: {error instanceof Error ? error.message : 'Unknown error'}
+        </div>
+      </div>
+    );
+  }
+  
+  const { t, currentLanguage, direction } = languageContext;
   // Get current currency from localStorage
   const [currentCurrency, setCurrentCurrency] = React.useState('USD');
+  // Force re-render state
+  const [refreshKey, setRefreshKey] = React.useState(0);
   
   // Date picker state
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   
+  // Time range state for chart
+  const [selectedTimeRange, setSelectedTimeRange] = useState('All');
+  
   React.useEffect(() => {
     const savedCurrency = localStorage.getItem('preferred-currency') || 'USD';
     setCurrentCurrency(savedCurrency);
   }, []);
+
+  // Listen for currency changes
+  React.useEffect(() => {
+    const handleCurrencyChange = (e: CustomEvent) => {
+      if (e.detail && e.detail.currency) {
+        setCurrentCurrency(e.detail.currency);
+      }
+    };
+
+    window.addEventListener('currencyChanged', handleCurrencyChange as EventListener);
+    return () => window.removeEventListener('currencyChanged', handleCurrencyChange as EventListener);
+  }, []);
+
+  // Listen for language changes
+  React.useEffect(() => {
+    const handleLanguageChange = (e: CustomEvent) => {
+      if (e.detail && e.detail.language) {
+        console.log('Language change event received:', e.detail.language);
+        setForceUpdate(prev => prev + 1);
+        setRefreshKey(prev => prev + 1);
+      }
+    };
+
+    window.addEventListener('languageChanged', handleLanguageChange as EventListener);
+    return () => window.removeEventListener('languageChanged', handleLanguageChange as EventListener);
+  }, []);
+
+  // Check for language changes every second
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const savedLanguage = localStorage.getItem('preferred-language') || 'en';
+      if (savedLanguage !== currentLanguage) {
+        console.log('Language changed in localStorage:', savedLanguage);
+        setRefreshKey(prev => prev + 1);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [currentLanguage]);
+
+  // Force re-render when language changes
+  const [forceUpdate, setForceUpdate] = React.useState(0);
+  
+  React.useEffect(() => {
+    // This effect will run whenever currentLanguage changes, forcing a re-render
+    console.log('Language changed to:', currentLanguage);
+    console.log('Current translations:', t);
+    setForceUpdate(prev => prev + 1);
+  }, [currentLanguage, t]);
 
   // Close date picker when clicking outside
   useEffect(() => {
@@ -658,6 +761,7 @@ function AdminDashboard() {
     try {
       const newDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
       setSelectedDate(newDate);
+      setSelectedTimeRange('Custom Date');
       setShowDatePicker(false);
     } catch (error) {
       console.error('Error selecting date:', error);
@@ -682,21 +786,21 @@ function AdminDashboard() {
   // Memoized data to prevent unnecessary re-renders
   const stats = useMemo(() => [
     {
-      title: 'Total Sales',
+      title: t.totalSales,
       value: formatPrice(125430, currentCurrency, 'USD'),
       change: '+12.5% from last month',
       changeType: 'positive',
       icon: <DollarSign className="w-5 h-5 text-gray-500 dark:text-gray-400" />
     },
     {
-      title: 'Net Sales',
+      title: t.netSales,
       value: formatPrice(118900, currentCurrency, 'USD'),
       change: '+11.8% from last month',
       changeType: 'positive',
       icon: <TrendingUp className="w-5 h-5 text-gray-500 dark:text-gray-400" />
     },
     {
-      title: 'Order Count',
+      title: t.orderCount,
       value: '1,234',
       change: '+8.2% from last month',
       changeType: 'positive',
@@ -709,54 +813,99 @@ function AdminDashboard() {
       changeType: 'negative',
       icon: <TrendingDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
     }
-  ], [currentCurrency]);
+  ], [currentCurrency, t]);
 
 
 
   return (
-    <div className="space-y-4">
-      {/* Combined Dashboard Card */}
-      <div className="dashboard-card p-6">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Dashboard</h1>
-          </div>
-          
-          {/* Time Period Filter */}
-          <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              All
+    <div 
+      className={`space-y-6 ${direction === 'rtl' ? 'rtl' : 'ltr'}`} 
+      key={`${currentLanguage}-${refreshKey}`}
+      dir={direction}
+      style={{
+        direction: direction,
+        textAlign: direction === 'rtl' ? 'right' : 'left',
+        backgroundColor: '#f8fafc',
+        minHeight: '100vh'
+      }}
+    >
+      
+      {/* Main Dashboard Card */}
+      <div className={`analytics-card p-0 ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+        {/* Card Header with full-width border line */}
+        <div className={`flex justify-between items-center px-4 pt-4 pb-3 border-b ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`} style={{ borderBottomColor: '#eef2f6' }}>
+          <h1 className={`text-lg font-semibold text-gray-900 dark:text-white ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>Dashboard</h1>
+          <div className={`flex items-center text-sm ${direction === 'rtl' ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
+            {/* Time Period Filter */}
+            <div className={`flex items-center rounded-lg overflow-hidden ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`} style={{ border: '1px solid #eef2f6' }}>
+            <button 
+              onClick={() => setSelectedTimeRange('All')}
+              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                selectedTimeRange === 'All' 
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+              }`}
+            >
+{t.all}
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              Today
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <button 
+              onClick={() => setSelectedTimeRange('Today')}
+              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                selectedTimeRange === 'Today' 
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+              }`}
+            >
+              {t.today}
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              This Week
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <button 
+              onClick={() => setSelectedTimeRange('This Week')}
+              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                selectedTimeRange === 'This Week' 
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+              }`}
+            >
+              {t.thisWeek}
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              This Month
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <button 
+              onClick={() => setSelectedTimeRange('This Month')}
+              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                selectedTimeRange === 'This Month' 
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+              }`}
+            >
+              {t.thisMonth}
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              This Year
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <button 
+              onClick={() => setSelectedTimeRange('This Year')}
+              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                selectedTimeRange === 'This Year' 
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+              }`}
+            >
+              {t.thisYear}
             </button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-600"></div>
+            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
             <div className="relative date-picker-container">
               <button 
                 onClick={() => setShowDatePicker(!showDatePicker)}
                 className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                {selectedDate ? formatDate(selectedDate) : 'Select Date'}
+                {selectedDate ? formatDate(selectedDate) : t.selectDate}
               </button>
               
               {/* Date Picker Popover */}
               {showDatePicker && (
                 <div 
-                  className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-xl z-[9999] p-4 w-80"
+                  className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-[9999] p-4 w-80"
+                  style={{ border: '1px solid #eef2f6' }}
                   style={{ 
                     position: 'absolute',
                     top: '100%',
@@ -835,10 +984,11 @@ function AdminDashboard() {
                   </div>
                   
                   {/* Today Button */}
-                  <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-600">
+                  <div className="mt-4 pt-3 border-t" style={{ borderTopColor: '#eef2f6' }}>
                     <button
                       onClick={() => {
                         setSelectedDate(new Date());
+                        setSelectedTimeRange('Custom Date');
                         setShowDatePicker(false);
                       }}
                       className="w-full text-sm text-cosmt-primary hover:text-cosmt-primary-dark font-medium"
@@ -851,20 +1001,20 @@ function AdminDashboard() {
             </div>
           </div>
         </div>
-        
-        {/* Horizontal Line */}
-        <div className="border-t border-gray-200 dark:border-gray-600 mb-4"></div>
-        
-        {/* Stats Grid */}
-        <div className="flex">
+        </div>
+
+        {/* Card Content */}
+        <div className="px-4 py-4">
+          {/* Stats Grid */}
+        <div className={`flex ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
           {stats.map((stat, index) => (
-            <div key={index} className="flex-1 py-4 px-4 border-r border-gray-200 dark:border-gray-600 last:border-r-0">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{stat.title}</h3>
+            <div key={index} className={`flex-1 py-4 px-4 ${direction === 'rtl' ? 'border-l last:border-l-0' : 'border-r last:border-r-0'}`} style={{ borderRightColor: '#eef2f6' }}>
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-xs font-medium text-gray-600 dark:text-gray-300">{stat.title}</h3>
                 {stat.icon}
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">{stat.value}</p>
                 <div className="flex items-center text-xs mt-1 text-gray-500 dark:text-gray-400">
                   <span className={`flex items-center font-medium ${stat.changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`}>
                     {stat.changeType === 'positive' ? 
@@ -899,56 +1049,42 @@ function AdminDashboard() {
             </div>
           </div>
         </div>
+        </div>
       </div>
 
-      {/* Modern Chart */}
-      <ModernChart />
-
-      {/* Live Visitors Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Live Visitors Details */}
-        <div className="dashboard-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Live Visitors</h3>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
-              <span className="text-sm text-green-600 dark:text-green-400 font-medium">Live</span>
+      {/* Chart and Right Side Section */}
+      <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+        {/* Modern Chart - Takes 2/3 of the width */}
+        <div className="lg:col-span-2">
+          <div className="analytics-card p-0">
+            {/* Chart Header with full-width border line */}
+            <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Analytics Overview</h3>
+              <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                <Activity className="w-3 h-3 mr-1" />
+                Last 30 days
+              </div>
             </div>
 
-          </div>
-          
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Eye className="w-5 h-5 text-gray-400 mr-2" />
-                <span className="text-sm text-gray-600 dark:text-gray-300">Currently Online</span>
-              </div>
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">127</span>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Globe className="w-5 h-5 text-gray-400 mr-2" />
-                <span className="text-sm text-gray-600 dark:text-gray-300">Page Views (Today)</span>
-              </div>
-              <span className="text-xl font-semibold text-gray-900 dark:text-white">2,847</span>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Users className="w-5 h-5 text-gray-400 mr-2" />
-                <span className="text-sm text-gray-600 dark:text-gray-300">Unique Visitors (Today)</span>
-              </div>
-              <span className="text-xl font-semibold text-gray-900 dark:text-white">1,234</span>
+            {/* Chart Content */}
+            <div>
+              <ModernChart timeRange={selectedDate ? 'Custom Date' : selectedTimeRange} selectedDate={selectedDate} currentCurrency={currentCurrency} t={t} />
             </div>
           </div>
         </div>
 
-        {/* Top Pages */}
-        <div className="dashboard-card p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Top Pages</h3>
-          
-          <div className="space-y-3">
+        {/* Right Side - Top Pages and Live Visitors stacked */}
+        <div className="lg:col-span-1 space-y-6">
+          {/* Top Pages */}
+          <div className="analytics-card">
+          {/* Card Header with full-width border line */}
+          <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.topPages}</h3>
+          </div>
+
+          {/* Card Content */}
+          <div className="px-6 py-6">
+            <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="w-2 h-2 bg-gray-600 rounded-full mr-3"></div>
@@ -981,18 +1117,61 @@ function AdminDashboard() {
               <span className="text-sm font-medium text-gray-900 dark:text-white">234 views</span>
             </div>
           </div>
+          </div>
+          </div>
+
+          {/* Live Visitors */}
+          <div className="analytics-card">
+          {/* Card Header with full-width border line */}
+          <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b" style={{ borderBottomColor: '#eef2f6' }}>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t.liveVisitors}</h3>
+              <div className="flex items-center">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">Live</span>
+              </div>
+            </div>
+
+            {/* Card Content */}
+            <div className="px-4 py-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Eye className="w-4 h-4 text-gray-400 mr-2" />
+                    <span className="text-xs text-gray-600 dark:text-gray-300">Currently Online</span>
+                  </div>
+                  <span className="text-lg font-bold text-gray-900 dark:text-white">127</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Globe className="w-4 h-4 text-gray-400 mr-2" />
+                    <span className="text-xs text-gray-600 dark:text-gray-300">Page Views (Today)</span>
+                  </div>
+                  <span className="text-base font-semibold text-gray-900 dark:text-white">2,847</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Users className="w-4 h-4 text-gray-400 mr-2" />
+                    <span className="text-xs text-gray-600 dark:text-gray-300">Unique Visitors (Today)</span>
+                  </div>
+                  <span className="text-base font-semibold text-gray-900 dark:text-white">1,234</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Traffic Sources & Device Analytics */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <TrafficSources />
-        <DeviceAnalytics />
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+        <TrafficSources t={t} />
+        <DeviceAnalytics t={t} />
       </div>
 
       {/* Conversion Funnel */}
-      <div className="grid grid-cols-1 gap-4">
-        <ConversionFunnel />
+      <div className={`grid grid-cols-1 gap-4 ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
+        <ConversionFunnel t={t} />
       </div>
     </div>
   );
