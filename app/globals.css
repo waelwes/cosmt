@@ -1,26 +1,715 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cosmt-primary: #00833F;
+  --cosmt-primary-dark: #005a2a;
+  --cosmt-primary-light: #e6f2ec;
+  --cosmt-background: #ffffff;
+  --cosmt-text: #111827;
+  --cosmt-text-light: #4b5563;
+  --cosmt-text-lighter: #6b7280;
+  --cosmt-promotion-bg: #2d5a27;
+  --cosmt-gray-50: #f9fafb;
+  --cosmt-gray-100: #f3f4f6;
+  --cosmt-gray-200: #e5e7eb;
+  --main-bg: #f8fafc;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-background: var(--cosmt-background);
+  --color-foreground: var(--cosmt-text);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono);
+  
+  /* Brand Colors */
+  --color-cosmt-primary: var(--cosmt-primary);
+  --color-cosmt-primary-dark: var(--cosmt-primary-dark);
+  --color-cosmt-primary-light: var(--cosmt-primary-light);
+  
+  /* Dark Mode Configuration */
+  --color-dark-bg: #111827;
+  --color-dark-surface: #1f2937;
+  --color-dark-text: #f9fafb;
+  --color-dark-border: #374151;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Dark mode configuration for Tailwind v4 */
+@variant dark (.dark &);
+
+body {
+  background: var(--cosmt-background);
+  color: var(--cosmt-text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Admin Dashboard Main Background */
+[data-admin="true"] .admin-main {
+  background-color: var(--main-bg) !important;
+}
+
+/* Automatically apply cursor pointer to all interactive elements */
+button,
+[role="button"],
+a,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+textarea,
+[tabindex]:not([tabindex="-1"]),
+[onclick],
+[onmousedown],
+[onmouseup],
+[onkeydown],
+[onkeyup] {
+  cursor: pointer !important;
+}
+
+/* Admin Layout Styles */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  contain: layout style;
+}
+
+/* Admin Header Background - Force White */
+[data-admin="true"] .bg-white {
+  background-color: #ffffff !important;
+}
+
+/* Force admin header to be white */
+[data-admin="true"] div[class*="bg-white"] {
+  background-color: #ffffff !important;
+}
+
+/* Specific admin header styling */
+[data-admin="true"] .bg-white.dark\\:bg-gray-800 {
+  background-color: #ffffff !important;
+}
+
+/* Force admin header div to be white */
+[data-admin="true"] div.flex-1.flex.flex-col > div:first-child {
+  background-color: #ffffff !important;
+}
+
+/* Admin header specific styling - Force white background */
+[data-admin="true"] .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Override any conflicting background colors */
+[data-admin="true"] .admin-header.bg-gray-50,
+[data-admin="true"] .admin-header[style*="background-color: #f9fafb"],
+[data-admin="true"] .admin-header[style*="background: #f9fafb"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Force admin header container to be white */
+[data-admin="true"] .admin-header > div {
+  background-color: transparent !important;
+}
+
+/* Highest priority - Force admin header to be white */
+[data-admin="true"] .admin-header,
+[data-admin="true"] .admin-header.bg-white,
+[data-admin="true"] .admin-header.bg-gray-50,
+[data-admin="true"] .admin-header[class*="bg-"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Ultra high priority - Override everything */
+[data-admin="true"] div.admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Force white background on admin header with any class combination */
+[data-admin="true"] .admin-header[style*="background"],
+[data-admin="true"] .admin-header[style*="background-color"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Override any inherited background from parent containers */
+[data-admin="true"] .flex-1.flex.flex-col > .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Force header to be white regardless of parent background */
+[data-admin="true"] .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Target the exact header structure */
+[data-admin="true"] div.flex-1.flex.flex-col > div.admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Override any Tailwind classes */
+[data-admin="true"] .admin-header.bg-white {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Specific rule for admin-header-white class */
+[data-admin="true"] .admin-header-white {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Dark mode header styling */
+[data-admin="true"] .dark .admin-header {
+  background-color: #1f2937 !important;
+  background: #1f2937 !important;
+  border-bottom-color: #374151 !important;
+}
+
+.admin-sidebar {
+  flex-shrink: 0;
+  width: 14rem; /* 224px */
+  background: #1e293b !important; /* Dark blue-gray background */
+  border-right: 1px solid #334155;
+  will-change: transform;
+  min-height: 100vh; /* Full height */
+}
+
+/* Force admin sidebar background to be dark blue-gray */
+[data-admin="true"] .admin-sidebar {
+  background: #1e293b !important;
+  background-color: #1e293b !important;
+}
+
+/* Exclude sidebar from admin cards gray background rules */
+[data-admin="true"] .admin-sidebar.bg-white,
+[data-admin="true"] .admin-sidebar[class*="bg-white"] {
+  background-color: #1e293b !important;
+}
+
+/* Force admin sidebar container to be dark blue-gray */
+[data-admin="true"] .admin-sidebar {
+  background-color: #1e293b !important;
+}
+
+/* Force admin sidebar main container to be dark blue-gray */
+[data-admin="true"] .admin-sidebar > div {
+  background-color: #1e293b !important;
+}
+
+/* Override any gray background on admin sidebar */
+[data-admin="true"] .admin-sidebar[style*="background-color: #f9f9f9"],
+[data-admin="true"] .admin-sidebar[style*="background: #f9f9f9"] {
+  background-color: #1e293b !important;
+  background: #1e293b !important;
+}
+
+/* Force sidebar to stay dark blue-gray - highest priority */
+[data-admin="true"] .admin-sidebar,
+[data-admin="true"] .admin-sidebar > div,
+[data-admin="true"] .admin-sidebar > div > div {
+  background-color: #1e293b !important;
+  background: #1e293b !important;
+}
+
+/* Ensure hover text color works properly - highest specificity */
+[data-admin="true"] .admin-sidebar button:hover,
+[data-admin="true"] .admin-sidebar a:hover,
+[data-admin="true"] .admin-sidebar button:hover *,
+[data-admin="true"] .admin-sidebar a:hover *,
+[data-admin="true"] .admin-sidebar .group:hover,
+[data-admin="true"] .admin-sidebar .group:hover * {
+  color: #ffffff !important;
+}
+
+/* Force text color on hover for all sidebar elements */
+[data-admin="true"] .admin-sidebar button:hover span,
+[data-admin="true"] .admin-sidebar a:hover span,
+[data-admin="true"] .admin-sidebar button:hover div,
+[data-admin="true"] .admin-sidebar a:hover div {
+  color: #ffffff !important;
+}
+
+/* Ultra specific hover text color override */
+[data-admin="true"] .admin-sidebar button:hover,
+[data-admin="true"] .admin-sidebar a:hover,
+[data-admin="true"] .admin-sidebar button:hover *,
+[data-admin="true"] .admin-sidebar a:hover * {
+  color: #ffffff !important;
+  color: white !important;
+}
+
+/* Target specific text content */
+[data-admin="true"] .admin-sidebar button:hover,
+[data-admin="true"] .admin-sidebar a:hover {
+  color: #ffffff !important;
+}
+
+[data-admin="true"] .admin-sidebar button:hover *,
+[data-admin="true"] .admin-sidebar a:hover * {
+  color: #ffffff !important;
+}
+
+/* Sidebar hover text fix - most specific */
+.admin-sidebar-hover:hover {
+  color: #ffffff !important;
+}
+
+.admin-sidebar-hover:hover * {
+  color: #ffffff !important;
+}
+
+/* Force all text to be white on hover */
+[data-admin="true"] .admin-sidebar button:hover,
+[data-admin="true"] .admin-sidebar a:hover {
+  color: #ffffff !important;
+}
+
+[data-admin="true"] .admin-sidebar button:hover *,
+[data-admin="true"] .admin-sidebar a:hover * {
+  color: #ffffff !important;
+}
+
+/* Override any dynamic changes */
+[data-admin="true"] .admin-sidebar[class*="bg-"],
+[data-admin="true"] .admin-sidebar[style*="background"] {
+  background-color: #1e293b !important;
+  background: #1e293b !important;
+}
+
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  background: #f9fafb; /* Light gray background */
+  contain: layout;
+  min-height: 100vh; /* Full height */
+}
+
+/* Horizontal Sidebar Layout */
+.admin-sidebar-horizontal {
+  width: 100%;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  will-change: transform;
+  transition: all 0.3s ease-in-out;
+  max-height: 200px; /* Default visible height */
+  overflow: hidden;
+}
+
+.admin-sidebar-horizontal.open {
+  max-height: 500px; /* Expanded height */
+  overflow: visible;
+}
+
+.admin-sidebar-horizontal.closed {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.admin-sidebar-horizontal .admin-sidebar {
+  width: 100%;
+  border-right: none;
+  border-bottom: none;
+}
+
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    position: fixed;
+    top: 0; /* Full height from top */
+    left: 0;
+    height: 100vh;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .admin-main {
+    width: 100%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Admin Sidebar Arrow Animations */
+.chevron-arrow {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Force sidebar navigation styling */
+[data-admin="true"] .admin-sidebar button {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+[data-admin="true"] .admin-sidebar button:hover {
+  background-color: white !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+[data-admin="true"] .admin-sidebar a:hover {
+  background-color: white !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+/* Google-Style Input Base Class - Light & Dark Mode */
+.cosmt-input-base {
+  @apply w-full py-2 px-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:outline-none focus:border-cosmt-primary focus:ring-0;
+  @apply dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cosmt-primary;
+}
+
+.chevron-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Ensure clickable elements show pointer cursor */
+[data-clickable="true"],
+.clickable {
+  cursor: pointer !important;
+}
+
+/* Override any cursor styles for interactive elements */
+button:hover,
+[role="button"]:hover,
+a:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="checkbox"]:hover,
+input[type="radio"]:hover,
+select:hover,
+textarea:hover {
+  cursor: pointer !important;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  button, 
+  [role="button"], 
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better mobile spacing */
+  .cosmt-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  /* Mobile header improvements */
+  .cosmt-navigation {
+    padding: 0;
+  }
+  
+  /* Mobile-friendly text sizes */
+  .text-cosmt-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+  
+  .text-cosmt-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .text-cosmt-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  
+  /* Mobile product cards */
+  .cosmt-product-card {
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  /* Mobile-friendly buttons */
+}
+
+/* COSMT Custom CSS Classes */
+.cosmt-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.cosmt-navigation {
+  @apply bg-white border-b border-gray-200 sticky top-0 z-50;
+}
+
+.cosmt-hero-slider {
+  @apply relative h-96 md:h-[500px] overflow-hidden;
+}
+
+.cosmt-product-card {
+  @apply transition-all duration-300 hover:scale-[1.02];
+  border-radius: 6px !important;
+}
+
+/* Main Website Cards - 6px border radius (exclude admin pages) */
+body:not([data-admin="true"]) .rounded-lg {
+  border-radius: 6px !important;
+}
+
+/* Admin Card Border Radius - 6px (only for admin pages, exclude dashboard cards) */
+[data-admin="true"] .rounded-lg:not(.rounded-2xl),
+[data-admin="true"] .bg-white.rounded-lg:not(.rounded-2xl),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg:not(.rounded-2xl),
+[data-admin="true"] [class*="bg-white"].rounded-lg:not(.rounded-2xl),
+[data-admin="true"] [class*="bg-gray-800"].rounded-lg:not(.rounded-2xl),
+[data-admin="true"] .border.rounded-lg:not(.rounded-2xl),
+[data-admin="true"] .border-gray-200.rounded-lg:not(.rounded-2xl),
+[data-admin="true"] .border-gray-700.rounded-lg:not(.rounded-2xl),
+[data-admin="true"] .rounded-md,
+[data-admin="true"] .rounded-xl:not(.rounded-2xl),
+[data-admin="true"] .rounded-3xl {
+  border-radius: 6px !important;
+}
+
+/* Admin Cards Background Color - #f9f9f9 (exclude dashboard cards and sidebar) */
+[data-admin="true"] .bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] [class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] .bg-white.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] .border.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] .border-gray-200.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] .border-gray-700.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] div.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] div.bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] div[class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *) {
+  background-color: #f9f9f9 !important;
+}
+
+/* More specific admin card background override (exclude dashboard cards and sidebar) */
+[data-admin="true"] div[class*="bg-white"][class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] div[class*="bg-white"][class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] .bg-white[class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
+[data-admin="true"] .bg-white[class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *) {
+  background-color: #f9f9f9 !important;
+}
+
+/* Force admin cards background - highest specificity (exclude dashboard cards) */
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700:not(.rounded-md) {
+  background-color: #f9f9f9 !important;
+}
+
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-4:not(.rounded-md),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-6:not(.rounded-md) {
+  background-color: #f9f9f9 !important;
+}
+
+/* Keep rounded-full and rounded-sm as they are for specific UI elements */
+[data-admin="true"] .rounded-full {
+  border-radius: 9999px !important; /* Keep full rounded for pills/badges */
+}
+
+/* Admin Dashboard Cards - Pure White with 8px border radius and shadow-md */
+[data-admin="true"] .dashboard-card {
+  background-color: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important; /* shadow-md */
+}
+
+/* Force all admin cards to use 6px border radius (except dashboard cards) */
+[data-admin="true"] .rounded-2xl:not(.dashboard-card),
+[data-admin="true"] .rounded-md:not(.dashboard-card),
+[data-admin="true"] .rounded-lg:not(.dashboard-card) {
+  border-radius: 6px !important;
+}
+
+[data-admin="true"] .rounded-sm {
+  border-radius: 2px !important; /* Keep small rounded for subtle elements */
+}
+
+/* Admin Form Elements - 6px border radius */
+[data-admin="true"] input[type="text"],
+[data-admin="true"] input[type="email"],
+[data-admin="true"] input[type="password"],
+[data-admin="true"] input[type="number"],
+[data-admin="true"] input[type="search"],
+[data-admin="true"] select,
+[data-admin="true"] textarea,
+[data-admin="true"] .border-gray-300.rounded-md,
+[data-admin="true"] .border-gray-600.rounded-md {
+  border-radius: 6px !important;
+}
+
+/* Admin Dropdowns and Modals - 6px border radius */
+[data-admin="true"] .dropdown,
+[data-admin="true"] .modal,
+[data-admin="true"] .popover {
+  border-radius: 6px !important;
+}
+
+
+
+.cosmt-brand-section {
+  @apply py-12 bg-gray-50;
+}
+
+.cosmt-brand-section-alt {
+  @apply py-12 bg-white;
+}
+
+.cosmt-footer {
+  @apply bg-gray-900 text-white;
+}
+
+.cosmt-promotion-bar {
+  @apply text-white py-1 px-2 md:py-2 md:px-4 relative;
+  background-color: #00833F;
+}
+
+/* Scrolling text animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 120s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Remove all border radius for sharp, angular design - EXCEPT admin pages */
+body:not([data-admin="true"]) * {
+  border-radius: 0 !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00833F;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00662f;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Swiper custom styles */
+.brand-carousel .swiper-slide {
+  height: auto;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glowSweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+
+/* Typography scale */
+.text-cosmt-xs { font-size: 0.75rem; line-height: 1rem; }
+.text-cosmt-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-cosmt-base { font-size: 1rem; line-height: 1.5rem; }
+.text-cosmt-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-cosmt-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-cosmt-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-cosmt-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.text-cosmt-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+.text-cosmt-5xl { font-size: 3rem; line-height: 1; }
+.text-cosmt-6xl { font-size: 3.75rem; line-height: 1; }
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* General button click effects */
+button {
+  transition: all 0.2s ease;
+}
+
+/* Remove focus outlines from all buttons */
+button:focus,
+button:focus-visible,
+button:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+  ring: none !important;
+}
+
+/* Remove focus rings from all interactive elements */
+*:focus,
+*:focus-visible,
+*:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+  ring: none !important;
+}
+
+/* Input clear button styling */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' L6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' L18' y2='18'%3E%3C/line%3E%3C/svg%3E") no-repeat center;
+  background-size: 16px 16px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+input[type="search"]::-webkit-search-cancel-button:hover {
+  background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' L6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' L18' y2='18'%3E%3C/line%3E%3C/svg%3E") no-repeat center;
+  background-size: 16px 16px;
 }
