@@ -154,7 +154,7 @@ export default function CategoriesPage() {
 
   const renderCategory = (category: any, isChild = false) => (
     <div key={category.id} className={`${isChild ? 'ml-8' : ''}`}>
-      <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-md shadow-sm mb-2 hover:bg-gray-50 dark:hover:bg-gray-700">
+      <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded mb-2 hover:bg-gray-50 dark:hover:bg-gray-700 analytics-card">
         <div className="flex items-center">
           <Folder className={`w-5 h-5 mr-3 ${isChild ? 'text-gray-400' : 'text-blue-500'}`} />
           <div>
@@ -198,7 +198,7 @@ export default function CategoriesPage() {
   );
 
   return (
-    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <div className="space-y-6 categories-page" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -223,7 +223,7 @@ export default function CategoriesPage() {
                 placeholder="Search categories..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full pl-10 pr-3 py-2 filter-input"
               />
             </div>
           </div>
@@ -233,7 +233,7 @@ export default function CategoriesPage() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="w-full filter-select"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>

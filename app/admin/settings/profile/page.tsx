@@ -54,7 +54,7 @@ export default function ProfileSettingsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Profile Settings</h1>
@@ -85,7 +85,7 @@ export default function ProfileSettingsPage() {
         {/* Profile Information */}
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Information */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
               <User className="w-5 h-5 mr-2" />
               Basic Information
@@ -155,7 +155,7 @@ export default function ProfileSettingsPage() {
           </div>
 
           {/* Account Settings */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
               <Shield className="w-5 h-5 mr-2" />
               Account Settings
@@ -206,7 +206,7 @@ export default function ProfileSettingsPage() {
           </div>
 
           {/* Notification Preferences */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
               <Bell className="w-5 h-5 mr-2" />
               Notification Preferences
@@ -267,7 +267,7 @@ export default function ProfileSettingsPage() {
         {/* Profile Card */}
         <div className="space-y-6">
           {/* Avatar & Basic Info */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
             <div className="text-center">
               <div className="relative inline-block">
                 <img
@@ -288,7 +288,7 @@ export default function ProfileSettingsPage() {
           </div>
 
           {/* Account Stats */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Account Information</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">

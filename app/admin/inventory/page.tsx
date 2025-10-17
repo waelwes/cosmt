@@ -109,7 +109,7 @@ const InventoryCard = memo(({ title, value, change, icon: Icon, color }: {
   icon: any;
   color: string;
 }) => (
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -136,7 +136,7 @@ const InventoryItem = memo(({ item, onEdit, onDelete, onView }: {
   const stockStatus = getStockStatus(item.currentStock, item.minStock);
   
   return (
-    <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+    <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-4">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="flex items-center space-x-3">
@@ -325,7 +325,7 @@ export default function InventoryManagement() {
       </div>
 
       {/* Filters and Search */}
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
           <div className="flex-1">
             <div className="relative">
@@ -394,7 +394,7 @@ export default function InventoryManagement() {
       </div>
 
       {/* Recent Stock Movements */}
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Stock Movements</h2>
           <button className="text-green-600 hover:text-green-700 text-sm font-medium">

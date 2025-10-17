@@ -22,9 +22,9 @@ export const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:focus:ring-gray-600 dark:focus:ring-offset-gray-800';
   
   const variantClasses = {
-    primary: 'bg-cosmt-primary text-white hover:bg-cosmt-primary-dark rounded-full dark:bg-cosmt-primary dark:hover:bg-cosmt-primary-dark',
-    secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600',
-    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-cosmt-primary hover:text-cosmt-primary rounded-full dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:border-cosmt-primary dark:hover:text-cosmt-primary',
+    primary: 'bg-cosmt-primary text-white hover:bg-cosmt-primary-dark rounded dark:bg-cosmt-primary dark:hover:bg-cosmt-primary-dark',
+    secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 rounded dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600',
+    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-cosmt-primary hover:text-cosmt-primary rounded dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:border-cosmt-primary dark:hover:text-cosmt-primary',
   };
   
   const sizeClasses = {

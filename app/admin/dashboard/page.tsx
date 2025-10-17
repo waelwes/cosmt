@@ -273,7 +273,7 @@ const ConversionFunnel = ({ t }: { t: any }) => {
       conversionRate: 100,
       dropOffRate: 0,
       icon: Users,
-      color: 'bg-gray-600',
+      color: 'bg-cosmt-primary',
       bgColor: 'bg-white dark:bg-gray-800/50',
       textColor: 'text-gray-700 dark:text-gray-300'
     },
@@ -283,7 +283,7 @@ const ConversionFunnel = ({ t }: { t: any }) => {
       conversionRate: 72.73,
       dropOffRate: 27.27,
       icon: ShoppingCart,
-      color: 'bg-gray-500',
+      color: 'bg-cosmt-primary',
       bgColor: 'bg-white dark:bg-gray-800/50',
       textColor: 'text-gray-700 dark:text-gray-300'
     },
@@ -293,7 +293,7 @@ const ConversionFunnel = ({ t }: { t: any }) => {
       conversionRate: 54.55,
       dropOffRate: 18.18,
       icon: CreditCard,
-      color: 'bg-gray-400',
+      color: 'bg-cosmt-primary',
       bgColor: 'bg-white dark:bg-gray-800/50',
       textColor: 'text-gray-700 dark:text-gray-300'
     },
@@ -904,7 +904,7 @@ function AdminDashboard() {
               {/* Date Picker Popover */}
               {showDatePicker && (
                 <div 
-                  className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-[9999] p-4 w-80"
+                  className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded z-[9999] p-4 w-80"
                   style={{ border: '1px solid #eef2f6' }}
                   style={{ 
                     position: 'absolute',

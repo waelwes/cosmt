@@ -202,7 +202,7 @@ export default function OrderDetailsPage() {
       </div>
 
       {/* Filters and Search */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+      <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div className="md:col-span-2">
@@ -239,7 +239,7 @@ export default function OrderDetailsPage() {
       {/* Orders List */}
       <div className="space-y-4">
         {filteredOrders.map((order) => (
-          <div key={order.id} className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+          <div key={order.id} className="dashboard-card border border-gray-200 dark:border-gray-700  overflow-hidden">
             {/* Order Header */}
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
@@ -380,7 +380,7 @@ export default function OrderDetailsPage() {
       {/* Empty State */}
       {filteredOrders.length === 0 && (
         <div className="text-center py-12">
-          <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-12">
+          <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-12">
             <ShoppingCart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No orders found</h3>
             <p className="text-gray-500 dark:text-gray-400 mb-6">

@@ -242,7 +242,7 @@ export default function OrdersPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
               <Clock className="w-6 h-6 text-blue-600" />
@@ -253,7 +253,7 @@ export default function OrdersPage() {
             </div>
           </div>
         </div>
-        <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 rounded-lg">
               <Package className="w-6 h-6 text-yellow-600" />
@@ -264,7 +264,7 @@ export default function OrdersPage() {
             </div>
           </div>
         </div>
-        <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-purple-100 rounded-lg">
               <Truck className="w-6 h-6 text-purple-600" />
@@ -275,7 +275,7 @@ export default function OrdersPage() {
             </div>
           </div>
         </div>
-        <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
               <CheckCircle className="w-6 h-6 text-green-600" />
@@ -338,7 +338,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+      <div className="analytics-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -438,20 +438,20 @@ export default function OrdersPage() {
       </div>
 
       {/* Pagination */}
-      <div className="analytics-card border border-gray-200 dark:border-gray-700 shadow-sm px-6 py-4">
+      <div className="analytics-card px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-gray-700 dark:text-gray-300">
             Showing <span className="font-medium">1</span> to <span className="font-medium">5</span> of{' '}
             <span className="font-medium">5</span> results
           </div>
           <div className="flex items-center space-x-2">
-            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 rounded-md hover:bg-gray-200">
+            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
               Previous
             </button>
-            <button className="px-3 py-1 text-sm text-white bg-green-600 rounded-md">
+            <button className="px-3 py-1 text-sm text-white bg-cosmt-primary rounded">
               1
             </button>
-            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 rounded-md hover:bg-gray-200">
+            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
               Next
             </button>
           </div>

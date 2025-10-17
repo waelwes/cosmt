@@ -91,7 +91,7 @@ export default function PaymentSettingsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Payment Settings</h1>
@@ -105,7 +105,7 @@ export default function PaymentSettingsPage() {
       </div>
 
       {/* General Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
           <Settings className="w-5 h-5 mr-2" />
           General Settings
@@ -165,7 +165,7 @@ export default function PaymentSettingsPage() {
       </div>
 
       {/* Payment Methods */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
             <CreditCard className="w-5 h-5 mr-2" />
@@ -226,7 +226,7 @@ export default function PaymentSettingsPage() {
       </div>
 
       {/* Security Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
           <Shield className="w-5 h-5 mr-2" />
           Security Settings
@@ -294,7 +294,7 @@ export default function PaymentSettingsPage() {
       </div>
 
       {/* Refund Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
           <AlertTriangle className="w-5 h-5 mr-2" />
           Refund Settings

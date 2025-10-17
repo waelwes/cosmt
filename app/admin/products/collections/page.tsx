@@ -99,7 +99,7 @@ export default function CollectionsPage() {
       </div>
 
       {/* Filters and Search */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+      <div className="dashboard-card p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div className="md:col-span-2">
@@ -110,7 +110,7 @@ export default function CollectionsPage() {
                 placeholder="Search collections..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full pl-10 pr-3 py-2 filter-input"
               />
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function CollectionsPage() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="w-full filter-select"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -134,7 +134,7 @@ export default function CollectionsPage() {
       {/* Collections Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCollections.map((collection) => (
-          <div key={collection.id} className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+          <div key={collection.id} className="dashboard-card overflow-hidden">
             {/* Collection Image */}
             <div className="h-48 bg-gray-100 dark:bg-gray-700 relative">
               <img
@@ -191,7 +191,7 @@ export default function CollectionsPage() {
       {/* Empty State */}
       {filteredCollections.length === 0 && (
         <div className="text-center py-12">
-          <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-12">
+          <div className="dashboard-card p-12">
             <Tag className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No collections found</h3>
             <p className="text-gray-500 dark:text-gray-400 mb-6">

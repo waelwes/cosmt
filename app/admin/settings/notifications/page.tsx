@@ -140,7 +140,7 @@ export default function NotificationsSettingsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Notification Settings</h1>
@@ -154,7 +154,7 @@ export default function NotificationsSettingsPage() {
       </div>
 
       {/* General Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
           <Settings className="w-5 h-5 mr-2" />
           General Settings
@@ -211,7 +211,7 @@ export default function NotificationsSettingsPage() {
       </div>
 
       {/* Notification Channels */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
           <Bell className="w-5 h-5 mr-2" />
           Notification Channels
@@ -302,7 +302,7 @@ export default function NotificationsSettingsPage() {
       </div>
 
       {/* Email Templates */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
             <Mail className="w-5 h-5 mr-2" />
@@ -348,7 +348,7 @@ export default function NotificationsSettingsPage() {
       </div>
 
       {/* Advanced Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
           <Settings className="w-5 h-5 mr-2" />
           Advanced Settings

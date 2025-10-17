@@ -16,6 +16,7 @@ import {
   Globe
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
+import './theme.css';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -219,7 +220,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           }}
         >
           {/* Top Header with Controls */}
-          <div className="admin-header admin-header-white bg-white dark:bg-gray-800 shadow-sm" style={{ backgroundColor: '#ffffff' }}>
+          <div className="admin-header admin-header-white bg-white dark:bg-gray-800" style={{ backgroundColor: '#ffffff' }}>
             {/* Header Content */}
             <div 
               className={`flex items-center justify-between h-16 px-6 ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}
@@ -269,7 +270,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   </button>
                   
                   {showLanguageMenu && (
-                    <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-lg z-50">
+                    <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 z-50">
                       <div className="py-2">
                         {languages.map((language) => (
                           <button
@@ -320,7 +321,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     )}
                   </button>
                   {showNotifications && (
-                    <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-lg z-50">
+                    <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 z-50">
                       <div className="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-600">
                         {t.notifications}
                       </div>
@@ -356,7 +357,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     <span className="text-sm font-medium">Admin</span>
                   </button>
                   {showUserMenu && (
-                    <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-lg z-50">
+                    <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 z-50">
                       <div className="py-2">
                         <Link
                           href="/admin/settings/profile"

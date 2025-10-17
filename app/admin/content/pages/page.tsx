@@ -170,7 +170,7 @@ const PageCard = memo(({ page, onEdit, onDelete, onDuplicate, onView }: {
   const TemplateIcon = templateIcons[page.template as keyof typeof templateIcons] || FileText;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-start space-x-3">
           <div className="p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">

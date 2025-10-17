@@ -190,7 +190,7 @@ const StatCard = memo(({ title, value, change, icon: Icon, color }: {
   icon: any;
   color: string;
 }) => (
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -214,7 +214,7 @@ const ChatMessageCard = memo(({ message, onReply, onMarkRead, onDelete }: {
   onMarkRead: (id: number) => void;
   onDelete: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-4">
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-2">
@@ -264,7 +264,7 @@ const EmailCampaignCard = memo(({ campaign, onEdit, onDelete, onView, onToggle }
   onView: (id: number) => void;
   onToggle: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-4">
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-2">
@@ -318,7 +318,7 @@ const TodoItemCard = memo(({ item, onEdit, onDelete, onToggle }: {
   onDelete: (id: number) => void;
   onToggle: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-4">
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-3 flex-1">
         <button
@@ -369,7 +369,7 @@ const DebugLogCard = memo(({ log, onView, onDelete }: {
   onView: (id: number) => void;
   onDelete: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-4">
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-2">
@@ -495,7 +495,7 @@ export default function AppsAndTools() {
       </div>
 
       {/* Tabs */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="dashboard-card border border-gray-200 dark:border-gray-700 ">
         <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="flex space-x-8 px-6">
             {[
@@ -585,7 +585,7 @@ export default function AppsAndTools() {
               
               <div className="space-y-4">
                 {calendarEvents.map((event) => (
-                  <div key={event.id} className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+                  <div key={event.id} className="dashboard-card border border-gray-200 dark:border-gray-700  p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900 dark:text-gray-100">{event.title}</h3>

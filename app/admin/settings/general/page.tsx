@@ -360,7 +360,7 @@ export default function GeneralSettingsPage() {
           <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
             <ImageIcon className="w-8 h-8 text-gray-400" />
           </div>
-          <button className="px-4 py-2 border rounded-lg hover:bg-gray-50">
+          <button className="px-4 py-2 border rounded-lg">
             Upload Logo
           </button>
         </div>
@@ -425,7 +425,7 @@ export default function GeneralSettingsPage() {
   };
 
   return (
-    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <div className="space-y-6 settings-general-page" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Settings</h1>

@@ -385,18 +385,18 @@ export default function CustomersPage() {
       {/* Pagination */}
       <div className="analytics-card px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-gray-700 dark:text-gray-300">
             Showing <span className="font-medium">1</span> to <span className="font-medium">5</span> of{' '}
             <span className="font-medium">5</span> results
           </div>
           <div className="flex items-center space-x-2">
-            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 rounded-md hover:bg-gray-200">
+            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
               Previous
             </button>
-            <button className="px-3 py-1 text-sm text-white bg-green-600 rounded-md">
+            <button className="px-3 py-1 text-sm text-white bg-cosmt-primary rounded">
               1
             </button>
-            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 rounded-md hover:bg-gray-200">
+            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
               Next
             </button>
           </div>

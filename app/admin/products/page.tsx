@@ -197,7 +197,7 @@ export default function ProductsPage() {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full pl-10 pr-3 py-2 filter-input"
               />
             </div>
           </div>
@@ -207,7 +207,7 @@ export default function ProductsPage() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 dark:text-gray-100"
+              className="w-full filter-select"
             >
               {categories.map(category => (
                 <option key={category} value={category}>
@@ -222,7 +222,7 @@ export default function ProductsPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 dark:text-gray-100"
+              className="w-full filter-select"
             >
               <option value="name">Sort by Name</option>
               <option value="price">Sort by Price</option>
@@ -236,8 +236,8 @@ export default function ProductsPage() {
       {/* Products Table */}
       <div className="analytics-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+          <table className="min-w-full divide-y" style={{ borderColor: '#eef2f6' }}>
+            <thead className="bg-gray-50 dark:bg-gray-700" style={{ borderColor: '#eef2f6' }}>
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider">
                   Product
@@ -348,7 +348,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Pagination */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm px-6 py-4">
+      <div className="analytics-card px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-700 dark:text-gray-300">
             Showing <span className="font-medium">1</span> to <span className="font-medium">4</span> of{' '}

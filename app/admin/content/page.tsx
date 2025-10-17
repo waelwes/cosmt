@@ -173,7 +173,7 @@ const StatCard = memo(({ title, value, change, icon: Icon, color }: {
   icon: any;
   color: string;
 }) => (
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="dashboard-card p-6">
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -198,7 +198,7 @@ const PageCard = memo(({ page, onEdit, onDelete, onView, onDuplicate }: {
   onView: (id: number) => void;
   onDuplicate: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+  <div className="dashboard-card p-6">
     <div className="flex items-start justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-2">
@@ -255,7 +255,7 @@ const MenuItemCard = memo(({ item, onEdit, onDelete, onToggle, level = 0 }: {
   onToggle: (id: number) => void;
   level?: number;
 }) => (
-  <div className={`dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4 ${level > 0 ? 'ml-6' : ''}`}>
+  <div className={`dashboard-card p-4 ${level > 0 ? 'ml-6' : ''}`}>
     <div className="flex items-center justify-between">
       <div className="flex-1">
         <div className="flex items-center space-x-3 mb-1">
@@ -306,7 +306,7 @@ const MediaFileCard = memo(({ file, onEdit, onDelete, onView }: {
   onDelete: (id: number) => void;
   onView: (id: number) => void;
 }) => (
-  <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+  <div className="dashboard-card p-4">
     <div className="flex items-center space-x-4">
       <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
         {file.type === 'image' ? (
@@ -462,7 +462,7 @@ export default function ContentManagement() {
       </div>
 
       {/* Tabs */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="dashboard-card">
         <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="flex space-x-8 px-6">
             {[

@@ -155,7 +155,7 @@ const OrderItem = memo(({ order }: { order: any }) => (
 
 const FunnelStep = memo(({ step, index }: { step: any; index: number }) => (
   <div className="flex items-center space-x-3">
-    <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center font-semibold text-xs">
+    <div className="w-6 h-6 bg-cosmt-primary/10 text-cosmt-primary rounded-full flex items-center justify-center font-semibold text-xs">
       {index + 1}
     </div>
     <div className="flex-1">
@@ -165,7 +165,7 @@ const FunnelStep = memo(({ step, index }: { step: any; index: number }) => (
       </div>
       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
         <div 
-          className="bg-green-600 h-1.5 rounded-full transition-all duration-300"
+          className="bg-cosmt-primary h-1.5 rounded-full transition-all duration-300"
           style={{ width: `${step.percentage}%` }}
         ></div>
       </div>
@@ -330,7 +330,7 @@ export default function AnalyticsDashboard() {
               
               {/* Date Picker Popover */}
               {showDatePicker && (
-                <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-[9999] p-4 w-80" style={{ border: '1px solid #eef2f6' }}>
+                <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded z-[9999] p-4 w-80" style={{ border: '1px solid #eef2f6' }}>
                   {/* Calendar Header */}
                   <div className="flex items-center justify-between mb-4">
                     <button
@@ -464,8 +464,8 @@ export default function AnalyticsDashboard() {
             {conversionFunnel.map((step, index) => (
               <FunnelStep key={step.stage} step={step} index={index} />
             ))}
-            <div className="mt-4 p-3 bg-green-50 rounded-lg">
-              <p className="text-sm font-medium text-green-800">
+            <div className="mt-4 p-3 bg-cosmt-primary/5 rounded-lg">
+              <p className="text-sm font-medium text-cosmt-primary">
                 Overall Conversion Rate: {conversionRate.toFixed(2)}%
               </p>
             </div>

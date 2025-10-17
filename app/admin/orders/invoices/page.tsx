@@ -202,7 +202,7 @@ function AdminInvoices() {
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
               <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -214,7 +214,7 @@ function AdminInvoices() {
           </div>
         </div>
 
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
               <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
@@ -226,7 +226,7 @@ function AdminInvoices() {
           </div>
         </div>
 
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
               <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
@@ -238,7 +238,7 @@ function AdminInvoices() {
           </div>
         </div>
 
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
           <div className="flex items-center">
             <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
               <DollarSign className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -252,7 +252,7 @@ function AdminInvoices() {
       </div>
 
       {/* Filters and Search */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+      <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="md:col-span-2">
             <div className="relative">
@@ -291,7 +291,7 @@ function AdminInvoices() {
       </div>
 
       {/* Invoices Table */}
-      <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+      <div className="dashboard-card border border-gray-200 dark:border-gray-700  overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-700">
@@ -435,7 +435,7 @@ function AdminInvoices() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700 shadow-sm px-6 py-4">
+        <div className="analytics-card px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-700 dark:text-gray-300">
               Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredInvoices.length)} of {filteredInvoices.length} results

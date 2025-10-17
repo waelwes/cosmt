@@ -308,7 +308,6 @@ textarea,
   flex-shrink: 0;
   width: 14rem; /* 224px */
   background: #000000 !important; /* Black background */
-  border-right: 1px solid #334155;
   will-change: transform;
   min-height: 100vh; /* Full height */
 }
@@ -498,6 +497,15 @@ textarea,
   border-radius: 0.25rem !important;
 }
 
+/* Override any conflicting button border radius rules */
+[data-admin="true"] button,
+[data-admin="true"] [role="button"],
+[data-admin="true"] input[type="button"],
+[data-admin="true"] input[type="submit"],
+[data-admin="true"] input[type="reset"] {
+  border-radius: 0.25rem !important;
+}
+
 /* Google-Style Input Base Class - Light & Dark Mode */
 .cosmt-input-base {
   @apply w-full py-2 px-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:outline-none focus:border-cosmt-primary focus:ring-0;
@@ -612,36 +620,36 @@ body:not([data-admin="true"]) .rounded-lg {
   border-radius: 6px !important;
 }
 
-/* Admin Cards Background Color - #f9f9f9 (exclude dashboard cards and sidebar) */
-[data-admin="true"] .bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] [class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] .bg-white.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] .border.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] .border-gray-200.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] .border-gray-700.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] div.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] div.bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] div[class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *) {
+/* Admin Cards Background Color - #f9f9f9 (exclude dashboard cards, sidebar, and categories page) */
+[data-admin="true"] .bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] [class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] .bg-white.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] .border.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] .border-gray-200.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] .border-gray-700.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] div.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] div.bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] div[class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *) {
   background-color: #f9f9f9 !important;
 }
 
-/* More specific admin card background override (exclude dashboard cards and sidebar) */
-[data-admin="true"] div[class*="bg-white"][class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] div[class*="bg-white"][class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] .bg-white[class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *),
-[data-admin="true"] .bg-white[class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *) {
+/* More specific admin card background override (exclude dashboard cards, sidebar, and categories page) */
+[data-admin="true"] div[class*="bg-white"][class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] div[class*="bg-white"][class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] .bg-white[class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
+[data-admin="true"] .bg-white[class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *) {
   background-color: #f9f9f9 !important;
 }
 
-/* Force admin cards background - highest specificity (exclude dashboard cards) */
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700:not(.rounded-md) {
+/* Force admin cards background - highest specificity (exclude dashboard cards and categories page) */
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700:not(.rounded-md):not(.categories-page *) {
   background-color: #f9f9f9 !important;
 }
 
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-4:not(.rounded-md),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-6:not(.rounded-md) {
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-4:not(.rounded-md):not(.categories-page *),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-6:not(.rounded-md):not(.categories-page *) {
   background-color: #f9f9f9 !important;
 }
 
@@ -663,6 +671,352 @@ body:not([data-admin="true"]) .rounded-lg {
   border-radius: 0.25rem !important;
   box-shadow: none !important;
   border: 1px solid #eef2f6 !important;
+}
+
+/* Table border colors for admin pages */
+[data-admin="true"] table {
+  border-color: #eef2f6 !important;
+}
+
+[data-admin="true"] table thead {
+  border-color: #eef2f6 !important;
+}
+
+[data-admin="true"] table thead tr {
+  border-color: #eef2f6 !important;
+}
+
+[data-admin="true"] table thead tr th {
+  border-color: #eef2f6 !important;
+  border-bottom-color: #eef2f6 !important;
+}
+
+[data-admin="true"] table tbody tr {
+  border-color: #eef2f6 !important;
+}
+
+[data-admin="true"] table tbody tr td {
+  border-color: #eef2f6 !important;
+}
+
+/* Force table header bottom border */
+[data-admin="true"] table thead tr:last-child th {
+  border-bottom: 1px solid #eef2f6 !important;
+}
+
+/* Input border colors for admin pages */
+[data-admin="true"] input[type="text"],
+[data-admin="true"] input[type="email"],
+[data-admin="true"] input[type="password"],
+[data-admin="true"] input[type="number"],
+[data-admin="true"] input[type="search"],
+[data-admin="true"] input[type="tel"],
+[data-admin="true"] input[type="url"],
+[data-admin="true"] input[type="date"],
+[data-admin="true"] input[type="time"],
+[data-admin="true"] input[type="datetime-local"],
+[data-admin="true"] select,
+[data-admin="true"] textarea {
+  border-color: #eef2f6 !important;
+}
+
+[data-admin="true"] input[type="text"]:focus,
+[data-admin="true"] input[type="email"]:focus,
+[data-admin="true"] input[type="password"]:focus,
+[data-admin="true"] input[type="number"]:focus,
+[data-admin="true"] input[type="search"]:focus,
+[data-admin="true"] input[type="tel"]:focus,
+[data-admin="true"] input[type="url"]:focus,
+[data-admin="true"] input[type="date"]:focus,
+[data-admin="true"] input[type="time"]:focus,
+[data-admin="true"] input[type="datetime-local"]:focus,
+[data-admin="true"] select:focus,
+[data-admin="true"] textarea:focus {
+  border-color: #eef2f6 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(238, 242, 246, 0.2) !important;
+}
+
+/* Override specific border classes on inputs */
+[data-admin="true"] .border-gray-300,
+[data-admin="true"] .border-gray-400,
+[data-admin="true"] .border-gray-500,
+[data-admin="true"] .border-gray-600,
+[data-admin="true"] .border-gray-700 {
+  border-color: #eef2f6 !important;
+}
+
+/* Force all input elements to use theme styling */
+[data-admin="true"] input,
+[data-admin="true"] input[type="text"],
+[data-admin="true"] input[type="email"],
+[data-admin="true"] input[type="password"],
+[data-admin="true"] input[type="number"],
+[data-admin="true"] input[type="tel"],
+[data-admin="true"] input[type="url"],
+[data-admin="true"] input[type="search"],
+[data-admin="true"] input[type="date"],
+[data-admin="true"] input[type="time"],
+[data-admin="true"] input[type="datetime-local"],
+[data-admin="true"] select,
+[data-admin="true"] textarea {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: #eef2f6 !important;
+  border: 1px solid #eef2f6 !important;
+  border-radius: 0.25rem !important;
+  color: #111827 !important;
+}
+
+/* Override any input with border classes */
+[data-admin="true"] input[class*="border"],
+[data-admin="true"] select[class*="border"],
+[data-admin="true"] textarea[class*="border"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: #eef2f6 !important;
+  border: 1px solid #eef2f6 !important;
+  border-radius: 0.25rem !important;
+  color: #111827 !important;
+}
+
+/* Input focus states */
+[data-admin="true"] input:focus,
+[data-admin="true"] input[type="text"]:focus,
+[data-admin="true"] input[type="email"]:focus,
+[data-admin="true"] input[type="password"]:focus,
+[data-admin="true"] input[type="number"]:focus,
+[data-admin="true"] input[type="tel"]:focus,
+[data-admin="true"] input[type="url"]:focus,
+[data-admin="true"] input[type="search"]:focus,
+[data-admin="true"] input[type="date"]:focus,
+[data-admin="true"] input[type="time"]:focus,
+[data-admin="true"] input[type="datetime-local"]:focus,
+[data-admin="true"] select:focus,
+[data-admin="true"] textarea:focus {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: #059669 !important;
+  border: 1px solid #059669 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+  color: #111827 !important;
+}
+
+/* Input hover states */
+[data-admin="true"] input:hover,
+[data-admin="true"] input[type="text"]:hover,
+[data-admin="true"] input[type="email"]:hover,
+[data-admin="true"] input[type="password"]:hover,
+[data-admin="true"] input[type="number"]:hover,
+[data-admin="true"] input[type="tel"]:hover,
+[data-admin="true"] input[type="url"]:hover,
+[data-admin="true"] input[type="search"]:hover,
+[data-admin="true"] input[type="date"]:hover,
+[data-admin="true"] input[type="time"]:hover,
+[data-admin="true"] input[type="datetime-local"]:hover,
+[data-admin="true"] select:hover,
+[data-admin="true"] textarea:hover {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: #eef2f6 !important;
+  border: 1px solid #eef2f6 !important;
+  color: #111827 !important;
+}
+
+/* Override any background classes on inputs */
+[data-admin="true"] input[class*="bg-"],
+[data-admin="true"] select[class*="bg-"],
+[data-admin="true"] textarea[class*="bg-"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Override dark mode background classes on inputs */
+[data-admin="true"] input.dark\\:bg-gray-700,
+[data-admin="true"] input.dark\\:bg-gray-800,
+[data-admin="true"] select.dark\\:bg-gray-700,
+[data-admin="true"] select.dark\\:bg-gray-800,
+[data-admin="true"] textarea.dark\\:bg-gray-700,
+[data-admin="true"] textarea.dark\\:bg-gray-800,
+[data-admin="true"] input[class*="dark:bg-gray-700"],
+[data-admin="true"] input[class*="dark:bg-gray-800"],
+[data-admin="true"] select[class*="dark:bg-gray-700"],
+[data-admin="true"] select[class*="dark:bg-gray-800"],
+[data-admin="true"] textarea[class*="dark:bg-gray-700"],
+[data-admin="true"] textarea[class*="dark:bg-gray-800"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Force white background on all admin inputs regardless of classes */
+[data-admin="true"] input,
+[data-admin="true"] input[type="text"],
+[data-admin="true"] input[type="email"],
+[data-admin="true"] input[type="password"],
+[data-admin="true"] input[type="number"],
+[data-admin="true"] input[type="tel"],
+[data-admin="true"] input[type="url"],
+[data-admin="true"] input[type="search"],
+[data-admin="true"] input[type="date"],
+[data-admin="true"] input[type="time"],
+[data-admin="true"] input[type="datetime-local"],
+[data-admin="true"] select,
+[data-admin="true"] textarea {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Ultimate override for any input with any background class */
+[data-admin="true"] input[class*="bg-"],
+[data-admin="true"] input[class*="dark:"],
+[data-admin="true"] select[class*="bg-"],
+[data-admin="true"] select[class*="dark:"],
+[data-admin="true"] textarea[class*="bg-"],
+[data-admin="true"] textarea[class*="dark:"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Specific override for inputs with dark mode classes */
+[data-admin="true"] input.bg-white.dark\\:bg-gray-700,
+[data-admin="true"] input.bg-white.dark\\:bg-gray-800,
+[data-admin="true"] select.bg-white.dark\\:bg-gray-700,
+[data-admin="true"] select.bg-white.dark\\:bg-gray-800,
+[data-admin="true"] textarea.bg-white.dark\\:bg-gray-700,
+[data-admin="true"] textarea.bg-white.dark\\:bg-gray-800 {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Override specific class combinations found in products page */
+[data-admin="true"] input[class*="bg-white"][class*="dark:bg-gray-700"],
+[data-admin="true"] select[class*="bg-white"][class*="dark:bg-gray-700"],
+[data-admin="true"] textarea[class*="bg-white"][class*="dark:bg-gray-700"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Force white background on all form elements with any combination of classes */
+[data-admin="true"] input[class*="bg-white"],
+[data-admin="true"] select[class*="bg-white"],
+[data-admin="true"] textarea[class*="bg-white"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Ultimate override for products page filter inputs */
+[data-admin="true"] .analytics-card input,
+[data-admin="true"] .analytics-card select,
+[data-admin="true"] .analytics-card textarea {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Override any remaining grey backgrounds on form elements */
+[data-admin="true"] input:not([class*="bg-white"]),
+[data-admin="true"] select:not([class*="bg-white"]),
+[data-admin="true"] textarea:not([class*="bg-white"]) {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Standardized filter input styling for all admin pages */
+[data-admin="true"] .filter-input,
+[data-admin="true"] .filter-select {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: 1px solid #eef2f6 !important;
+  border-color: #eef2f6 !important;
+  border-radius: 0.25rem !important;
+  color: #111827 !important;
+  padding: 0.5rem 0.75rem !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-admin="true"] .filter-input:focus,
+[data-admin="true"] .filter-select:focus {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: #059669 !important;
+  border: 1px solid #059669 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+  color: #111827 !important;
+}
+
+[data-admin="true"] .filter-input:hover,
+[data-admin="true"] .filter-select:hover {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: #eef2f6 !important;
+  border: 1px solid #eef2f6 !important;
+  color: #111827 !important;
+}
+
+/* Force all admin pages to follow theme style - comprehensive overrides */
+[data-admin="true"] .rounded-lg:not(.dashboard-card):not(.analytics-card) {
+  border-radius: 0.25rem !important;
+}
+
+[data-admin="true"] .bg-gray-50,
+[data-admin="true"] .bg-gray-100,
+[data-admin="true"] .bg-gray-200 {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+[data-admin="true"] .dark\\:bg-gray-700,
+[data-admin="true"] .dark\\:bg-gray-800,
+[data-admin="true"] .dark\\:bg-gray-900 {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+[data-admin="true"] .border-gray-300,
+[data-admin="true"] .border-gray-400,
+[data-admin="true"] .border-gray-500,
+[data-admin="true"] .border-gray-600,
+[data-admin="true"] .border-gray-700 {
+  border-color: #eef2f6 !important;
+}
+
+[data-admin="true"] .dark\\:border-gray-600,
+[data-admin="true"] .dark\\:border-gray-700 {
+  border-color: #eef2f6 !important;
+}
+
+/* Override any remaining shadows */
+[data-admin="true"] .shadow-sm,
+[data-admin="true"] .shadow,
+[data-admin="true"] .shadow-md,
+[data-admin="true"] .shadow-lg,
+[data-admin="true"] .shadow-xl {
+  box-shadow: none !important;
+}
+
+/* Force table styling consistency */
+[data-admin="true"] table thead.bg-gray-50,
+[data-admin="true"] table thead.dark\\:bg-gray-700 {
+  background-color: #f8fafc !important;
+  background: #f8fafc !important;
+}
+
+[data-admin="true"] table tbody.bg-white,
+[data-admin="true"] table tbody.dark\\:bg-gray-800 {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+[data-admin="true"] table tr.hover\\:bg-gray-50,
+[data-admin="true"] table tr.dark\\:hover\\:bg-gray-700 {
+  background-color: #f8fafc !important;
+  background: #f8fafc !important;
+}
+
+[data-admin="true"] table tr:hover {
+  background-color: #f8fafc !important;
+  background: #f8fafc !important;
 }
 
 /* Force all admin cards to use 6px border radius (except dashboard cards) */
@@ -814,6 +1168,37 @@ html {
 /* General button click effects */
 button {
   transition: all 0.2s ease;
+  border-radius: 0.25rem !important;
+}
+
+/* Default border radius for all buttons and button-like elements */
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  border-radius: 0.25rem !important;
+}
+
+/* Override any rounded classes on buttons */
+button.rounded-full,
+button.rounded-lg,
+button.rounded-md,
+button.rounded-xl,
+button.rounded-2xl,
+button.rounded-3xl,
+[role="button"].rounded-full,
+[role="button"].rounded-lg,
+[role="button"].rounded-md,
+[role="button"].rounded-xl,
+[role="button"].rounded-2xl,
+[role="button"].rounded-3xl {
+  border-radius: 0.25rem !important;
+}
+
+/* Force button border radius with highest specificity */
+button:not(.rounded-sm):not(.rounded-none) {
+  border-radius: 0.25rem !important;
 }
 
 /* Remove focus outlines from all buttons */
@@ -856,12 +1241,229 @@ input[type="search"]::-webkit-search-cancel-button:hover {
   font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
 }
 
+/* Text Theme System */
+.text-theme-primary {
+  color: var(--admin-text-primary, #111827) !important;
+}
+
+.text-theme-secondary {
+  color: var(--admin-text-secondary, #374151) !important;
+}
+
+.text-theme-muted {
+  color: var(--admin-text-muted, #6b7280) !important;
+}
+
+.text-theme-accent {
+  color: var(--admin-primary, #059669) !important;
+}
+
+.text-theme-white {
+  color: #ffffff !important;
+}
+
+.text-theme-black {
+  color: #000000 !important;
+}
+
+/* Typography Scale */
+.text-display {
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--admin-text-primary, #111827);
+}
+
+.text-heading-1 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--admin-text-primary, #111827);
+}
+
+.text-heading-2 {
+  font-size: 1.875rem;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--admin-text-primary, #111827);
+}
+
+.text-heading-3 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--admin-text-primary, #111827);
+}
+
+.text-heading-4 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--admin-text-primary, #111827);
+}
+
+.text-body-large {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--admin-text-primary, #111827);
+}
+
+.text-body {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--admin-text-primary, #111827);
+}
+
+.text-body-small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--admin-text-secondary, #374151);
+}
+
+.text-caption {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 400;
+  color: var(--admin-text-muted, #6b7280);
+}
+
+.text-label {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--admin-text-secondary, #374151);
+}
+
+.text-button {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--admin-text-primary, #111827);
+}
+
+/* Dark mode text adjustments */
+[data-theme="dark"] .text-theme-primary {
+  color: #f9fafb !important;
+}
+
+[data-theme="dark"] .text-theme-secondary {
+  color: #d1d5db !important;
+}
+
+[data-theme="dark"] .text-theme-muted {
+  color: #9ca3af !important;
+}
+
+[data-theme="dark"] .text-display,
+[data-theme="dark"] .text-heading-1,
+[data-theme="dark"] .text-heading-2,
+[data-theme="dark"] .text-heading-3,
+[data-theme="dark"] .text-heading-4,
+[data-theme="dark"] .text-body-large,
+[data-theme="dark"] .text-body {
+  color: #f9fafb !important;
+}
+
+[data-theme="dark"] .text-body-small,
+[data-theme="dark"] .text-label {
+  color: #d1d5db !important;
+}
+
+[data-theme="dark"] .text-caption {
+  color: #9ca3af !important;
+}
+
+/* FINAL OVERRIDE: Force all buttons to have 0.25rem border radius */
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+button.rounded-full,
+button.rounded-lg,
+button.rounded-md,
+button.rounded-xl,
+button.rounded-2xl,
+button.rounded-3xl,
+[data-admin="true"] button,
+[data-admin="true"] [role="button"],
+[data-admin="true"] input[type="button"],
+[data-admin="true"] input[type="submit"],
+[data-admin="true"] input[type="reset"] {
+  border-radius: 0.25rem !important;
+}
+
+/* ULTIMATE OVERRIDE: Use attribute selector for maximum specificity */
+button[class*="rounded"],
+[role="button"][class*="rounded"],
+input[type="button"][class*="rounded"],
+input[type="submit"][class*="rounded"],
+input[type="reset"][class*="rounded"] {
+  border-radius: 0.25rem !important;
+}
+
 [dir="rtl"] .rtl\:text-right {
   text-align: right;
 }
 
+/* Settings General Page - Remove border radius for tabs style */
+[data-admin="true"] .settings-general-page input,
+[data-admin="true"] .settings-general-page select,
+[data-admin="true"] .settings-general-page textarea,
+[data-admin="true"] .settings-general-page button {
+  border-radius: 0 !important;
+}
+
+/* Override the global 0.25rem rule for settings general page */
+[data-admin="true"] .settings-general-page input.rounded-lg,
+[data-admin="true"] .settings-general-page select.rounded-lg,
+[data-admin="true"] .settings-general-page textarea.rounded-lg,
+[data-admin="true"] .settings-general-page button.rounded-lg {
+  border-radius: 0 !important;
+}
+
+/* Remove all hover effects from settings general page */
+[data-admin="true"] .settings-general-page button:hover,
+[data-admin="true"] .settings-general-page input:hover,
+[data-admin="true"] .settings-general-page select:hover,
+[data-admin="true"] .settings-general-page textarea:hover,
+[data-admin="true"] .settings-general-page button:focus,
+[data-admin="true"] .settings-general-page input:focus,
+[data-admin="true"] .settings-general-page select:focus,
+[data-admin="true"] .settings-general-page textarea:focus,
+[data-admin="true"] .settings-general-page button:active,
+[data-admin="true"] .settings-general-page input:active,
+[data-admin="true"] .settings-general-page select:active,
+[data-admin="true"] .settings-general-page textarea:active {
+  background-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 [dir="rtl"] .rtl\:text-left {
   text-align: left;
+}
+
+/* Categories Page - Force white background with highest specificity */
+[data-admin="true"] .categories-page .bg-white,
+[data-admin="true"] .categories-page .bg-white.dark\\:bg-gray-800\\/50,
+[data-admin="true"] .categories-page .analytics-card.bg-white,
+[data-admin="true"] .categories-page .analytics-card.bg-white.dark\\:bg-gray-800\\/50 {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: 1px solid #eef2f6 !important;
+  border-radius: 0.25rem !important;
+}
+
+/* Override any grey background rules for categories page */
+[data-admin="true"] .categories-page div[class*="bg-white"],
+[data-admin="true"] .categories-page .bg-white[class*="rounded"],
+[data-admin="true"] .categories-page .bg-white[class*="border"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
 }
 
 [dir="rtl"] .rtl\:ml-auto {

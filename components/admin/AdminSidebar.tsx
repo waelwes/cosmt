@@ -222,7 +222,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
               {/* Sidebar */}
               <div 
-                className="w-full h-full flex flex-col border-r border-gray-600 bg-black dark:bg-black" 
+                className="w-full h-full flex flex-col bg-black dark:bg-black" 
                 style={{ 
                   backgroundColor: '#000000',
                   direction: direction,
@@ -230,7 +230,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 }}
               >
         {/* Header Section - Logo Only */}
-        <div className="px-4 py-4 border-b border-gray-600 relative">
+        <div className="px-4 py-4 relative">
           {/* Close button - positioned absolutely */}
           <button
             onClick={onClose}
@@ -305,7 +305,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         </nav>
 
         {/* Back to Site */}
-        <div className="px-4 py-3 border-t border-gray-600">
+        <div className="px-4 py-3">
           <a
             href="/"
             className={`flex items-center ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'} px-3 py-2 text-sm text-white hover:bg-gray-800 transition-colors duration-200`}
@@ -317,7 +317,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-600">
+        <div className="p-4">
           <div className={`flex items-center ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
             <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center">
               <UserCog className="w-5 h-5 text-gray-300" />
