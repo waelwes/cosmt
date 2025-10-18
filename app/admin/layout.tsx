@@ -43,26 +43,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     setMounted(true);
   }, []);
 
-  // Check if user is admin and redirect if not
+  // Temporarily disable all redirects for debugging
   useEffect(() => {
     console.log('Admin layout check:', { mounted, loading, user: !!user, isAdmin, userProfile });
-    if (mounted && !loading && user) {
-      // Wait a bit for the profile to be loaded
-      const timer = setTimeout(() => {
-        console.log('Delayed admin check:', { isAdmin, userProfile });
-        if (!isAdmin) {
-          console.log('User is not admin after delay, redirecting to signin');
-          router.push('/signin');
-        } else {
-          console.log('User is admin after delay, allowing access');
-        }
-      }, 1000); // Wait 1 second for profile to load
-      
-      return () => clearTimeout(timer);
-    } else if (mounted && !loading && !user) {
-      console.log('No user, redirecting to signin');
-      router.push('/signin');
-    }
+    // No redirects for now - just log the state
   }, [mounted, loading, user, isAdmin, router, userProfile]);
 
   // Load dark mode preference
