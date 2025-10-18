@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../contexts/CartContext";
 import { SearchProvider } from "../contexts/SearchContext";
-import { AuthProvider } from "../contexts/AuthContext";
+import { AuthProvider } from "../contexts/AuthContextBypass";
 import { WishlistProvider } from "../contexts/WishlistContext";
 import { UnifiedLanguageProvider } from "../contexts/UnifiedLanguageContext";
 import { ErrorBoundary } from "../components/ui/ErrorBoundary";
