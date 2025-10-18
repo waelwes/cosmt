@@ -45,14 +45,19 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   // Check if user is admin and redirect if not
   useEffect(() => {
+    console.log('Admin layout check:', { mounted, loading, user: !!user, isAdmin, userProfile });
     if (mounted && !loading) {
       if (!user) {
+        console.log('No user, redirecting to signin');
         router.push('/signin');
       } else if (!isAdmin) {
+        console.log('User is not admin, redirecting to signin');
         router.push('/signin');
+      } else {
+        console.log('User is admin, allowing access');
       }
     }
-  }, [mounted, loading, user, isAdmin, router]);
+  }, [mounted, loading, user, isAdmin, router, userProfile]);
 
   // Load dark mode preference
   useEffect(() => {

@@ -82,6 +82,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
     
     console.log('Created bypass profile:', bypassProfile);
+    console.log('Profile role:', bypassProfile.role);
+    console.log('Is admin:', bypassProfile.role === 'admin');
     setUserProfile(bypassProfile);
     setLoading(false);
   };
