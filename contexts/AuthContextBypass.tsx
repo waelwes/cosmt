@@ -40,9 +40,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session:', session);
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
+        console.log('Creating initial bypass profile for:', session.user.email);
         createBypassProfile(session.user);
       } else {
         setLoading(false);
@@ -53,10 +55,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state change:', event, session);
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        console.log('Creating bypass profile for auth change:', session.user.email);
         createBypassProfile(session.user);
       } else {
         setUserProfile(null);
