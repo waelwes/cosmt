@@ -339,7 +339,7 @@ export default function CheckoutPage() {
         <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-300" />
+              <CheckCircle className="w-6 h-6 text-blue-600 dark:text-green-300" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Completed</p>
@@ -397,7 +397,7 @@ export default function CheckoutPage() {
                 placeholder="Search by checkout ID, customer name, or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
           </div>
@@ -407,7 +407,7 @@ export default function CheckoutPage() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="all">All Status</option>
               <option value="completed">Completed</option>
@@ -422,7 +422,7 @@ export default function CheckoutPage() {
             <select
               value={selectedPaymentStatus}
               onChange={(e) => setSelectedPaymentStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
               <option value="all">All Payment Status</option>
               <option value="paid">Paid</option>

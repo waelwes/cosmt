@@ -1,7 +1,8 @@
 'use client';
 
-import React, { memo, useMemo, useState } from 'react';
+import React, { memo, useMemo, useState, useEffect } from 'react';
 import { BarChart3, TrendingUp, Users, ShoppingCart, DollarSign, Eye, Star, Download, Filter, Calendar } from 'lucide-react';
+import { useRTL } from '../../../contexts/UnifiedLanguageContext';
 
 // Mock data for analytics
 const salesData = [
@@ -108,7 +109,7 @@ const ChartCard = memo(({ title, children, className = "" }: {
     <div className="px-6 pt-6 pb-4">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
     </div>
-    <div className="border-t mb-4" style={{ borderTopColor: '#eef2f6', borderTopWidth: '1px' }}></div>
+    <div className="border-t mb-4" style={{ borderTopColor: '#eef2f6' }}></div>
     <div className="px-6 pb-6">
       {children}
     </div>
@@ -175,6 +176,8 @@ const FunnelStep = memo(({ step, index }: { step: any; index: number }) => (
 ));
 
 export default function AnalyticsDashboard() {
+  // All hooks must be called at the top before any conditional returns
+  const [mounted, setMounted] = useState(false);
   const [timeRange, setTimeRange] = useState('12months');
   const [selectedMetric, setSelectedMetric] = useState('revenue');
   
@@ -183,7 +186,15 @@ export default function AnalyticsDashboard() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Memoized calculations
+  // RTL context
+  const { language, direction, isRTL, isArabic } = useRTL();
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // All useMemo hooks must be called before any conditional returns
   const stats = useMemo(() => {
     const totalRevenue = salesData.reduce((sum, month) => sum + month.revenue, 0);
     const totalOrders = salesData.reduce((sum, month) => sum + month.orders, 0);
@@ -246,6 +257,41 @@ export default function AnalyticsDashboard() {
     return visitors > 0 ? (purchases / visitors * 100) : 0;
   }, []);
 
+  // Now safe to have conditional returns
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500 text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  // Translation function
+  const getTranslation = (key: string) => {
+    const translations: { [key: string]: { en: string; ar: string } } = {
+      analytics: { en: 'Analytics', ar: 'التحليلات' },
+      overview: { en: 'Overview', ar: 'نظرة عامة' },
+      totalRevenue: { en: 'Total Revenue', ar: 'إجمالي الإيرادات' },
+      totalOrders: { en: 'Total Orders', ar: 'إجمالي الطلبات' },
+      totalCustomers: { en: 'Total Customers', ar: 'إجمالي العملاء' },
+      conversionRate: { en: 'Conversion Rate', ar: 'معدل التحويل' },
+      salesChart: { en: 'Sales Chart', ar: 'رسم بياني للمبيعات' },
+      topProducts: { en: 'Top Products', ar: 'أفضل المنتجات' },
+      productName: { en: 'Product Name', ar: 'اسم المنتج' },
+      sales: { en: 'Sales', ar: 'المبيعات' },
+      revenue: { en: 'Revenue', ar: 'الإيرادات' },
+      growth: { en: 'Growth', ar: 'النمو' },
+      loading: { en: 'Loading...', ar: 'جاري التحميل...' },
+      all: { en: 'All', ar: 'الكل' },
+      today: { en: 'Today', ar: 'اليوم' },
+      thisWeek: { en: 'This Week', ar: 'هذا الأسبوع' },
+      thisMonth: { en: 'This Month', ar: 'هذا الشهر' },
+      thisYear: { en: 'This Year', ar: 'هذا العام' },
+      selectDate: { en: 'Select Date', ar: 'اختر التاريخ' }
+    };
+    return translations[key] ? translations[key][isArabic ? 'ar' : 'en'] : key;
+  };
+
   // Date picker functions
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', { 
@@ -289,7 +335,15 @@ export default function AnalyticsDashboard() {
   };
 
   return (
-    <div className="space-y-4" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <div 
+      className={`space-y-4 ${direction === 'rtl' ? 'rtl' : 'ltr'}`} 
+      style={{ 
+        backgroundColor: '#f8fafc', 
+        minHeight: '100vh',
+        direction: direction,
+        textAlign: direction === 'rtl' ? 'right' : 'left'
+      }}
+    >
       {/* Combined Analytics Card */}
       <div className="analytics-card p-6">
         {/* Header */}
@@ -299,33 +353,53 @@ export default function AnalyticsDashboard() {
           </div>
           
           {/* Time Period Filter */}
-          <div className="flex items-center rounded-lg overflow-hidden" style={{ border: '1px solid #eef2f6' }}>
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              All
+          <div className={`flex items-center rounded-lg overflow-hidden border ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
+            <button className={`px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
+              timeRange === 'all' 
+                ? 'text-white bg-cosmt-primary shadow-sm hover:bg-cosmt-primary-dark' 
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-cosmt-primary'
+            }`}>
+              {getTranslation('all')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              Today
+            <div className="w-px h-6 bg-gray-200"></div>
+            <button className={`px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
+              timeRange === 'today' 
+                ? 'text-white bg-cosmt-primary shadow-sm hover:bg-cosmt-primary-dark' 
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-cosmt-primary'
+            }`}>
+              {getTranslation('today')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              This Week
+            <div className="w-px h-6 bg-gray-200"></div>
+            <button className={`px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
+              timeRange === 'week' 
+                ? 'text-white bg-cosmt-primary shadow-sm hover:bg-cosmt-primary-dark' 
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-cosmt-primary'
+            }`}>
+              {getTranslation('thisWeek')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              This Month
+            <div className="w-px h-6 bg-gray-200"></div>
+            <button className={`px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
+              timeRange === 'month' 
+                ? 'text-white bg-cosmt-primary shadow-sm hover:bg-cosmt-primary-dark' 
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-cosmt-primary'
+            }`}>
+              {getTranslation('thisMonth')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              This Year
+            <div className="w-px h-6 bg-gray-200"></div>
+            <button className={`px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
+              timeRange === 'year' 
+                ? 'text-white bg-cosmt-primary shadow-sm hover:bg-cosmt-primary-dark' 
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-cosmt-primary'
+            }`}>
+              {getTranslation('thisYear')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <div className="w-px h-6 bg-gray-200"></div>
             <div className="relative date-picker-container">
               <button 
                 onClick={() => setShowDatePicker(!showDatePicker)}
                 className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                {selectedDate ? formatDate(selectedDate) : 'Select Date'}
+                {selectedDate ? formatDate(selectedDate) : getTranslation('selectDate')}
               </button>
               
               {/* Date Picker Popover */}
@@ -380,12 +454,12 @@ export default function AnalyticsDashboard() {
                         <button
                           key={day}
                           onClick={() => handleDateSelect(day)}
-                          className={`h-8 w-8 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                          className={`h-8 w-8 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 ${
                             isSelectedDate 
-                              ? 'bg-cosmt-primary text-white' 
+                              ? 'bg-cosmt-primary text-white shadow-sm' 
                               : isTodayDate 
-                                ? 'border border-cosmt-primary text-cosmt-primary' 
-                                : 'text-gray-700 dark:text-gray-300'
+                                ? 'border border-cosmt-primary text-cosmt-primary hover:bg-cosmt-primary/5' 
+                                : 'text-gray-700 dark:text-gray-300 hover:text-cosmt-primary'
                           }`}
                         >
                           {day}
@@ -401,7 +475,7 @@ export default function AnalyticsDashboard() {
                         setSelectedDate(new Date());
                         setShowDatePicker(false);
                       }}
-                      className="w-full text-sm text-cosmt-primary hover:text-cosmt-primary-dark font-medium"
+                      className="w-full text-sm text-cosmt-primary hover:text-cosmt-primary-dark font-medium transition-colors duration-200"
                     >
                       Today
                     </button>

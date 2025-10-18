@@ -193,14 +193,14 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
               </div>
 
               {/* Action Buttons */}
-              <div className="flex space-x-0">
+              <div className="cart-buttons-container">
                 <Link href="/checkout" onClick={onClose} className="flex-1">
-                  <Button variant="primary" className="w-full">
+                  <Button variant="primary" className="w-full cart-button-left">
                     Proceed to Checkout
                   </Button>
                 </Link>
                 <Link href="/cart" onClick={onClose} className="flex-1">
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full cart-button-right">
                     View Full Cart
                   </Button>
                 </Link>

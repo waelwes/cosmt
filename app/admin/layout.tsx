@@ -1,22 +1,22 @@
 'use client';
 
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { AdminSidebar } from '../../components/admin/AdminSidebar';
 import { SimpleCurrencySelector } from '../../components/admin/SimpleCurrencySelector';
-import { useLanguage } from '../../contexts/LanguageContext';
+import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
+import { useRTL } from '../../contexts/UnifiedLanguageContext';
 import {
   Bell,
   Settings,
   User,
   LogOut,
-  Moon,
   Sun,
-  Globe
+  Moon,
+  ChevronDown,
+  Menu
 } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
-import './theme.css';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -25,371 +25,285 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
-  
-  // Test if context is available
-  let languageContext;
-  try {
-    languageContext = useLanguage();
-  } catch (error) {
-    console.error('LanguageContext not available:', error);
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-red-500 text-lg">
-          Language Context Error: {error instanceof Error ? error.message : 'Unknown error'}
-        </div>
-      </div>
-    );
-  }
-  
-  const { currentLanguage, setCurrentLanguage, languages, t, direction } = languageContext;
-  
-  // Apply RTL/LTR direction to the document
-  useEffect(() => {
-    console.log('AdminLayout: Setting document direction:', direction, 'language:', currentLanguage);
-    document.documentElement.dir = direction;
-    document.documentElement.lang = currentLanguage;
-    
-    // Also set the body direction for better RTL support
-    document.body.dir = direction;
-    document.body.className = document.body.className.replace(/rtl|ltr/g, '') + ` ${direction}`;
-    
-    // Force RTL on the admin container
-    const adminContainer = document.querySelector('[data-admin="true"]');
-    if (adminContainer) {
-      adminContainer.setAttribute('dir', direction);
-      adminContainer.style.direction = direction;
-    }
-  }, [direction, currentLanguage]);
-  // Sidebar is always visible, no toggle needed
+  const [mounted, setMounted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  // RTL context
+  const { language, direction, isRTL, isArabic } = useRTL();
 
-  const handleLogout = () => {
-    // Clear admin session cookie
-    document.cookie = 'adminLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    router.push('/signin');
-  };
-
-  const notifications = [
-    {
-      id: 1,
-      title: 'New Order Received',
-      message: 'Order #12345 has been placed',
-      time: '2 minutes ago',
-      unread: true
-    },
-    {
-      id: 2,
-      title: 'Low Stock Alert',
-      message: 'Hair Mask is running low (5 items left)',
-      time: '1 hour ago',
-      unread: true
-    },
-    {
-      id: 3,
-      title: 'Payment Processed',
-      message: 'Payment for Order #12344 completed',
-      time: '3 hours ago',
-      unread: false
-    }
-  ];
-
-  const unreadCount = notifications.filter(n => n.unread).length;
-
-  const handleLanguageChange = (languageCode: string) => {
-    console.log('AdminLayout: Language change requested:', languageCode);
-    setCurrentLanguage(languageCode);
-    setShowLanguageMenu(false);
-    // Trigger a custom event to notify other components
-    window.dispatchEvent(new CustomEvent('languageChanged', { 
-      detail: { language: languageCode } 
-    }));
-    console.log('AdminLayout: Language change event dispatched');
-  };
-
+  // Prevent hydration mismatch
   useEffect(() => {
-    // Check if admin is logged in
+    setMounted(true);
+  }, []);
+
+  // Check if admin is logged in
+  useEffect(() => {
     const checkAuth = () => {
       const adminLoggedIn = document.cookie
-        .split(';')
-        .some(cookie => cookie.trim().startsWith('adminLoggedIn=true'));
+        .split('; ')
+        .find(row => row.startsWith('adminLoggedIn='))
+        ?.split('=')[1];
       
-      if (!adminLoggedIn) {
-        router.push('/signin');
-      } else {
+      if (adminLoggedIn === 'true') {
         setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        router.push('/signin');
       }
       setIsLoading(false);
     };
 
-    // Initialize dark mode from localStorage
-    const savedDarkMode = localStorage.getItem('admin-dark-mode') === 'true';
-    setIsDarkMode(savedDarkMode);
+    if (mounted) {
+      checkAuth();
+    }
+  }, [mounted, router]);
 
-    checkAuth();
-  }, [router, pathname]);
-
-  // Close dropdowns when clicking outside
+  // Load dark mode preference
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showLanguageMenu) {
-        setShowLanguageMenu(false);
+    if (mounted) {
+      const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+      setIsDarkMode(savedDarkMode);
+      
+      if (savedDarkMode) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
       }
-      if (showNotifications) {
-        setShowNotifications(false);
-      }
-      if (showUserMenu) {
-        setShowUserMenu(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showLanguageMenu, showNotifications, showUserMenu]);
+    }
+  }, [mounted]);
 
   // Toggle dark mode
   const toggleDarkMode = () => {
     const newDarkMode = !isDarkMode;
     setIsDarkMode(newDarkMode);
-    localStorage.setItem('admin-dark-mode', newDarkMode.toString());
+    localStorage.setItem('darkMode', newDarkMode.toString());
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   };
 
-  // Show loading spinner while checking auth
-  if (isLoading) {
+  const handleLogout = () => {
+    document.cookie = 'adminLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    router.push('/signin');
+  };
+
+  // Mock notifications
+  const notifications = [
+    { id: 1, message: 'New order received', time: '2 min ago', unread: true },
+    { id: 2, message: 'Payment processed', time: '5 min ago', unread: true },
+    { id: 3, message: 'Customer inquiry', time: '10 min ago', unread: false },
+  ];
+
+  const unreadCount = notifications.filter(n => n.unread).length;
+
+  if (!mounted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="h-32 w-32">
-            <img
-              src="/images/logos/COSMT.png"
-              alt="COSMT Logo"
-              className="h-full w-full object-contain"
-            />
-          </div>
-          <div className="flex space-x-1">
-            <div className="w-1 h-1 bg-gray-400 rounded animate-bounce" style={{ animationDelay: '0ms' }}></div>
-            <div className="w-1 h-1 bg-gray-400 rounded animate-bounce" style={{ animationDelay: '150ms' }}></div>
-            <div className="w-1 h-1 bg-gray-400 rounded animate-bounce" style={{ animationDelay: '300ms' }}></div>
-          </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500 text-lg">Loading...</div>
       </div>
     );
   }
 
-  // Show full admin layout
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500 text-lg">Checking authentication...</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500 text-lg">Access denied. Redirecting...</div>
+      </div>
+    );
+  }
+
   return (
     <div 
       className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100`}
       data-admin="true"
-      dir={direction}
+      dir={direction as 'ltr' | 'rtl'}
       style={{ 
-        direction: direction,
+        direction: direction as 'ltr' | 'rtl',
         textAlign: direction === 'rtl' ? 'right' : 'left'
       }}
     >
       <div 
         className={`flex ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}
         style={{ 
-          direction: direction,
+          direction: direction as 'ltr' | 'rtl',
           flexDirection: direction === 'rtl' ? 'row-reverse' : 'row'
         }}
       >
-        {/* Sidebar - Position changes based on direction */}
+        {/* Sidebar */}
+        <AdminSidebar 
+          isOpen={sidebarOpen} 
+          onClose={() => setSidebarOpen(false)} 
+          isDarkMode={isDarkMode} 
+          toggleDarkMode={toggleDarkMode}
+        />
+        
+        {/* Main Content */}
         <div 
-          className="admin-sidebar"
+          className={`flex-1 flex flex-col ${isRTL ? 'lg:me-64' : 'lg:ms-64'}`}
           style={{ 
-            direction: direction,
+            direction: direction as 'ltr' | 'rtl',
             textAlign: direction === 'rtl' ? 'right' : 'left'
           }}
         >
-          <AdminSidebar isOpen={true} onClose={() => {}} isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-        </div>
-
-        {/* Main Content Area - Adjusts margin based on direction */}
-        <div 
-          className="flex-1 flex flex-col"
-          style={{ 
-            direction: direction,
-            textAlign: direction === 'rtl' ? 'right' : 'left'
-          }}
-        >
-          {/* Top Header with Controls */}
-          <div className="admin-header admin-header-white bg-white dark:bg-gray-800" style={{ backgroundColor: '#ffffff' }}>
-            {/* Header Content */}
+          {/* Header */}
+          <header 
+            className="w-full border-b border-gray-200 dark:border-gray-700 px-6 py-4 shadow-sm"
+            style={{ 
+              direction: direction as 'ltr' | 'rtl',
+              textAlign: direction === 'rtl' ? 'right' : 'left',
+              backgroundColor: '#ffffff',
+              background: '#ffffff'
+            }}
+          >
             <div 
-              className={`flex items-center justify-between h-16 px-6 ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}
+              className={`flex items-center justify-between ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}
               style={{ 
-                direction: direction,
+                direction: direction as 'ltr' | 'rtl',
                 flexDirection: direction === 'rtl' ? 'row-reverse' : 'row'
               }}
             >
-              {/* Page Title - Position changes based on direction */}
-              <div 
-                className={`flex items-center ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
-                style={{ 
-                  direction: direction,
-                  textAlign: direction === 'rtl' ? 'right' : 'left'
-                }}
-              >
-                <h2 
-                  className={`text-xl font-semibold text-gray-900 dark:text-white ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
-                  style={{ 
-                    direction: direction,
-                    textAlign: direction === 'rtl' ? 'right' : 'left'
-                  }}
+              <div className={`flex items-center ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
+                {/* Mobile menu button */}
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors me-4 admin-header-button"
                 >
-                  {t.adminDashboard}
-                </h2>
+                  <Menu className="w-5 h-5" />
+                </button>
+                
+                <div>
+                  <h1 
+                    className="text-xl font-semibold text-gray-900 dark:text-white"
+                    style={{ 
+                      direction: direction as 'ltr' | 'rtl',
+                      textAlign: direction === 'rtl' ? 'right' : 'left'
+                    }}
+                  >
+                    {isArabic ? 'لوحة تحكم الإدارة' : 'Admin Dashboard'}
+                    <span className="ms-2 px-2 py-1 bg-cosmt-primary text-white text-xs rounded">
+                      {language.toUpperCase()} - {direction.toUpperCase()}
+                    </span>
+                  </h1>
+                </div>
               </div>
               
-              {/* Controls - Position changes based on direction */}
+              {/* Controls */}
               <div 
-                className={`flex items-center ${direction === 'rtl' ? 'space-x-reverse space-x-2' : 'space-x-2'}`}
+                className={`flex items-center ${direction === 'rtl' ? 'space-x-reverse space-x-4' : 'space-x-4'}`}
                 style={{ 
-                  direction: direction,
+                  direction: direction as 'ltr' | 'rtl',
                   flexDirection: direction === 'rtl' ? 'row-reverse' : 'row'
                 }}
               >
-                {/* Language Selector */}
-                <div className="relative">
-                  <button 
-                    onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                    className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 rounded-lg transition-colors"
-                    title="Select Language"
-                  >
-                    <Globe className="w-4 h-4 mr-2" />
-                        <span className="text-sm">
-                          {languages.find(lang => lang.code === currentLanguage)?.flag}
-                        </span>
-                  </button>
-                  
-                  {showLanguageMenu && (
-                    <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 z-50">
-                      <div className="py-2">
-                        {languages.map((language) => (
-                          <button
-                            key={language.code}
-                            onClick={() => handleLanguageChange(language.code)}
-                            className={`w-full flex items-center px-4 py-3 text-sm text-left hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors ${
-                              currentLanguage === language.code 
-                                ? 'bg-green-50 text-green-600 dark:bg-green-800 dark:text-green-300' 
-                                : 'text-gray-700 dark:text-gray-100'
-                            }`}
-                          >
-                            <span className="mr-3 text-lg">{language.flag}</span>
-                            <span className="font-medium">{language.name}</span>
-                            {currentLanguage === language.code && (
-                              <span className="ml-auto text-green-600 dark:text-green-300">✓</span>
-                            )}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
+                {/* Language Switcher */}
+                <LanguageSwitcher />
+                
                 {/* Currency Selector */}
                 <SimpleCurrencySelector />
-
+                
                 {/* Dark Mode Toggle */}
                 <button
                   onClick={toggleDarkMode}
-                  className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 rounded-lg transition-colors"
-                  title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                  className="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors admin-header-button"
                 >
-                  {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                  {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </button>
-
+                
                 {/* Notifications */}
                 <div className="relative">
                   <button
                     onClick={() => setShowNotifications(!showNotifications)}
-                    className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 rounded-lg transition-colors relative"
-                    title="Notifications"
+                    className="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors relative admin-header-button"
                   >
-                    <Bell className="w-4 h-4" />
+                    <Bell className="w-5 h-5" />
                     {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium">
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                         {unreadCount}
                       </span>
                     )}
                   </button>
+                  
                   {showNotifications && (
-                    <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 z-50">
-                      <div className="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-600">
-                        {t.notifications}
+                    <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-lg z-50">
+                      <div className="p-4 border-b border-gray-200 dark:border-gray-600">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{isArabic ? 'الإشعارات' : 'Notifications'}</h3>
                       </div>
-                      <div className="divide-y divide-gray-100 dark:divide-gray-600">
+                      <div className="max-h-64 overflow-y-auto">
                         {notifications.map((notification) => (
                           <div
                             key={notification.id}
-                            className={`p-4 ${notification.unread ? 'bg-blue-50 dark:bg-blue-900' : ''} hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors`}
+                            className={`p-4 border-b border-gray-100 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 ${
+                              notification.unread ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                            }`}
                           >
-                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{notification.title}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{notification.message}</p>
-                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{notification.time}</p>
+                            <p className="text-sm text-gray-900 dark:text-white">{notification.message}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{notification.time}</p>
                           </div>
                         ))}
-                      </div>
-                      <div className="p-3 border-t border-gray-200 dark:border-gray-600">
-                        <Button variant="outline" className="w-full text-center text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium">
-                          {t.viewAllNotifications}
-                        </Button>
                       </div>
                     </div>
                   )}
                 </div>
-
+                
                 {/* User Menu */}
                 <div className="relative">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 rounded-lg transition-colors"
-                    title="User Menu"
+                    className="flex items-center space-x-2 p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors admin-header-button"
                   >
-                    <User className="w-4 h-4 mr-2" />
+                    <User className="w-5 h-5" />
                     <span className="text-sm font-medium">Admin</span>
+                    <ChevronDown className="w-4 h-4" />
                   </button>
+                  
                   {showUserMenu && (
-                    <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 z-50">
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-lg z-50">
                       <div className="py-2">
-                        <Link
-                          href="/admin/settings/profile"
-                          className="flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
-                        >
+                        <button className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
                           <Settings className="w-4 h-4 mr-3" />
-                          <span className="font-medium">{t.settings}</span>
-                        </Link>
-                        <Button
+                          {isArabic ? 'الإعدادات' : 'Settings'}
+                        </button>
+                        <button
                           onClick={handleLogout}
-                          variant="outline"
-                          className="flex items-center w-full text-left px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition-colors"
+                          className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                         >
                           <LogOut className="w-4 h-4 mr-3" />
-                          <span className="font-medium">{t.signOut}</span>
-                        </Button>
+                          {isArabic ? 'تسجيل الخروج' : 'Sign Out'}
+                        </button>
                       </div>
                     </div>
                   )}
                 </div>
               </div>
             </div>
-          </div>
+          </header>
           
-                      {/* Main Content */}
-                      <div className="admin-main" style={{ backgroundColor: '#f9fafb' }}>
-            <main className="py-4">
-              <div className="w-full px-2 sm:px-3 lg:px-4 pr-2">
-                {children}
-              </div>
-            </main>
-          </div>
+          {/* Main Content */}
+          <main 
+            className="flex-1 p-6"
+            style={{ 
+              direction: direction as 'ltr' | 'rtl',
+              textAlign: direction === 'rtl' ? 'right' : 'left'
+            }}
+          >
+            {children}
+          </main>
         </div>
       </div>
     </div>

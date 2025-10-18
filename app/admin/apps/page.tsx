@@ -497,7 +497,7 @@ export default function AppsAndTools() {
       {/* Tabs */}
       <div className="dashboard-card border border-gray-200 dark:border-gray-700 ">
         <div className="border-b border-gray-200 dark:border-gray-700">
-          <nav className="flex space-x-8 px-6">
+          <nav className="flex space-x-8 px-6 tab-navigation">
             {[
               { id: 'chat', name: 'Chat Support', count: chatMessages.length },
               { id: 'email', name: 'Email Campaigns', count: emailCampaigns.length },

@@ -188,7 +188,7 @@ export default function CustomersPage() {
         <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
-              <UserCheck className="w-6 h-6 text-green-600" />
+              <UserCheck className="w-6 h-6 text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Active</p>
@@ -232,7 +232,7 @@ export default function CustomersPage() {
                 placeholder="Search customers..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 style={{ borderColor: '#eef2f6' }}
               />
             </div>
@@ -243,7 +243,7 @@ export default function CustomersPage() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               style={{ borderColor: '#eef2f6' }}
             >
               {statuses.map(status => (
@@ -259,7 +259,7 @@ export default function CustomersPage() {
             <select
               value={selectedTier}
               onChange={(e) => setSelectedTier(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               style={{ borderColor: '#eef2f6' }}
             >
               {tiers.map(tier => (

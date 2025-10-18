@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts/UnifiedLanguageContext';
 
 export function LanguageTest() {
   const { currentLanguage, setCurrentLanguage, t, direction } = useLanguage();

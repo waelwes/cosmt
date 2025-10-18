@@ -484,7 +484,7 @@ export default function MarketingTools() {
       {/* Tabs */}
       <div className="analytics-card">
         <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
-          <nav className="flex space-x-8 px-6">
+          <nav className="flex space-x-8 px-6 tab-navigation">
             {[
               { id: 'campaigns', name: 'Campaigns', count: campaigns.length },
               { id: 'coupons', name: 'Coupons', count: coupons.length },

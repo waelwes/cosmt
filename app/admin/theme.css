@@ -240,7 +240,7 @@
   border-color: var(--admin-border) !important;
 }
 
-/* Sidebar Theme - Preserve Black Design */
+/* Sidebar Theme - Black Design */
 [data-admin="true"] .admin-sidebar {
   background-color: #000000 !important;
 }
@@ -254,13 +254,13 @@
 
 [data-admin="true"] .admin-sidebar a:hover,
 [data-admin="true"] .admin-sidebar button:hover {
-  background-color: #1f2937 !important;
+  background-color: #2e2e33 !important;
   color: #ffffff !important;
 }
 
 [data-admin="true"] .admin-sidebar a.active,
 [data-admin="true"] .admin-sidebar button.active {
-  background-color: #334155 !important;
+  background-color: #2e2e33 !important;
   color: #ffffff !important;
 }
 
@@ -355,4 +355,145 @@
   [data-admin="true"] h2 {
     font-size: 1.25rem;
   }
+}
+
+/* Ultra specific sidebar hover override - highest priority */
+html body [data-admin="true"] .admin-sidebar button:hover,
+html body [data-admin="true"] .admin-sidebar a:hover {
+  background-color: #2e2e33 !important;
+}
+
+/* Nuclear option - override everything */
+[data-admin="true"] .admin-sidebar button:hover,
+[data-admin="true"] .admin-sidebar a:hover,
+[data-admin="true"] .admin-sidebar button:hover *,
+[data-admin="true"] .admin-sidebar a:hover * {
+  background-color: #2e2e33 !important;
+  background: #2e2e33 !important;
+}
+
+/* Force override with maximum specificity */
+html body div[data-admin="true"] .admin-sidebar button:hover,
+html body div[data-admin="true"] .admin-sidebar a:hover {
+  background-color: #2e2e33 !important;
+  background: #2e2e33 !important;
+}
+
+/* Final override - target the exact structure */
+[data-admin="true"] .admin-sidebar button:hover {
+  background-color: #2e2e33 !important;
+  background: #2e2e33 !important;
+}
+
+[data-admin="true"] .admin-sidebar a:hover {
+  background-color: #2e2e33 !important;
+  background: #2e2e33 !important;
+}
+
+/* Analytics page border fixes */
+[data-admin="true"] .analytics-card .border-t {
+  border-top-color: var(--admin-border) !important;
+}
+
+[data-admin="true"] .border-t {
+  border-top-color: var(--admin-border) !important;
+}
+
+/* Force admin pages to always use light theme borders */
+[data-admin="true"] .border-t,
+[data-admin="true"] .border-b,
+[data-admin="true"] .border-l,
+[data-admin="true"] .border-r,
+[data-admin="true"] .border {
+  border-color: var(--admin-border) !important;
+}
+
+/* Override any dark mode border colors in admin pages */
+[data-admin="true"] .dark .border-t,
+[data-admin="true"] .dark .border-b,
+[data-admin="true"] .dark .border-l,
+[data-admin="true"] .dark .border-r,
+[data-admin="true"] .dark .border {
+  border-color: var(--admin-border) !important;
+}
+
+/* Specific border-r fixes for admin pages */
+[data-admin="true"] .border-r {
+  border-right-color: var(--admin-border) !important;
+}
+
+[data-admin="true"] .dark .border-r {
+  border-right-color: var(--admin-border) !important;
+}
+
+/* RTL border fixes for admin pages */
+[data-admin="true"][dir="rtl"] .border-r {
+  border-left-color: var(--admin-border) !important;
+}
+
+[data-admin="true"][dir="rtl"] .border-l {
+  border-right-color: var(--admin-border) !important;
+}
+
+/* Ultra specific border-r fixes for analytics page */
+[data-admin="true"] .analytics-card .border-r,
+[data-admin="true"] .analytics-card .border-r[style*="borderRightColor"] {
+  border-right-color: var(--admin-border) !important;
+}
+
+/* Force override for any dark mode or other overrides */
+[data-admin="true"] .dark .analytics-card .border-r,
+[data-admin="true"] .dark .analytics-card .border-r[style*="borderRightColor"] {
+  border-right-color: var(--admin-border) !important;
+}
+
+/* Nuclear option - maximum specificity */
+html body [data-admin="true"] .analytics-card .border-r,
+html body [data-admin="true"] .analytics-card .border-r[style*="borderRightColor"] {
+  border-right-color: var(--admin-border) !important;
+}
+
+/* Final override - target the exact structure in analytics page */
+[data-admin="true"] .analytics-card .flex .border-r {
+  border-right-color: var(--admin-border) !important;
+  border-right: 1px solid var(--admin-border) !important;
+}
+
+/* Force override with maximum specificity for analytics stats */
+html body div[data-admin="true"] .analytics-card .flex .border-r {
+  border-right-color: var(--admin-border) !important;
+  border-right: 1px solid var(--admin-border) !important;
+}
+
+/* Ultimate override - target every possible selector */
+[data-admin="true"] .analytics-card .flex > div.border-r,
+[data-admin="true"] .analytics-card .flex > div[class*="border-r"],
+[data-admin="true"] .analytics-card .flex > div[style*="borderRightColor"] {
+  border-right-color: var(--admin-border) !important;
+  border-right: 1px solid var(--admin-border) !important;
+}
+
+/* Force override for any remaining black borders */
+[data-admin="true"] .analytics-card .flex > div {
+  border-right-color: var(--admin-border) !important;
+}
+
+/* Nuclear option - override everything */
+html body div[data-admin="true"] .analytics-card .flex > div.border-r,
+html body div[data-admin="true"] .analytics-card .flex > div[class*="border-r"],
+html body div[data-admin="true"] .analytics-card .flex > div[style*="borderRightColor"] {
+  border-right-color: var(--admin-border) !important;
+  border-right: 1px solid var(--admin-border) !important;
+}
+
+/* Final nuclear option - target the exact structure with maximum specificity */
+html body div[data-admin="true"] .analytics-card .flex > div:not(:last-child) {
+  border-right-color: var(--admin-border) !important;
+  border-right: 1px solid var(--admin-border) !important;
+}
+
+/* Override any remaining black borders with maximum specificity */
+html body div[data-admin="true"] .analytics-card .flex > div[class*="border"] {
+  border-right-color: var(--admin-border) !important;
+  border-right: 1px solid var(--admin-border) !important;
 }

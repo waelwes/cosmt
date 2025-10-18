@@ -1,11 +1,15 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap');
+@import '../styles/rtl.css';
+@import './admin/theme.css';
+
+/* RTL Base Styles - Moved to styles/rtl.css */
 
 :root {
-  --cosmt-primary: #00833F;
-  --cosmt-primary-dark: #005a2a;
-  --cosmt-primary-light: #e6f2ec;
+  --cosmt-primary: #059669;
+  --cosmt-primary-dark: #047857;
+  --cosmt-primary-light: #ecfdf5;
   --cosmt-background: #ffffff;
   --cosmt-text: #111827;
   --cosmt-text-light: #4b5563;
@@ -15,6 +19,15 @@
   --cosmt-gray-100: #f3f4f6;
   --cosmt-gray-200: #e5e7eb;
   --main-bg: #f8fafc;
+  
+  /* Customizable section variables */
+  --hero-bg-color: #ffffff;
+  --hero-height: 500px;
+  --category-bg-color: #f8fafc;
+  --category-columns: 4;
+  --brand-bg-color: #ffffff;
+  --product-bg-color: #f8fafc;
+  --product-columns: 4;
 }
 
 @theme inline {
@@ -59,6 +72,27 @@ html[dir="rtl"] .flex {
   flex-direction: row-reverse !important;
 }
 
+/* Prevent logo from being affected by RTL flex direction changes */
+html[dir="rtl"] .flex .logo-container,
+html[dir="rtl"] .flex [class*="logo"],
+html[dir="rtl"] .flex img[alt*="Logo"],
+html[dir="rtl"] .flex img[alt*="logo"] {
+  flex-direction: row !important;
+}
+
+/* Specific fix for navigation logo - prevent RTL from flipping logo position */
+html[dir="rtl"] .cosmt-navigation .flex-1.flex.justify-center,
+html[dir="rtl"] .cosmt-navigation .flex-1.flex.justify-center > * {
+  flex-direction: row !important;
+  justify-content: center !important;
+}
+
+/* Specific fix for admin header logo - prevent RTL from flipping logo position */
+html[dir="rtl"] .admin-header .flex.items-center,
+html[dir="rtl"] .admin-header .flex.items-center > * {
+  flex-direction: row !important;
+}
+
 html[dir="rtl"] .space-x-2 > * + * {
   margin-left: 0 !important;
   margin-right: 0.5rem !important;
@@ -82,15 +116,34 @@ html[dir="rtl"] .text-right {
   text-align: left !important;
 }
 
-html[dir="rtl"] .ml-2 {
+/* Directional margin/padding rules removed - using logical properties instead */
+
+/* Admin layout RTL fixes - Using logical properties */
+/* These rules are now handled by Tailwind's logical properties (ms-, me-, ps-, pe-) */
+
+/* RTL sidebar positioning - handled by styles/rtl.css */
+
+/* Additional RTL fixes for admin layout */
+html[dir="rtl"] .flex-row {
+  flex-direction: row-reverse !important;
+}
+
+html[dir="rtl"] .flex-row-reverse {
+  flex-direction: row !important;
+}
+
+/* Fix for admin header controls */
+html[dir="rtl"] .space-x-4 > * + * {
+  margin-left: 0 !important;
+  margin-right: 1rem !important;
+}
+
+html[dir="rtl"] .space-x-2 > * + * {
   margin-left: 0 !important;
   margin-right: 0.5rem !important;
 }
 
-html[dir="rtl"] .mr-2 {
-  margin-right: 0 !important;
-  margin-left: 0.5rem !important;
-}
+/* Fix for admin sidebar navigation - using logical properties */
 
 html[dir="rtl"] .pl-3 {
   padding-left: 0 !important;
@@ -231,6 +284,147 @@ textarea,
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
 }
 
+/* Ultra high priority - Force white background on admin header */
+.admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Force white background regardless of any other classes */
+[data-admin="true"] .admin-header,
+[data-admin="true"] .admin-header.bg-white,
+[data-admin="true"] .admin-header.bg-gray-50,
+[data-admin="true"] .admin-header.bg-gray-100,
+[data-admin="true"] .admin-header[class*="bg-"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Override any Tailwind background classes */
+.admin-header.bg-gray-100,
+.admin-header.bg-gray-50,
+.admin-header.bg-gray-200 {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Force white background with maximum specificity */
+html body [data-admin="true"] .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Override inline styles and force white background */
+[data-admin="true"] .admin-header[style*="background-color"],
+[data-admin="true"] .admin-header[style*="background"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Ultimate override for admin header background */
+[data-admin="true"] header.admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Override parent container background affecting header */
+[data-admin="true"] .bg-gray-50 .admin-header,
+[data-admin="true"] .bg-gray-100 .admin-header,
+[data-admin="true"] div[class*="bg-gray"] .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Force white background on header regardless of parent */
+[data-admin="true"] .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  isolation: isolate !important;
+}
+
+/* Most aggressive override - target the exact structure */
+[data-admin="true"] .min-h-screen .admin-header,
+[data-admin="true"] .bg-gray-50 .admin-header,
+[data-admin="true"] div[data-admin="true"] .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Force white background with !important on all possible selectors */
+html [data-admin="true"] .admin-header,
+body [data-admin="true"] .admin-header,
+div[data-admin="true"] .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Target the exact header with all its classes */
+[data-admin="true"] .w-full.admin-header.bg-white {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Override any inherited background from parent containers */
+[data-admin="true"] .min-h-screen.bg-gray-50 .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Nuclear option - force white background on any header in admin */
+[data-admin="true"] header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Force white background with maximum specificity and !important */
+html body div[data-admin="true"] header.admin-header.w-full.bg-white {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* FINAL OVERRIDE - Force white background on admin header */
+.admin-header {
+  background: white !important;
+  background-color: white !important;
+}
+
+/* Force white background on any header in admin area */
+[data-admin="true"] header {
+  background: white !important;
+  background-color: white !important;
+}
+
+/* Override theme.css admin-header rule */
+[data-admin="true"] .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* FINAL OVERRIDE - Must be at the end to override theme.css */
+[data-admin="true"] .admin-header {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  background-attachment: scroll !important;
+  background-clip: border-box !important;
+  background-origin: padding-box !important;
+  background-position: 0% 0% !important;
+  background-repeat: repeat !important;
+  background-size: auto !important;
+}
+
 /* Override any conflicting background colors */
 [data-admin="true"] .admin-header.bg-gray-50,
 [data-admin="true"] .admin-header[style*="background-color: #f9fafb"],
@@ -304,6 +498,346 @@ textarea,
   border-bottom-color: #374151 !important;
 }
 
+/* Admin header button styling */
+[data-admin="true"] .admin-header button {
+  border-radius: 0.25rem !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-admin="true"] .admin-header button:hover {
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+[data-admin="true"] .dark .admin-header button:hover {
+  background-color: #374151 !important;
+  color: #ffffff !important;
+}
+
+/* Admin header dropdown styling */
+[data-admin="true"] .admin-header .absolute {
+  border-radius: 0.375rem !important;
+  box-shadow: none !important;
+}
+
+/* Admin header notification badge */
+[data-admin="true"] .admin-header .bg-red-500 {
+  background-color: #ef4444 !important;
+  border-radius: 9999px !important;
+}
+
+/* Admin header button specific styling */
+[data-admin="true"] .admin-header-button {
+  border-radius: 0.375rem !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  outline: none !important;
+}
+
+[data-admin="true"] .admin-header-button:hover {
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+[data-admin="true"] .dark .admin-header-button:hover {
+  background-color: #374151 !important;
+  color: #ffffff !important;
+}
+
+[data-admin="true"] .admin-header-button:focus {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+}
+
+/* Remove ALL focus outlines from admin sidebar buttons */
+[data-admin="true"] .admin-sidebar button:focus,
+[data-admin="true"] .admin-sidebar button:focus-visible,
+[data-admin="true"] .admin-sidebar button:focus-within,
+[data-admin="true"] .admin-sidebar a:focus,
+[data-admin="true"] .admin-sidebar a:focus-visible,
+[data-admin="true"] .admin-sidebar a:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+  ring: none !important;
+  border: none !important;
+}
+
+/* Additional focus removal for sidebar buttons */
+[data-admin="true"] .admin-sidebar button,
+[data-admin="true"] .admin-sidebar a {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+[data-admin="true"] .admin-sidebar button:focus,
+[data-admin="true"] .admin-sidebar button:active,
+[data-admin="true"] .admin-sidebar a:focus,
+[data-admin="true"] .admin-sidebar a:active {
+  outline: none !important;
+  box-shadow: none !important;
+  ring: none !important;
+  border: none !important;
+}
+
+/* Force remove any green focus borders */
+[data-admin="true"] .admin-sidebar button:focus-visible,
+[data-admin="true"] .admin-sidebar a:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Nuclear option - remove ALL possible focus styles from sidebar */
+[data-admin="true"] .admin-sidebar *:focus,
+[data-admin="true"] .admin-sidebar *:focus-visible,
+[data-admin="true"] .admin-sidebar *:focus-within {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+}
+
+/* ULTIMATE GREEN BORDER REMOVAL - Target all possible green borders */
+[data-admin="true"] .admin-sidebar button,
+[data-admin="true"] .admin-sidebar a,
+[data-admin="true"] .admin-sidebar button:focus,
+[data-admin="true"] .admin-sidebar button:active,
+[data-admin="true"] .admin-sidebar button:hover,
+[data-admin="true"] .admin-sidebar a:focus,
+[data-admin="true"] .admin-sidebar a:active,
+[data-admin="true"] .admin-sidebar a:hover {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+  border-color: transparent !important;
+  border-width: 0 !important;
+}
+
+/* Remove any green color from borders */
+[data-admin="true"] .admin-sidebar * {
+  border-color: transparent !important;
+  outline-color: transparent !important;
+}
+
+/* Force remove any remaining green borders */
+[data-admin="true"] .admin-sidebar button[style*="border"],
+[data-admin="true"] .admin-sidebar a[style*="border"] {
+  border: none !important;
+  outline: none !important;
+}
+
+/* Remove any green color specifically */
+[data-admin="true"] .admin-sidebar button,
+[data-admin="true"] .admin-sidebar a {
+  color: #ffffff !important;
+  border-color: transparent !important;
+  outline-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Override any green focus ring or border */
+[data-admin="true"] .admin-sidebar button:focus,
+[data-admin="true"] .admin-sidebar a:focus {
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-color: transparent !important;
+  --tw-ring-offset-width: 0 !important;
+  --tw-ring-width: 0 !important;
+  ring: none !important;
+  ring-color: transparent !important;
+  ring-offset: 0 !important;
+}
+
+/* COMPLETE GREEN BORDER REMOVAL ON CLICK/FOCUS */
+[data-admin="true"] .admin-sidebar button:focus,
+[data-admin="true"] .admin-sidebar button:focus-visible,
+[data-admin="true"] .admin-sidebar button:active,
+[data-admin="true"] .admin-sidebar a:focus,
+[data-admin="true"] .admin-sidebar a:focus-visible,
+[data-admin="true"] .admin-sidebar a:active {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-color: transparent !important;
+  border-width: 0 !important;
+  ring: none !important;
+  ring-color: transparent !important;
+  ring-offset: 0 !important;
+  ring-width: 0 !important;
+  --tw-ring: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset: 0 !important;
+  --tw-ring-offset-color: transparent !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-offset-width: 0 !important;
+}
+
+/* Force remove any remaining focus styles */
+[data-admin="true"] .admin-sidebar button:focus-visible,
+[data-admin="true"] .admin-sidebar a:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+}
+
+/* ULTIMATE CLICK/FOCUS GREEN BORDER REMOVAL */
+[data-admin="true"] .admin-sidebar button,
+[data-admin="true"] .admin-sidebar a {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  ring-color: transparent !important;
+  --tw-ring: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset: 0 !important;
+  --tw-ring-offset-color: transparent !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-offset-width: 0 !important;
+}
+
+/* Remove any green color from all states */
+[data-admin="true"] .admin-sidebar button:focus,
+[data-admin="true"] .admin-sidebar button:active,
+[data-admin="true"] .admin-sidebar button:hover,
+[data-admin="true"] .admin-sidebar a:focus,
+[data-admin="true"] .admin-sidebar a:active,
+[data-admin="true"] .admin-sidebar a:hover {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  ring-color: transparent !important;
+}
+
+/* Remove green borders from ALL admin buttons */
+[data-admin="true"] button,
+[data-admin="true"] button:focus,
+[data-admin="true"] button:active,
+[data-admin="true"] button:hover,
+[data-admin="true"] button:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  ring-color: transparent !important;
+  --tw-ring: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset: 0 !important;
+  --tw-ring-offset-color: transparent !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-offset-width: 0 !important;
+}
+
+/* Remove green borders from admin header buttons specifically */
+[data-admin="true"] .admin-header button,
+[data-admin="true"] .admin-header button:focus,
+[data-admin="true"] .admin-header button:active,
+[data-admin="true"] .admin-header button:hover {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+}
+
+/* NUCLEAR OPTION - Remove ALL green borders from sidebar tabs */
+[data-admin="true"] .admin-sidebar * {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  ring-color: transparent !important;
+  --tw-ring: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset: 0 !important;
+  --tw-ring-offset-color: transparent !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-offset-width: 0 !important;
+}
+
+/* Force remove green borders on ALL sidebar elements */
+[data-admin="true"] .admin-sidebar button,
+[data-admin="true"] .admin-sidebar a,
+[data-admin="true"] .admin-sidebar div,
+[data-admin="true"] .admin-sidebar span {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  ring-color: transparent !important;
+}
+
+/* Override any remaining focus styles with maximum specificity */
+html body [data-admin="true"] .admin-sidebar button:focus,
+html body [data-admin="true"] .admin-sidebar button:active,
+html body [data-admin="true"] .admin-sidebar a:focus,
+html body [data-admin="true"] .admin-sidebar a:active {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  ring-color: transparent !important;
+}
+
+/* FINAL NUCLEAR OPTION - Remove any green color completely */
+[data-admin="true"] .admin-sidebar * {
+  border-color: transparent !important;
+  outline-color: transparent !important;
+  box-shadow: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-color: transparent !important;
+}
+
+/* Force remove any green focus ring */
+[data-admin="true"] .admin-sidebar button:focus-visible,
+[data-admin="true"] .admin-sidebar a:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  ring-color: transparent !important;
+  --tw-ring: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset: 0 !important;
+  --tw-ring-offset-color: transparent !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-offset-width: 0 !important;
+}
+
 .admin-sidebar {
   flex-shrink: 0;
   width: 14rem; /* 224px */
@@ -337,8 +871,8 @@ textarea,
 /* Override any gray background on admin sidebar */
 [data-admin="true"] .admin-sidebar[style*="background-color: #f9f9f9"],
 [data-admin="true"] .admin-sidebar[style*="background: #f9f9f9"] {
-  background-color: #000000 !important;
-  background: #000000 !important;
+  background-color: transparent !important;
+  background: transparent !important;
 }
 
 /* Force sidebar to stay black - highest priority */
@@ -410,8 +944,8 @@ textarea,
 /* Override any dynamic changes */
 [data-admin="true"] .admin-sidebar[class*="bg-"],
 [data-admin="true"] .admin-sidebar[style*="background"] {
-  background-color: #1e293b !important;
-  background: #1e293b !important;
+  background-color: #000000 !important;
+  background: #000000 !important;
 }
 
 .admin-main {
@@ -482,13 +1016,139 @@ textarea,
 }
 
 [data-admin="true"] .admin-sidebar button:hover {
-  background-color: #1f2937 !important;
+  background-color: #2e2e33 !important;
   border-radius: 0.25rem !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 [data-admin="true"] .admin-sidebar a:hover {
-  background-color: #1f2937 !important;
+  background-color: #2e2e33 !important;
   border-radius: 0.25rem !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Ultra specific hover override for admin sidebar */
+html body [data-admin="true"] .admin-sidebar button:hover,
+html body [data-admin="true"] .admin-sidebar a:hover {
+  background-color: #2e2e33 !important;
+}
+
+/* Active state for admin sidebar */
+[data-admin="true"] .admin-sidebar button.active,
+[data-admin="true"] .admin-sidebar a.active {
+  background-color: #2e2e33 !important;
+}
+
+/* Analytics page border fixes */
+[data-admin="true"] .analytics-card .border-t {
+  border-top-color: #eef2f6 !important;
+}
+
+[data-admin="true"] .border-t {
+  border-top-color: #eef2f6 !important;
+}
+
+/* Force admin pages to always use light theme borders */
+[data-admin="true"] .border-t,
+[data-admin="true"] .border-b,
+[data-admin="true"] .border-l,
+[data-admin="true"] .border-r,
+[data-admin="true"] .border {
+  border-color: #eef2f6 !important;
+}
+
+/* Override any dark mode border colors in admin pages */
+[data-admin="true"] .dark .border-t,
+[data-admin="true"] .dark .border-b,
+[data-admin="true"] .dark .border-l,
+[data-admin="true"] .dark .border-r,
+[data-admin="true"] .dark .border {
+  border-color: #eef2f6 !important;
+}
+
+/* Specific border-r fixes for admin pages */
+[data-admin="true"] .border-r {
+  border-right-color: #eef2f6 !important;
+}
+
+[data-admin="true"] .dark .border-r {
+  border-right-color: #eef2f6 !important;
+}
+
+/* RTL border fixes for admin pages */
+[data-admin="true"][dir="rtl"] .border-r {
+  border-left-color: #eef2f6 !important;
+}
+
+[data-admin="true"][dir="rtl"] .border-l {
+  border-right-color: #eef2f6 !important;
+}
+
+/* Ultra specific border-r fixes for analytics page */
+[data-admin="true"] .analytics-card .border-r,
+[data-admin="true"] .analytics-card .border-r[style*="borderRightColor"] {
+  border-right-color: #eef2f6 !important;
+}
+
+/* Force override for any dark mode or other overrides */
+[data-admin="true"] .dark .analytics-card .border-r,
+[data-admin="true"] .dark .analytics-card .border-r[style*="borderRightColor"] {
+  border-right-color: #eef2f6 !important;
+}
+
+/* Nuclear option - maximum specificity */
+html body [data-admin="true"] .analytics-card .border-r,
+html body [data-admin="true"] .analytics-card .border-r[style*="borderRightColor"] {
+  border-right-color: #eef2f6 !important;
+}
+
+/* Final override - target the exact structure in analytics page */
+[data-admin="true"] .analytics-card .flex .border-r {
+  border-right-color: #eef2f6 !important;
+  border-right: 1px solid #eef2f6 !important;
+}
+
+/* Force override with maximum specificity for analytics stats */
+html body div[data-admin="true"] .analytics-card .flex .border-r {
+  border-right-color: #eef2f6 !important;
+  border-right: 1px solid #eef2f6 !important;
+}
+
+/* Ultimate override - target every possible selector */
+[data-admin="true"] .analytics-card .flex > div.border-r,
+[data-admin="true"] .analytics-card .flex > div[class*="border-r"],
+[data-admin="true"] .analytics-card .flex > div[style*="borderRightColor"] {
+  border-right-color: #eef2f6 !important;
+  border-right: 1px solid #eef2f6 !important;
+}
+
+/* Force override for any remaining black borders */
+[data-admin="true"] .analytics-card .flex > div {
+  border-right-color: #eef2f6 !important;
+}
+
+/* Nuclear option - override everything */
+html body div[data-admin="true"] .analytics-card .flex > div.border-r,
+html body div[data-admin="true"] .analytics-card .flex > div[class*="border-r"],
+html body div[data-admin="true"] .analytics-card .flex > div[style*="borderRightColor"] {
+  border-right-color: #eef2f6 !important;
+  border-right: 1px solid #eef2f6 !important;
+}
+
+/* Final nuclear option - target the exact structure with maximum specificity */
+html body div[data-admin="true"] .analytics-card .flex > div:not(:last-child) {
+  border-right-color: #eef2f6 !important;
+  border-right: 1px solid #eef2f6 !important;
+}
+
+/* Override any remaining black borders with maximum specificity */
+html body div[data-admin="true"] .analytics-card .flex > div[class*="border"] {
+  border-right-color: #eef2f6 !important;
+  border-right: 1px solid #eef2f6 !important;
 }
 
 /* Set default border radius for all admin sidebar elements */
@@ -508,8 +1168,168 @@ textarea,
 
 /* Google-Style Input Base Class - Light & Dark Mode */
 .cosmt-input-base {
-  @apply w-full py-2 px-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:outline-none focus:border-cosmt-primary focus:ring-0;
-  @apply dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cosmt-primary;
+  @apply w-full py-2 px-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:outline-none focus:border-cosmt-primary focus:ring-0 hover:border-cosmt-primary;
+  @apply dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cosmt-primary dark:hover:border-cosmt-primary;
+}
+
+.cosmt-input-base:focus {
+  box-shadow: none !important;
+}
+
+/* Global Input Base Styling - All Website Inputs */
+input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+select,
+textarea {
+  border-radius: 0.25rem !important;
+  border: 1px solid #e5e7eb !important;
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  padding: 0.5rem 0.75rem !important;
+  transition: border-color 0.2s ease !important;
+}
+
+/* Global Input Hover Effects - All Website Inputs */
+input:hover,
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="number"]:hover,
+input[type="tel"]:hover,
+input[type="url"]:hover,
+input[type="search"]:hover,
+input[type="date"]:hover,
+input[type="time"]:hover,
+input[type="datetime-local"]:hover,
+select:hover,
+textarea:hover {
+  border-color: #059669 !important;
+  transition: border-color 0.2s ease !important;
+}
+
+/* Global Input Active Effects - All Website Inputs */
+input:active,
+input[type="text"]:active,
+input[type="email"]:active,
+input[type="password"]:active,
+input[type="number"]:active,
+input[type="tel"]:active,
+input[type="url"]:active,
+input[type="search"]:active,
+input[type="date"]:active,
+input[type="time"]:active,
+input[type="datetime-local"]:active,
+select:active,
+textarea:active {
+  border-color: #059669 !important;
+  transition: border-color 0.2s ease !important;
+}
+
+/* Global Input Focus Effects - All Website Inputs */
+input:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #059669 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease !important;
+}
+
+/* Dark mode base styling */
+.dark input,
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="number"],
+.dark input[type="tel"],
+.dark input[type="url"],
+.dark input[type="search"],
+.dark input[type="date"],
+.dark input[type="time"],
+.dark input[type="datetime-local"],
+.dark select,
+.dark textarea {
+  border-radius: 0.25rem !important;
+  border: 1px solid #374151 !important;
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+  padding: 0.5rem 0.75rem !important;
+  transition: border-color 0.2s ease !important;
+}
+
+/* Dark mode hover effects */
+.dark input:hover,
+.dark input[type="text"]:hover,
+.dark input[type="email"]:hover,
+.dark input[type="password"]:hover,
+.dark input[type="number"]:hover,
+.dark input[type="tel"]:hover,
+.dark input[type="url"]:hover,
+.dark input[type="search"]:hover,
+.dark input[type="date"]:hover,
+.dark input[type="time"]:hover,
+.dark input[type="datetime-local"]:hover,
+.dark select:hover,
+.dark textarea:hover {
+  border-color: #059669 !important;
+  transition: border-color 0.2s ease !important;
+}
+
+/* Dark mode active effects */
+.dark input:active,
+.dark input[type="text"]:active,
+.dark input[type="email"]:active,
+.dark input[type="password"]:active,
+.dark input[type="number"]:active,
+.dark input[type="tel"]:active,
+.dark input[type="url"]:active,
+.dark input[type="search"]:active,
+.dark input[type="date"]:active,
+.dark input[type="time"]:active,
+.dark input[type="datetime-local"]:active,
+.dark select:active,
+.dark textarea:active {
+  border-color: #059669 !important;
+  transition: border-color 0.2s ease !important;
+}
+
+/* Dark mode focus effects */
+.dark input:focus,
+.dark input[type="text"]:focus,
+.dark input[type="email"]:focus,
+.dark input[type="password"]:focus,
+.dark input[type="number"]:focus,
+.dark input[type="tel"]:focus,
+.dark input[type="url"]:focus,
+.dark input[type="search"]:focus,
+.dark input[type="date"]:focus,
+.dark input[type="time"]:focus,
+.dark input[type="datetime-local"]:focus,
+.dark select:focus,
+.dark textarea:focus {
+  border-color: #059669 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease !important;
 }
 
 .chevron-arrow.rotated {
@@ -658,11 +1478,11 @@ body:not([data-admin="true"]) .rounded-lg {
   border-radius: 9999px !important; /* Keep full rounded for pills/badges */
 }
 
-/* Admin Dashboard Cards - Pure White with 8px border radius and shadow-md */
+/* Admin Dashboard Cards - Pure White with 8px border radius and no shadow */
 [data-admin="true"] .dashboard-card {
   background-color: #ffffff !important;
   border-radius: 8px !important;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important; /* shadow-md */
+  box-shadow: none !important;
 }
 
 /* Analytics cards specific styling */
@@ -762,10 +1582,12 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] textarea {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #eef2f6 !important;
-  border: 1px solid #eef2f6 !important;
+  border-color: #e5e7eb !important;
+  border: 1px solid #e5e7eb !important;
   border-radius: 0.25rem !important;
   color: #111827 !important;
+  padding: 0.5rem 0.75rem !important;
+  transition: border-color 0.2s ease !important;
 }
 
 /* Override any input with border classes */
@@ -799,7 +1621,7 @@ body:not([data-admin="true"]) .rounded-lg {
   border-color: #059669 !important;
   border: 1px solid #059669 !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+  box-shadow: none !important;
   color: #111827 !important;
 }
 
@@ -819,8 +1641,29 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] textarea:hover {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #eef2f6 !important;
-  border: 1px solid #eef2f6 !important;
+  border-color: #059669 !important;
+  border: 1px solid #059669 !important;
+  color: #111827 !important;
+}
+
+/* Input active states */
+[data-admin="true"] input:active,
+[data-admin="true"] input[type="text"]:active,
+[data-admin="true"] input[type="email"]:active,
+[data-admin="true"] input[type="password"]:active,
+[data-admin="true"] input[type="number"]:active,
+[data-admin="true"] input[type="tel"]:active,
+[data-admin="true"] input[type="url"]:active,
+[data-admin="true"] input[type="search"]:active,
+[data-admin="true"] input[type="date"]:active,
+[data-admin="true"] input[type="time"]:active,
+[data-admin="true"] input[type="datetime-local"]:active,
+[data-admin="true"] select:active,
+[data-admin="true"] textarea:active {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: #059669 !important;
+  border: 1px solid #059669 !important;
   color: #111827 !important;
 }
 
@@ -941,7 +1784,7 @@ body:not([data-admin="true"]) .rounded-lg {
   border-color: #059669 !important;
   border: 1px solid #059669 !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+  box-shadow: none !important;
   color: #111827 !important;
 }
 
@@ -949,8 +1792,17 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] .filter-select:hover {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #eef2f6 !important;
-  border: 1px solid #eef2f6 !important;
+  border-color: #059669 !important;
+  border: 1px solid #059669 !important;
+  color: #111827 !important;
+}
+
+[data-admin="true"] .filter-input:active,
+[data-admin="true"] .filter-select:active {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-color: #059669 !important;
+  border: 1px solid #059669 !important;
   color: #111827 !important;
 }
 
@@ -1417,6 +2269,40 @@ input[type="reset"][class*="rounded"] {
   border-radius: 0 !important;
 }
 
+/* Tab Navigation - Remove border radius for tab buttons */
+[data-admin="true"] nav button[class*="border-b-2"],
+[data-admin="true"] .tab-navigation button,
+[data-admin="true"] .tab-navigation button:hover,
+[data-admin="true"] .tab-navigation button:focus,
+[data-admin="true"] .tab-navigation button:active {
+  border-radius: 0 !important;
+}
+
+/* Override global button border radius for tab buttons */
+[data-admin="true"] button[class*="border-b-2"]:hover,
+[data-admin="true"] button[class*="border-b-2"]:focus,
+[data-admin="true"] button[class*="border-b-2"]:active {
+  border-radius: 0 !important;
+}
+
+/* Theme Customizer and Live Customizer tabs - Remove border radius */
+[data-admin="true"] .theme-customizer-tabs button,
+[data-admin="true"] .live-customizer-tabs button,
+[data-admin="true"] .theme-customizer-tabs button:hover,
+[data-admin="true"] .live-customizer-tabs button:hover,
+[data-admin="true"] .theme-customizer-tabs button:focus,
+[data-admin="true"] .live-customizer-tabs button:focus,
+[data-admin="true"] .theme-customizer-tabs button:active,
+[data-admin="true"] .live-customizer-tabs button:active {
+  border-radius: 0 !important;
+}
+
+/* General tab styling - Remove border radius for all tab-like buttons */
+[data-admin="true"] button[style*="borderRadius: 0"],
+[data-admin="true"] button[style*="border-radius: 0"] {
+  border-radius: 0 !important;
+}
+
 /* Override the global 0.25rem rule for settings general page */
 [data-admin="true"] .settings-general-page input.rounded-lg,
 [data-admin="true"] .settings-general-page select.rounded-lg,
@@ -1609,13 +2495,265 @@ input[type="reset"][class*="rounded"] {
   text-align: right;
 }
 
+/* Admin Input Icons - Move All to Right Side */
+[data-admin="true"] .relative .absolute.left-3,
+[data-admin="true"] .relative .absolute.left-4,
+[data-admin="true"] .relative .absolute.left-2,
+[data-admin="true"] .relative .absolute.left-1,
+[data-admin="true"] .relative .absolute.left-5 {
+  left: auto !important;
+  right: 0.75rem !important;
+}
+
+[data-admin="true"] .relative input[class*="pl-"] {
+  padding-left: 0.75rem !important;
+  padding-right: 2.5rem !important;
+}
+
+/* Specific icon positioning for admin pages */
+[data-admin="true"] .relative .absolute[class*="left-"] {
+  left: auto !important;
+  right: 0.75rem !important;
+}
+
+/* Search icons specifically */
+[data-admin="true"] .relative .absolute[class*="Search"],
+[data-admin="true"] .relative .absolute[class*="search"] {
+  left: auto !important;
+  right: 0.75rem !important;
+}
+
+/* Filter icons */
+[data-admin="true"] .relative .absolute[class*="Filter"],
+[data-admin="true"] .relative .absolute[class*="filter"] {
+  left: auto !important;
+  right: 0.75rem !important;
+}
+
+/* Mail icons */
+[data-admin="true"] .relative .absolute[class*="Mail"],
+[data-admin="true"] .relative .absolute[class*="mail"] {
+  left: auto !important;
+  right: 0.75rem !important;
+}
+
+/* User icons */
+[data-admin="true"] .relative .absolute[class*="User"],
+[data-admin="true"] .relative .absolute[class*="user"] {
+  left: auto !important;
+  right: 0.75rem !important;
+}
+
+/* Lock icons */
+[data-admin="true"] .relative .absolute[class*="Lock"],
+[data-admin="true"] .relative .absolute[class*="lock"] {
+  left: auto !important;
+  right: 0.75rem !important;
+}
+
+/* Cart Sidebar Connected Buttons */
+.cart-button-left {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-right: none !important;
+  margin-right: 0 !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.cart-button-right {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-left: none !important;
+  margin-left: 0 !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}
+
+/* Force connected buttons styling */
+.cart-buttons-container {
+  display: flex !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.cart-buttons-container > a {
+  flex: 1 !important;
+  width: 50% !important;
+  min-width: 0 !important;
+  display: flex !important;
+}
+
+.cart-buttons-container .cart-button-left {
+  border-radius: 0.25rem 0 0 0.25rem !important;
+  border-right: none !important;
+  margin-right: 0 !important;
+}
+
+.cart-buttons-container .cart-button-right {
+  border-radius: 0 0.25rem 0.25rem 0 !important;
+  border-left: none !important;
+  margin-left: 0 !important;
+}
+
+/* Ultra-specific button connection styling */
+.cart-buttons-container button.cart-button-left {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-right: none !important;
+  margin-right: 0 !important;
+  border-radius: 0.25rem 0 0 0.25rem !important;
+  flex: 1 !important;
+  width: 50% !important;
+  min-width: 0 !important;
+  text-align: center !important;
+}
+
+.cart-buttons-container button.cart-button-right {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-left: none !important;
+  margin-left: 0 !important;
+  border-radius: 0 0.25rem 0.25rem 0 !important;
+  flex: 1 !important;
+  width: 50% !important;
+  min-width: 0 !important;
+  text-align: center !important;
+}
+
+/* Force no gaps between buttons */
+.cart-buttons-container > * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.cart-buttons-container > * + * {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
 /* RTL header alignment */
 [dir="rtl"] .admin-header {
   direction: rtl;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 [dir="rtl"] .admin-header .flex {
   flex-direction: row-reverse;
+}
+
+/* Force admin header to take full width in RTL */
+html[dir="rtl"] .admin-header {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+}
+
+/* Comprehensive RTL Layout Fixes */
+[dir="rtl"] {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+[dir="rtl"] * {
+  direction: inherit !important;
+}
+
+/* RTL Text Alignment */
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 {
+  text-align: right !important;
+}
+
+[dir="rtl"] p, [dir="rtl"] span, [dir="rtl"] div {
+  text-align: right !important;
+}
+
+/* RTL Flexbox */
+[dir="rtl"] .flex {
+  flex-direction: row-reverse !important;
+}
+
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse !important;
+}
+
+/* RTL Spacing - Convert all margin/padding to logical properties */
+[dir="rtl"] .mr-1 { margin-right: 0 !important; margin-left: 0.25rem !important; }
+[dir="rtl"] .mr-2 { margin-right: 0 !important; margin-left: 0.5rem !important; }
+[dir="rtl"] .mr-3 { margin-right: 0 !important; margin-left: 0.75rem !important; }
+[dir="rtl"] .mr-4 { margin-right: 0 !important; margin-left: 1rem !important; }
+[dir="rtl"] .mr-6 { margin-right: 0 !important; margin-left: 1.5rem !important; }
+
+[dir="rtl"] .ml-1 { margin-left: 0 !important; margin-right: 0.25rem !important; }
+[dir="rtl"] .ml-2 { margin-left: 0 !important; margin-right: 0.5rem !important; }
+[dir="rtl"] .ml-3 { margin-left: 0 !important; margin-right: 0.75rem !important; }
+[dir="rtl"] .ml-4 { margin-left: 0 !important; margin-right: 1rem !important; }
+[dir="rtl"] .ml-6 { margin-left: 0 !important; margin-right: 1.5rem !important; }
+
+[dir="rtl"] .pr-1 { padding-right: 0 !important; padding-left: 0.25rem !important; }
+[dir="rtl"] .pr-2 { padding-right: 0 !important; padding-left: 0.5rem !important; }
+[dir="rtl"] .pr-3 { padding-right: 0 !important; padding-left: 0.75rem !important; }
+[dir="rtl"] .pr-4 { padding-right: 0 !important; padding-left: 1rem !important; }
+[dir="rtl"] .pr-6 { padding-right: 0 !important; padding-left: 1.5rem !important; }
+
+[dir="rtl"] .pl-1 { padding-left: 0 !important; padding-right: 0.25rem !important; }
+[dir="rtl"] .pl-2 { padding-left: 0 !important; padding-right: 0.5rem !important; }
+[dir="rtl"] .pl-3 { padding-left: 0 !important; padding-right: 0.75rem !important; }
+[dir="rtl"] .pl-4 { padding-left: 0 !important; padding-right: 1rem !important; }
+[dir="rtl"] .pl-6 { padding-left: 0 !important; padding-right: 1.5rem !important; }
+
+/* RTL Text Alignment Classes */
+[dir="rtl"] .text-left { text-align: right !important; }
+[dir="rtl"] .text-right { text-align: left !important; }
+
+/* RTL Justify Content */
+[dir="rtl"] .justify-start { justify-content: flex-end !important; }
+[dir="rtl"] .justify-end { justify-content: flex-start !important; }
+
+/* RTL Border */
+[dir="rtl"] .border-r { border-right: none !important; border-left: 1px solid #eef2f6 !important; }
+[dir="rtl"] .border-l { border-left: none !important; border-right: 1px solid #eef2f6 !important; }
+
+/* RTL Space Between */
+[dir="rtl"] .space-x-1 > * + * { margin-left: 0 !important; margin-right: 0.25rem !important; }
+[dir="rtl"] .space-x-2 > * + * { margin-left: 0 !important; margin-right: 0.5rem !important; }
+[dir="rtl"] .space-x-3 > * + * { margin-left: 0 !important; margin-right: 0.75rem !important; }
+[dir="rtl"] .space-x-4 > * + * { margin-left: 0 !important; margin-right: 1rem !important; }
+[dir="rtl"] .space-x-6 > * + * { margin-left: 0 !important; margin-right: 1.5rem !important; }
+
+/* RTL Dashboard Cards */
+[dir="rtl"] .dashboard-card {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+[dir="rtl"] .analytics-card {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+/* RTL Grid */
+[dir="rtl"] .grid {
+  direction: rtl !important;
+}
+
+[dir="rtl"] .grid-cols-1, [dir="rtl"] .grid-cols-2, [dir="rtl"] .grid-cols-3, [dir="rtl"] .grid-cols-4 {
+  direction: rtl !important;
+}
+
+/* RTL Form Elements */
+[dir="rtl"] input, [dir="rtl"] textarea, [dir="rtl"] select {
+  text-align: right !important;
+  direction: rtl !important;
+}
+
+/* RTL Buttons */
+[dir="rtl"] button {
+  text-align: right !important;
+  direction: rtl !important;
 }
 
 /* RTL chart and content areas */

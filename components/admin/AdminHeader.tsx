@@ -60,7 +60,7 @@ export function AdminHeader({ isDarkMode, toggleDarkMode }: AdminHeaderProps) {
   const unreadCount = notifications.filter(n => n.unread).length;
 
   return (
-    <header className="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <header className="admin-header bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
       <div className="flex items-center justify-between h-14 px-3 sm:px-4 lg:px-6">
         {/* Left side */}
         <div className="flex items-center">

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { Search, Menu, X, ShoppingBag, User, Heart, LogOut } from 'lucide-react';
 import { Input } from '../ui/Input';
@@ -11,8 +11,11 @@ import { useCart } from '../../contexts/CartContext';
 import { useSearch } from '../../contexts/SearchContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useWishlist } from '../../contexts/WishlistContext';
+import { useRTL } from '../../contexts/UnifiedLanguageContext';
+import { useLanguage } from '../../contexts/UnifiedLanguageContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { LanguageSwitcher } from '../ui/LanguageSwitcher';
 
 interface MainNavigationProps {
   isMobileMenuOpen: boolean;
@@ -31,6 +34,8 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
   const { setSearchQuery } = useSearch();
   const { user, logout } = useAuth();
   const { getWishlistCount } = useWishlist();
+  const { isRTL } = useRTL();
+  const { t } = useLanguage();
   const router = useRouter();
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -69,22 +74,22 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
       }
     };
   }, [hoverTimeout]);
-  const navigationItems = [
-    { name: 'Hair Care', href: '/categories/hair-care' },
-    { name: 'Skin Care', href: '/categories/skincare' },
-    { name: 'Makeup', href: '/categories/makeup' },
-    { name: 'Fragrance', href: '/categories/fragrance' },
-    { name: 'Body Care', href: '/categories/body-care' },
-    { name: 'All Categories', href: '/categories' },
-    { name: 'Sale', href: '/sale' },
-  ];
+  const navigationItems = useMemo(() => [
+    { name: t.hairCare, href: '/categories/hair-care' },
+    { name: t.skincare, href: '/categories/skincare' },
+    { name: t.makeup, href: '/categories/makeup' },
+    { name: t.fragrance, href: '/categories/fragrance' },
+    { name: t.bodyCare, href: '/categories/body-care' },
+    { name: t.allCategories, href: '/categories' },
+    { name: t.sale, href: '/sale' },
+  ], [t]);
 
   return (
     <>
       {/* Top Row */}
       <div className="cosmt-container">
-        <div className="flex items-center justify-between h-16 px-2 md:px-0">
-          {/* Left side - Mobile menu button */}
+        <div className={`flex items-center justify-between h-16 px-2 md:px-0 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          {/* Mobile menu button */}
           <div className="flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -114,14 +119,19 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
               <Input
                 type="search"
                 name="search"
-                placeholder="Search products, brands, and more..."
+                placeholder={isRTL ? "ابحث عن المنتجات والعلامات التجارية..." : "Search products, brands, and more..."}
                 icon={<Search className="w-4 h-4 text-gray-400" />}
               />
             </form>
           </div>
 
+          {/* Language Switcher */}
+          <div className="hidden md:block">
+            <LanguageSwitcher />
+          </div>
+
           {/* Right side icons */}
-          <div className="flex items-center space-x-1 md:space-x-2">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-1 md:space-x-2' : 'space-x-1 md:space-x-2'}`}>
             {/* Mobile search button */}
             <button
               onClick={() => setIsSearchOpen(true)}

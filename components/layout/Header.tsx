@@ -4,8 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { Search, Menu, X, ShoppingBag, User, Heart } from 'lucide-react';
 import { TopPromotionBar } from './TopPromotionBar';
 import { MainNavigation } from './MainNavigation';
+import { LanguageSwitcher } from '../ui/LanguageSwitcher';
+import { useRTL } from '../../contexts/UnifiedLanguageContext';
 
 export const Header: React.FC = () => {
+  const { isRTL } = useRTL();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
@@ -36,6 +39,7 @@ export const Header: React.FC = () => {
       className={`cosmt-navigation transition-transform duration-300 ease-in-out ${
         isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
+      dir={isRTL ? 'rtl' : 'ltr'}
     >
       <TopPromotionBar />
       <MainNavigation 

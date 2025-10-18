@@ -89,12 +89,12 @@ const stockMovements = [
 const getStockStatus = (current: number, min: number) => {
   if (current === 0) return { status: 'out-of-stock', color: 'text-red-600', bg: 'bg-red-50' };
   if (current <= min) return { status: 'low-stock', color: 'text-orange-600', bg: 'bg-orange-50' };
-  return { status: 'in-stock', color: 'text-green-600', bg: 'bg-green-50' };
+  return { status: 'in-stock', color: 'text-blue-600', bg: 'bg-green-50' };
 };
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'in-stock': return 'text-green-600 bg-green-50';
+    case 'in-stock': return 'text-blue-600 bg-green-50';
     case 'low-stock': return 'text-orange-600 bg-orange-50';
     case 'out-of-stock': return 'text-red-600 bg-red-50';
     default: return 'text-gray-600 bg-gray-50';
@@ -115,7 +115,7 @@ const InventoryCard = memo(({ title, value, change, icon: Icon, color }: {
         <p className="text-sm font-medium text-gray-600">{title}</p>
         <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
         {change && (
-          <p className={`text-sm ${change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+          <p className={`text-sm ${change.startsWith('+') ? 'text-blue-600' : 'text-red-600'}`}>
             {change}
           </p>
         )}
@@ -187,7 +187,7 @@ const InventoryItem = memo(({ item, onEdit, onDelete, onView }: {
             </button>
             <button
               onClick={() => onEdit(item.id)}
-              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-green-50 rounded-lg transition-colors"
             >
               <Edit className="w-4 h-4" />
             </button>
@@ -208,7 +208,7 @@ const StockMovementItem = memo(({ movement }: { movement: any }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
     <div className="flex items-center space-x-3">
       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-        movement.type === 'in' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+        movement.type === 'in' ? 'bg-green-100 text-blue-600' : 'bg-red-100 text-red-600'
       }`}>
         {movement.type === 'in' ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
       </div>
@@ -218,7 +218,7 @@ const StockMovementItem = memo(({ movement }: { movement: any }) => (
       </div>
     </div>
     <div className="text-right">
-      <p className={`font-semibold ${movement.type === 'in' ? 'text-green-600' : 'text-red-600'}`}>
+      <p className={`font-semibold ${movement.type === 'in' ? 'text-blue-600' : 'text-red-600'}`}>
         {movement.type === 'in' ? '+' : '-'}{movement.quantity}
       </p>
       <p className="text-sm text-gray-500 dark:text-gray-400">{movement.date}</p>
@@ -301,7 +301,7 @@ export default function InventoryManagement() {
           value={stats.inStock}
           change="+2 this week"
           icon={Package}
-          color="bg-green-100 text-green-600"
+          color="bg-green-100 text-blue-600"
         />
         <InventoryCard
           title="Low Stock"
@@ -335,7 +335,7 @@ export default function InventoryManagement() {
                 placeholder="Search products by name or SKU..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -344,7 +344,7 @@ export default function InventoryManagement() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Status</option>
               <option value="in-stock">In Stock</option>
@@ -355,7 +355,7 @@ export default function InventoryManagement() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Categories</option>
               <option value="Hair Care">Hair Care</option>
@@ -397,7 +397,7 @@ export default function InventoryManagement() {
         <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Stock Movements</h2>
-          <button className="text-green-600 hover:text-green-700 text-sm font-medium">
+          <button className="text-blue-600 hover:text-green-700 text-sm font-medium">
             View All
           </button>
         </div>

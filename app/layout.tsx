@@ -5,8 +5,9 @@ import { CartProvider } from "../contexts/CartContext";
 import { SearchProvider } from "../contexts/SearchContext";
 import { AuthProvider } from "../contexts/AuthContext";
 import { WishlistProvider } from "../contexts/WishlistContext";
-import { LanguageProvider } from "../contexts/LanguageContext";
+import { UnifiedLanguageProvider } from "../contexts/UnifiedLanguageContext";
 import { ErrorBoundary } from "../components/ui/ErrorBoundary";
+import { HTMLAttributes } from "../components/layout/HTMLAttributes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -83,13 +84,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
         <ErrorBoundary>
-          <LanguageProvider>
+          <UnifiedLanguageProvider>
+            <HTMLAttributes />
             <AuthProvider>
               <WishlistProvider>
                 <CartProvider>
@@ -99,7 +101,7 @@ export default function RootLayout({
                 </CartProvider>
               </WishlistProvider>
             </AuthProvider>
-          </LanguageProvider>
+          </UnifiedLanguageProvider>
         </ErrorBoundary>
       </body>
     </html>

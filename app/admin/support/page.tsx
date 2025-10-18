@@ -158,14 +158,14 @@ const documentation = [
 // Helper functions
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'published': return 'text-green-600 bg-green-50';
+    case 'published': return 'text-blue-600 bg-green-50';
     case 'draft': return 'text-yellow-600 bg-yellow-50';
     case 'open': return 'text-red-600 bg-red-50';
     case 'in-progress': return 'text-blue-600 bg-blue-50';
-    case 'resolved': return 'text-green-600 bg-green-50';
+    case 'resolved': return 'text-blue-600 bg-green-50';
     case 'high': return 'text-red-600 bg-red-50';
     case 'medium': return 'text-yellow-600 bg-yellow-50';
-    case 'low': return 'text-green-600 bg-green-50';
+    case 'low': return 'text-blue-600 bg-green-50';
     default: return 'text-gray-600 bg-gray-50';
   }
 };
@@ -187,7 +187,7 @@ const StatCard = memo(({ title, value, change, icon: Icon, color }: {
         <p className="text-sm font-medium text-gray-600">{title}</p>
         <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
         {change && (
-          <p className={`text-sm ${change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+          <p className={`text-sm ${change.startsWith('+') ? 'text-blue-600' : 'text-red-600'}`}>
             {change}
           </p>
         )}
@@ -239,7 +239,7 @@ const HelpArticleCard = memo(({ article, onEdit, onDelete, onView, onPublish }: 
         </button>
         <button
           onClick={() => onEdit(article.id)}
-          className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-green-50 rounded-lg transition-colors"
         >
           <Edit className="w-4 h-4" />
         </button>
@@ -289,7 +289,7 @@ const FAQCard = memo(({ faq, onEdit, onDelete, onView }: {
         </button>
         <button
           onClick={() => onEdit(faq.id)}
-          className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-green-50 rounded-lg transition-colors"
         >
           <Edit className="w-4 h-4" />
         </button>
@@ -346,7 +346,7 @@ const SupportTicketCard = memo(({ ticket, onEdit, onDelete, onView, onAssign }: 
         </button>
         <button
           onClick={() => onEdit(ticket.id)}
-          className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-green-50 rounded-lg transition-colors"
         >
           <Edit className="w-4 h-4" />
         </button>
@@ -394,7 +394,7 @@ const DocumentationCard = memo(({ doc, onEdit, onDelete, onView, onDownload }: {
         </button>
         <button
           onClick={() => onDownload(doc.id)}
-          className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-green-50 rounded-lg transition-colors"
         >
           <Download className="w-4 h-4" />
         </button>
@@ -512,7 +512,7 @@ export default function SupportCenter() {
           value={stats.totalViews.toLocaleString()}
           change="+15% this month"
           icon={Eye}
-          color="bg-green-100 text-green-600"
+          color="bg-green-100 text-blue-600"
         />
         <StatCard
           title="Open Tickets"
@@ -538,7 +538,7 @@ export default function SupportCenter() {
             placeholder="Search help articles, FAQs, and documentation..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             style={{ borderColor: '#eef2f6' }}
           />
         </div>
@@ -547,7 +547,7 @@ export default function SupportCenter() {
       {/* Tabs */}
       <div className="analytics-card">
         <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
-          <nav className="flex space-x-8 px-6">
+          <nav className="flex space-x-8 px-6 tab-navigation">
             {[
               { id: 'articles', name: 'Help Articles', count: helpArticles.length },
               { id: 'faqs', name: 'FAQs', count: faqs.length },
@@ -559,7 +559,7 @@ export default function SupportCenter() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-green-500 text-green-600'
+                    ? 'border-green-500 text-blue-600'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
                 }`}
               >

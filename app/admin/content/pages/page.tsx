@@ -293,8 +293,8 @@ export default function CustomPages() {
   });
 
   const handleEdit = (page: any) => {
-    console.log('Edit page:', page);
-    // Navigate to page editor
+    // Navigate to page builder
+    window.location.href = `/admin/content/pages/page-builder?pageId=${page.id}`;
   };
 
   const handleDelete = (page: any) => {
@@ -334,10 +334,28 @@ export default function CustomPages() {
             Manage all pages of your website like Shopify's page editor
           </p>
         </div>
-        <Button onClick={handleCreatePage} className="flex items-center space-x-2">
-          <Plus className="w-4 h-4" />
-          <span>Create Page</span>
-        </Button>
+        <div className="flex items-center space-x-3">
+          <Button 
+            onClick={() => window.location.href = '/admin/theme-customizer'} 
+            className="flex items-center space-x-2"
+            variant="secondary"
+          >
+            <Settings className="w-4 h-4" />
+            <span>Theme Customizer</span>
+          </Button>
+          <Button 
+            onClick={() => window.location.href = '/admin/content/pages/page-builder'} 
+            className="flex items-center space-x-2"
+            variant="secondary"
+          >
+            <Settings className="w-4 h-4" />
+            <span>Page Builder</span>
+          </Button>
+          <Button onClick={handleCreatePage} className="flex items-center space-x-2">
+            <Plus className="w-4 h-4" />
+            <span>Create Page</span>
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}

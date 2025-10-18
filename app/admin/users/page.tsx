@@ -85,7 +85,7 @@ const roles = [
     description: 'Edit products and content',
     permissions: ['products', 'content', 'media'],
     userCount: 1,
-    color: 'bg-green-100 text-green-600'
+    color: 'bg-green-100 text-blue-600'
   },
   {
     id: 4,
@@ -122,7 +122,7 @@ const permissions = [
 // Helper functions
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'active': return 'text-green-600 bg-green-50';
+    case 'active': return 'text-blue-600 bg-green-50';
     case 'inactive': return 'text-gray-600 bg-gray-50';
     case 'suspended': return 'text-red-600 bg-red-50';
     default: return 'text-gray-600 bg-gray-50';
@@ -146,7 +146,7 @@ const StatCard = memo(({ title, value, change, icon: Icon, color }: {
         <p className="text-sm font-medium text-gray-600">{title}</p>
         <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
         {change && (
-          <p className={`text-sm ${change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+          <p className={`text-sm ${change.startsWith('+') ? 'text-blue-600' : 'text-red-600'}`}>
             {change}
           </p>
         )}
@@ -194,7 +194,7 @@ const UserCard = memo(({ user, onEdit, onDelete, onView, onToggleStatus }: {
         </button>
         <button
           onClick={() => onEdit(user.id)}
-          className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-green-50 rounded-lg transition-colors"
         >
           <Edit className="w-4 h-4" />
         </button>
@@ -203,7 +203,7 @@ const UserCard = memo(({ user, onEdit, onDelete, onView, onToggleStatus }: {
           className={`p-2 rounded-lg transition-colors ${
             user.status === 'active'
               ? 'text-red-400 hover:text-red-600 hover:bg-red-50'
-              : 'text-green-400 hover:text-green-600 hover:bg-green-50'
+              : 'text-green-400 hover:text-blue-600 hover:bg-green-50'
           }`}
         >
           {user.status === 'active' ? <XCircle className="w-4 h-4" /> : <CheckCircle className="w-4 h-4" />}
@@ -270,7 +270,7 @@ const RoleCard = memo(({ role, onEdit, onDelete, onView }: {
         </button>
         <button
           onClick={() => onEdit(role.id)}
-          className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-green-50 rounded-lg transition-colors"
         >
           <Edit className="w-4 h-4" />
         </button>
@@ -295,7 +295,7 @@ const PermissionItem = memo(({ permission, isSelected, onToggle }: {
       type="checkbox"
       checked={isSelected}
       onChange={() => onToggle(permission.id)}
-      className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
     />
     <div className="flex-1">
       <h4 className="font-medium text-gray-900 dark:text-gray-100">{permission.name}</h4>
@@ -390,7 +390,7 @@ export default function UserManagement() {
           value={stats.activeUsers}
           change="+1 this week"
           icon={CheckCircle}
-          color="bg-green-100 text-green-600"
+          color="bg-green-100 text-blue-600"
         />
         <StatCard
           title="Inactive Users"
@@ -417,7 +417,7 @@ export default function UserManagement() {
                 placeholder="Search users by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -426,7 +426,7 @@ export default function UserManagement() {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Roles</option>
               {roles.map(role => (
@@ -437,7 +437,7 @@ export default function UserManagement() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -450,7 +450,7 @@ export default function UserManagement() {
       {/* Tabs */}
       <div className="analytics-card">
         <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
-          <nav className="flex space-x-8 px-6">
+          <nav className="flex space-x-8 px-6 tab-navigation">
             {[
               { id: 'users', name: 'Users', count: users.length },
               { id: 'roles', name: 'Roles', count: roles.length },
@@ -461,7 +461,7 @@ export default function UserManagement() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-green-500 text-green-600'
+                    ? 'border-green-500 text-blue-600'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
                 }`}
               >

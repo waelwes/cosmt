@@ -627,22 +627,48 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [mounted, setMounted] = useState(false);
 
+  // Load language from localStorage on mount
   useEffect(() => {
+    setMounted(true);
     const savedLanguage = localStorage.getItem('preferred-language') || 'en';
     console.log('LanguageProvider: Loading saved language:', savedLanguage);
     setCurrentLanguage(savedLanguage);
   }, []);
 
+  // Debug language changes
   useEffect(() => {
-    console.log('LanguageProvider: Saving language to localStorage:', currentLanguage);
-    localStorage.setItem('preferred-language', currentLanguage);
+    console.log('LanguageProvider: Language state changed to:', currentLanguage);
+    const currentLang = languages.find(lang => lang.code === currentLanguage);
+    console.log('LanguageProvider: Found language object:', currentLang);
+    if (currentLang) {
+      console.log('LanguageProvider: Direction should be:', currentLang.direction);
+    }
   }, [currentLanguage]);
+
+  useEffect(() => {
+    if (mounted) {
+      console.log('LanguageProvider: Saving language to localStorage:', currentLanguage);
+      localStorage.setItem('preferred-language', currentLanguage);
+    }
+  }, [currentLanguage, mounted]);
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return <>{children}</>;
+  }
 
   const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
   const t = translations[currentLanguage] || translations.en;
   
   console.log('LanguageProvider: Current language:', currentLanguage, 'Direction:', currentLang.direction);
+  console.log('LanguageProvider: Available languages:', languages.map(l => `${l.code}(${l.direction})`));
+  console.log('LanguageProvider: Context value being provided:', {
+    currentLanguage,
+    direction: currentLang.direction,
+    languages: languages.length
+  });
 
   return (
     <LanguageContext.Provider value={{

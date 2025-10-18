@@ -489,7 +489,7 @@ export default function ProductDetailPage() {
         {/* Product Details Tabs */}
         <div className="mt-16">
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-8">
+            <nav className="flex space-x-8 tab-navigation">
               <button 
                 onClick={() => setActiveTab('ingredients')}
                 className={`py-4 px-1 border-b-2 font-medium text-cosmt-base transition-colors duration-200 ${

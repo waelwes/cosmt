@@ -27,7 +27,7 @@ export const ThemeToggle: React.FC = () => {
       <select
         value={theme}
         onChange={(e) => setTheme(e.target.value as 'light' | 'dark' | 'auto')}
-        className="appearance-none bg-transparent border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        className="appearance-none bg-transparent border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       >
         {themes.map(({ key, label }) => (
           <option key={key} value={key}>

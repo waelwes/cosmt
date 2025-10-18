@@ -464,7 +464,7 @@ export default function ContentManagement() {
       {/* Tabs */}
       <div className="dashboard-card">
         <div className="border-b border-gray-200 dark:border-gray-700">
-          <nav className="flex space-x-8 px-6">
+          <nav className="flex space-x-8 px-6 tab-navigation">
             {[
               { id: 'pages', name: 'Pages', count: pages.length },
               { id: 'menus', name: 'Menus', count: menuItems.length },

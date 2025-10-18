@@ -51,7 +51,7 @@ export default function SignInPage() {
         <div className="max-w-sm mx-auto">
 
           {/* Sign In Form */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
             {/* Header */}
             <div className="text-center mb-6">
               <h1 className="text-cosmt-2xl font-bold text-gray-900 mb-2">Welcome Back</h1>

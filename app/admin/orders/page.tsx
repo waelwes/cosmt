@@ -104,49 +104,49 @@ export default function OrdersPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-800';
+        return 'status-active';
       case 'processing':
-        return 'bg-blue-100 text-blue-800';
+        return 'status-active';
       case 'shipped':
-        return 'bg-purple-100 text-purple-800';
+        return 'status-active';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'status-inactive';
       case 'cancelled':
-        return 'bg-red-100 text-red-800';
+        return 'status-inactive';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'status-inactive';
     }
   };
 
   const getPaymentStatusColor = (status: string) => {
     switch (status) {
       case 'paid':
-        return 'bg-green-100 text-green-800';
+        return 'status-active';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'status-inactive';
       case 'refunded':
-        return 'bg-blue-100 text-blue-800';
+        return 'status-active';
       case 'failed':
-        return 'bg-red-100 text-red-800';
+        return 'status-inactive';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'status-inactive';
     }
   };
 
   const getShippingStatusColor = (status: string) => {
     switch (status) {
       case 'delivered':
-        return 'bg-green-100 text-green-800';
+        return 'status-active';
       case 'in_transit':
-        return 'bg-blue-100 text-blue-800';
+        return 'status-active';
       case 'preparing':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'status-inactive';
       case 'pending':
-        return 'bg-gray-100 text-gray-800';
+        return 'status-inactive';
       case 'cancelled':
-        return 'bg-red-100 text-red-800';
+        return 'status-inactive';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'status-inactive';
     }
   };
 
@@ -168,7 +168,7 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="space-y-4" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <div className="space-y-4">
       {/* Combined Orders Card */}
       <div className="analytics-card p-6">
         {/* Header */}
@@ -190,11 +190,11 @@ export default function OrdersPage() {
         </div>
         
         {/* Horizontal Line */}
-        <div className="border-t mb-4" style={{ borderTopColor: '#eef2f6' }}></div>
+        <div className="border-t mb-4"></div>
         
         {/* Stats Grid */}
         <div className="flex">
-          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
+          <div className="flex-1 py-4 px-4 border-r">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Orders</h3>
               <Package className="w-5 h-5 text-gray-400" />
@@ -205,7 +205,7 @@ export default function OrdersPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
+          <div className="flex-1 py-4 px-4 border-r">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Pending</h3>
               <Clock className="w-5 h-5 text-yellow-400" />
@@ -216,7 +216,7 @@ export default function OrdersPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
+          <div className="flex-1 py-4 px-4 border-r">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Shipped</h3>
               <Truck className="w-5 h-5 text-blue-400" />
@@ -278,7 +278,7 @@ export default function OrdersPage() {
         <div className="analytics-card p-6">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-green-600" />
+              <CheckCircle className="w-6 h-6 text-blue-600" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Completed</p>
@@ -300,7 +300,7 @@ export default function OrdersPage() {
                 placeholder="Search orders..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="w-full pl-10 pr-3 py-2 filter-input"
               />
             </div>
           </div>
@@ -310,7 +310,7 @@ export default function OrdersPage() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full filter-select"
             >
               {statuses.map(status => (
                 <option key={status} value={status}>
@@ -325,7 +325,7 @@ export default function OrdersPage() {
             <select
               value={selectedDateRange}
               onChange={(e) => setSelectedDateRange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full filter-select"
             >
               {dateRanges.map(range => (
                 <option key={range} value={range}>

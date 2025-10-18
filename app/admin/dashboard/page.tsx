@@ -17,6 +17,7 @@ import {
   Share2,
   Smartphone,
   Monitor,
+  Tablet,
   ShoppingCart,
   CheckCircle,
   ArrowDown,
@@ -24,7 +25,7 @@ import {
   Zap
 } from 'lucide-react';
 import { formatPrice } from '../../../utils/currency';
-import { useLanguage } from '../../../contexts/LanguageContext';
+import { useRTL } from '../../../contexts/UnifiedLanguageContext';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -53,8 +54,18 @@ ChartJS.register(
 
 // Live Visitor Count Component
 const LiveVisitorCount = memo(() => {
+  const { isArabic } = useRTL();
   const [visitorCount, setVisitorCount] = useState(0);
   const [isOnline, setIsOnline] = useState(true);
+
+  // Translation function for LiveVisitorCount
+  const getTranslation = (key: string) => {
+    const translations: { [key: string]: { en: string; ar: string } } = {
+      liveVisitors: { en: 'Live Visitors', ar: 'الزوار المباشرون' }
+    };
+    
+    return translations[key] ? translations[key][isArabic ? 'ar' : 'en'] : key;
+  };
 
   useEffect(() => {
     // Simulate real-time visitor count updates
@@ -77,9 +88,9 @@ const LiveVisitorCount = memo(() => {
   }, []);
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-800/30 p-4 rounded-lg" style={{ border: '1px solid #eef2f6' }}>
+    <div className="analytics-card p-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Live Visitors</h3>
+        <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{getTranslation('liveVisitors')}</h3>
         <div className="flex items-center">
           <div className={`w-2 h-2 rounded-full mr-2 ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
           <span className="text-xs text-gray-500 dark:text-gray-400">Live</span>
@@ -100,46 +111,57 @@ const LiveVisitorCount = memo(() => {
 });
 
 // Traffic Sources Component
-const TrafficSources = ({ t }: { t: any }) => {
+const TrafficSources = () => {
+  const { isArabic } = useRTL();
+  
+  // Translation function for TrafficSources
+  const getTranslation = (key: string) => {
+    const translations: { [key: string]: { en: string; ar: string } } = {
+      trafficSources: { en: 'Traffic Sources', ar: 'مصادر الزيارات' }
+    };
+    
+    return translations[key] ? translations[key][isArabic ? 'ar' : 'en'] : key;
+  };
+  
   const trafficData = [
     {
-      source: 'Organic Search',
+      source: isArabic ? 'البحث العضوي' : 'Organic Search',
       visitors: 1247,
       percentage: 45.2,
       icon: Search,
-      color: 'bg-gray-600',
+      color: 'bg-cosmt-primary',
       trend: '+12.5%'
     },
     {
-      source: 'Direct',
+      source: isArabic ? 'مباشر' : 'Direct',
       visitors: 892,
       percentage: 32.3,
       icon: ExternalLink,
-      color: 'bg-gray-500',
+      color: 'bg-blue-500',
       trend: '+8.2%'
     },
     {
-      source: 'Social Media',
+      source: isArabic ? 'وسائل التواصل الاجتماعي' : 'Social Media',
       visitors: 456,
       percentage: 16.5,
       icon: Share2,
-      color: 'bg-gray-400',
+      color: 'bg-purple-500',
       trend: '+15.3%'
     },
     {
-      source: 'Email',
+      source: isArabic ? 'البريد الإلكتروني' : 'Email',
       visitors: 123,
       percentage: 4.5,
       icon: Mail,
-      color: 'bg-gray-300',
+      color: 'bg-orange-500',
       trend: '+3.1%'
     },
     {
-      source: 'Referral',
+      source: isArabic ? 'الإحالة' : 'Referral',
       visitors: 89,
       percentage: 3.2,
       icon: Globe,
-      color: 'bg-cosmt-primary',
+      color: 'bg-teal-500',
       trend: '-2.4%'
     }
   ];
@@ -147,10 +169,10 @@ const TrafficSources = ({ t }: { t: any }) => {
   return (
     <div className="analytics-card p-0">
       {/* Card Header with full-width border line */}
-      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.trafficSources}</h3>
+      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('trafficSources')}</h3>
         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-          <Activity className="w-3 h-3 mr-1" />
+          <Activity className="w-3 h-3 me-1" />
           30 days
         </div>
       </div>
@@ -162,23 +184,23 @@ const TrafficSources = ({ t }: { t: any }) => {
         {trafficData.map((source, index) => (
           <div key={index} className="flex items-center justify-between">
             <div className="flex items-center flex-1">
-              <div className={`w-2 h-2 rounded-full ${source.color} mr-2`}></div>
+              <div className={`w-2 h-2 rounded-full ${source.color} me-2`}></div>
               <div className="flex items-center">
-                <source.icon className="w-3 h-3 text-gray-400 mr-2" />
+                <source.icon className="w-3 h-3 text-gray-400 me-2" />
                 <span className="text-sm font-medium text-gray-900 dark:text-white">{source.source}</span>
               </div>
             </div>
             
             <div className="flex items-center space-x-3">
-              <div className="text-right">
+              <div className="text-end">
                 <div className="text-sm font-semibold text-gray-900 dark:text-white">{source.visitors.toLocaleString()}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">{source.percentage}%</div>
               </div>
               
               <div className="flex items-center">
-                <div className="w-12 bg-gray-200 dark:bg-gray-700 rounded-full h-1 mr-2">
+                <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2 me-3">
                   <div 
-                    className={`h-1 rounded-full ${source.color}`}
+                    className={`h-2 rounded-full ${source.color}`}
                     style={{ width: `${source.percentage}%` }}
                   ></div>
                 </div>
@@ -198,36 +220,47 @@ const TrafficSources = ({ t }: { t: any }) => {
 };
 
 // Device Analytics Component
-const DeviceAnalytics = ({ t }: { t: any }) => {
+const DeviceAnalytics = () => {
+  const { isArabic } = useRTL();
+  
+  // Translation function for DeviceAnalytics
+  const getTranslation = (key: string) => {
+    const translations: { [key: string]: { en: string; ar: string } } = {
+      deviceAnalytics: { en: 'Device Analytics', ar: 'تحليلات الأجهزة' }
+    };
+    
+    return translations[key] ? translations[key][isArabic ? 'ar' : 'en'] : key;
+  };
+  
   const deviceData = [
     {
-      device: 'Desktop',
+      device: isArabic ? 'سطح المكتب' : 'Desktop',
       visitors: 1847,
       percentage: 66.9,
       icon: Monitor,
-      color: 'bg-gray-600'
+      color: 'bg-cosmt-primary'
     },
     {
-      device: 'Mobile',
+      device: isArabic ? 'الهاتف المحمول' : 'Mobile',
       visitors: 789,
       percentage: 28.6,
       icon: Smartphone,
-      color: 'bg-gray-400'
+      color: 'bg-blue-500'
     },
     {
-      device: 'Tablet',
+      device: isArabic ? 'التابلت' : 'Tablet',
       visitors: 127,
       percentage: 4.6,
-      icon: Monitor,
-      color: 'bg-cosmt-primary'
+      icon: Tablet,
+      color: 'bg-purple-500'
     }
   ];
 
   return (
     <div className="analytics-card p-0">
       {/* Card Header with full-width border line */}
-      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.deviceAnalytics}</h3>
+      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('deviceAnalytics')}</h3>
       </div>
 
       {/* Card Content */}
@@ -236,22 +269,22 @@ const DeviceAnalytics = ({ t }: { t: any }) => {
         {deviceData.map((device, index) => (
           <div key={index} className="flex items-center justify-between">
             <div className="flex items-center flex-1">
-              <div className={`w-2 h-2 rounded-full ${device.color} mr-2`}></div>
+              <div className={`w-2 h-2 rounded-full ${device.color} me-2`}></div>
               <div className="flex items-center">
-                <device.icon className="w-3 h-3 text-gray-400 mr-2" />
+                <device.icon className="w-3 h-3 text-gray-400 me-2" />
                 <span className="text-sm font-medium text-gray-900 dark:text-white">{device.device}</span>
               </div>
             </div>
             
             <div className="flex items-center space-x-3">
-              <div className="text-right">
+              <div className="text-end">
                 <div className="text-sm font-semibold text-gray-900 dark:text-white">{device.visitors.toLocaleString()}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">{device.percentage}%</div>
               </div>
               
-              <div className="w-12 bg-gray-200 dark:bg-gray-700 rounded-full h-1">
+              <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <div 
-                  className={`h-1 rounded-full ${device.color}`}
+                  className={`h-2 rounded-full ${device.color}`}
                   style={{ width: `${device.percentage}%` }}
                 ></div>
               </div>
@@ -265,7 +298,18 @@ const DeviceAnalytics = ({ t }: { t: any }) => {
 };
 
 // Conversion Funnel Component
-const ConversionFunnel = ({ t }: { t: any }) => {
+const ConversionFunnel = () => {
+  const { isArabic } = useRTL();
+  
+  // Translation function for ConversionFunnel
+  const getTranslation = (key: string) => {
+    const translations: { [key: string]: { en: string; ar: string } } = {
+      conversionFunnel: { en: 'Conversion Funnel', ar: 'قمع التحويل' }
+    };
+    
+    return translations[key] ? translations[key][isArabic ? 'ar' : 'en'] : key;
+  };
+  
   const funnelData = [
     {
       step: 'Total Visitors',
@@ -312,10 +356,10 @@ const ConversionFunnel = ({ t }: { t: any }) => {
   return (
     <div className="analytics-card p-0">
       {/* Card Header with full-width border line */}
-      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.conversionFunnel}</h3>
+      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('conversionFunnel')}</h3>
         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-          <Zap className="w-3 h-3 mr-1" />
+          <Zap className="w-3 h-3 me-1" />
           Optimize ✨
         </div>
       </div>
@@ -329,7 +373,7 @@ const ConversionFunnel = ({ t }: { t: any }) => {
             <div className="py-2">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center">
-                  <div className={`w-6 h-6 ${step.color} rounded flex items-center justify-center mr-3`}>
+                  <div className={`w-6 h-6 ${step.color} rounded flex items-center justify-center me-3`}>
                     <step.icon className="w-3 h-3 text-white" />
                   </div>
                   <div>
@@ -343,7 +387,7 @@ const ConversionFunnel = ({ t }: { t: any }) => {
                   </div>
                 </div>
                 
-                <div className="text-right">
+                <div className="text-end">
                   <div className="text-xs text-gray-500 dark:text-gray-400">Drop-off</div>
                   <div className="text-sm font-medium text-red-600 dark:text-red-400">
                     {step.dropOffRate > 0 ? `-${step.dropOffRate}%` : '0%'}
@@ -371,7 +415,7 @@ const ConversionFunnel = ({ t }: { t: any }) => {
       </div>
       
       {/* Funnel Summary */}
-      <div className="mt-4 pt-3 border-t" style={{ borderTopColor: '#eef2f6' }}>
+      <div className="mt-4 pt-3 border-t">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Target className="w-4 h-4 text-gray-400 mr-2" />
@@ -390,7 +434,7 @@ const ConversionFunnel = ({ t }: { t: any }) => {
 
 // Memoized components for better performance
 const StatCard = memo(({ stat, index }: { stat: any; index: number }) => (
-  <div className="bg-gray-50 dark:bg-gray-800/30 p-4 rounded-lg" style={{ border: '1px solid #eef2f6' }}>
+  <div className="analytics-card p-4">
     <div className="flex items-center justify-between mb-2">
       <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{stat.title}</h3>
       {stat.icon}
@@ -413,7 +457,17 @@ const StatCard = memo(({ stat, index }: { stat: any; index: number }) => (
 
 
 // Modern Chart Component
-const ModernChart = ({ timeRange = 'All', selectedDate, currentCurrency = 'USD', t }: { timeRange?: string; selectedDate?: Date | null; currentCurrency?: string; t: any }) => {
+const ModernChart = ({ timeRange = 'All', selectedDate, currentCurrency = 'USD' }: { timeRange?: string; selectedDate?: Date | null; currentCurrency?: string }) => {
+  const { isArabic } = useRTL();
+  
+  // Translation function for ModernChart
+  const getTranslation = (key: string) => {
+    const translations: { [key: string]: { en: string; ar: string } } = {
+      salesOverview: { en: 'Sales Overview', ar: 'نظرة عامة على المبيعات' }
+    };
+    
+    return translations[key] ? translations[key][isArabic ? 'ar' : 'en'] : key;
+  };
   
   const salesData = {
     'All': [
@@ -610,7 +664,7 @@ const ModernChart = ({ timeRange = 'All', selectedDate, currentCurrency = 'USD',
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.salesOverview}</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('salesOverview')}</h2>
           <div className="text-2xl font-bold text-gray-900 dark:text-white">{formatPrice(totalSales, currentCurrency, 'USD')}</div>
         </div>
         <div className={`flex items-center text-sm ${percentageChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -626,45 +680,61 @@ const ModernChart = ({ timeRange = 'All', selectedDate, currentCurrency = 'USD',
 };
 
 function AdminDashboard() {
-  // Test if context is available
-  let languageContext;
-  try {
-    languageContext = useLanguage();
-  } catch (error) {
-    console.error('LanguageContext not available in dashboard:', error);
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-red-500 text-lg">
-          Language Context Error in Dashboard: {error instanceof Error ? error.message : 'Unknown error'}
-        </div>
-      </div>
-    );
-  }
-  
-  const { t, currentLanguage, direction } = languageContext;
-  // Get current currency from localStorage
+  const [mounted, setMounted] = useState(false);
+
+  // RTL context
+  const { language, direction, isRTL, isArabic } = useRTL();
+
+  // Translation function
+  const getTranslation = (key: string) => {
+    const translations: { [key: string]: { en: string; ar: string } } = {
+      loading: { en: 'Loading...', ar: 'جاري التحميل...' },
+      totalSales: { en: 'Total Sales', ar: 'إجمالي المبيعات' },
+      netSales: { en: 'Net Sales', ar: 'صافي المبيعات' },
+      orderCount: { en: 'Order Count', ar: 'عدد الطلبات' },
+      conversionRate: { en: 'Conversion Rate', ar: 'معدل التحويل' },
+      salesOverview: { en: 'Sales Overview', ar: 'نظرة عامة على المبيعات' },
+      liveVisitors: { en: 'Live Visitors', ar: 'الزوار المباشرون' },
+      topPages: { en: 'Top Pages', ar: 'الصفحات الأكثر زيارة' },
+      trafficSources: { en: 'Traffic Sources', ar: 'مصادر الزيارات' },
+      deviceAnalytics: { en: 'Device Analytics', ar: 'تحليلات الأجهزة' },
+      conversionFunnel: { en: 'Conversion Funnel', ar: 'قمع التحويل' },
+      all: { en: 'All', ar: 'الكل' },
+      today: { en: 'Today', ar: 'اليوم' },
+      thisWeek: { en: 'This Week', ar: 'هذا الأسبوع' },
+      thisMonth: { en: 'This Month', ar: 'هذا الشهر' },
+      thisYear: { en: 'This Year', ar: 'هذا العام' },
+      selectDate: { en: 'Select Date', ar: 'اختر التاريخ' },
+      overview: { en: 'Analytics Overview', ar: 'نظرة عامة على التحليلات' }
+    };
+    
+    return translations[key] ? translations[key][isArabic ? 'ar' : 'en'] : key;
+  };
+
+  // All other hooks must be called before any conditional returns
   const [currentCurrency, setCurrentCurrency] = React.useState('USD');
-  // Force re-render state
   const [refreshKey, setRefreshKey] = React.useState(0);
-  
-  // Date picker state
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  
-  // Time range state for chart
   const [selectedTimeRange, setSelectedTimeRange] = useState('All');
-  
+  const [forceUpdate, setForceUpdate] = React.useState(0);
+
+  // All useEffect hooks must be called before any conditional returns
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   React.useEffect(() => {
     const savedCurrency = localStorage.getItem('preferred-currency') || 'USD';
     setCurrentCurrency(savedCurrency);
   }, []);
 
-  // Listen for currency changes
   React.useEffect(() => {
     const handleCurrencyChange = (e: CustomEvent) => {
       if (e.detail && e.detail.currency) {
         setCurrentCurrency(e.detail.currency);
+        setRefreshKey(prev => prev + 1);
       }
     };
 
@@ -672,7 +742,6 @@ function AdminDashboard() {
     return () => window.removeEventListener('currencyChanged', handleCurrencyChange as EventListener);
   }, []);
 
-  // Listen for language changes
   React.useEffect(() => {
     const handleLanguageChange = (e: CustomEvent) => {
       if (e.detail && e.detail.language) {
@@ -686,30 +755,13 @@ function AdminDashboard() {
     return () => window.removeEventListener('languageChanged', handleLanguageChange as EventListener);
   }, []);
 
-  // Check for language changes every second
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      const savedLanguage = localStorage.getItem('preferred-language') || 'en';
-      if (savedLanguage !== currentLanguage) {
-        console.log('Language changed in localStorage:', savedLanguage);
-        setRefreshKey(prev => prev + 1);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [currentLanguage]);
-
-  // Force re-render when language changes
-  const [forceUpdate, setForceUpdate] = React.useState(0);
-  
-  React.useEffect(() => {
-    // This effect will run whenever currentLanguage changes, forcing a re-render
-    console.log('Language changed to:', currentLanguage);
-    console.log('Current translations:', t);
+  React.  useEffect(() => {
+    console.log('Dashboard: Language changed to:', language, 'Direction:', direction);
+    console.log('Dashboard: RTL mode:', isRTL, 'Arabic:', isArabic);
     setForceUpdate(prev => prev + 1);
-  }, [currentLanguage, t]);
+    setRefreshKey(prev => prev + 1);
+  }, [language, direction, isRTL, isArabic]);
 
-  // Close date picker when clicking outside
   useEffect(() => {
     if (!showDatePicker) return;
 
@@ -720,7 +772,6 @@ function AdminDashboard() {
       }
     };
 
-    // Use a small delay to prevent conflicts with Next.js routing
     const timeoutId = setTimeout(() => {
       document.addEventListener('mousedown', handleClickOutside);
     }, 100);
@@ -730,6 +781,58 @@ function AdminDashboard() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showDatePicker]);
+
+  // Memoized data to prevent unnecessary re-renders
+  const stats = useMemo(() => {
+    return [
+      {
+        title: getTranslation('totalSales'),
+        value: formatPrice(125430, currentCurrency, 'USD'),
+        change: '+12.5% from last month',
+        changeType: 'positive',
+        icon: <DollarSign className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+      },
+      {
+        title: getTranslation('netSales'),
+        value: formatPrice(118900, currentCurrency, 'USD'),
+        change: '+11.8% from last month',
+        changeType: 'positive',
+        icon: <TrendingUp className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+      },
+      {
+        title: getTranslation('orderCount'),
+        value: '1,234',
+        change: '+8.2% from last month',
+        changeType: 'positive',
+        icon: <CreditCard className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+      },
+      {
+        title: 'Returns',
+        value: '45',
+        change: '-2.1% from last month',
+        changeType: 'negative',
+        icon: <TrendingDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+      }
+    ];
+  }, [currentCurrency]);
+
+  // If not mounted, return loading state
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500 text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  // Show loading if not mounted
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500 text-lg">{isArabic ? 'جاري التحميل...' : 'Loading...'}</div>
+      </div>
+    );
+  }
 
   // Date picker functions
   const formatDate = (date: Date) => {
@@ -783,44 +886,13 @@ function AdminDashboard() {
     }
   };
   
-  // Memoized data to prevent unnecessary re-renders
-  const stats = useMemo(() => [
-    {
-      title: t.totalSales,
-      value: formatPrice(125430, currentCurrency, 'USD'),
-      change: '+12.5% from last month',
-      changeType: 'positive',
-      icon: <DollarSign className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-    },
-    {
-      title: t.netSales,
-      value: formatPrice(118900, currentCurrency, 'USD'),
-      change: '+11.8% from last month',
-      changeType: 'positive',
-      icon: <TrendingUp className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-    },
-    {
-      title: t.orderCount,
-      value: '1,234',
-      change: '+8.2% from last month',
-      changeType: 'positive',
-      icon: <CreditCard className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-    },
-    {
-      title: 'Returns',
-      value: '45',
-      change: '-2.1% from last month',
-      changeType: 'negative',
-      icon: <TrendingDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-    }
-  ], [currentCurrency, t]);
 
 
 
   return (
     <div 
       className={`space-y-6 ${direction === 'rtl' ? 'rtl' : 'ltr'}`} 
-      key={`${currentLanguage}-${refreshKey}`}
+      key={`dashboard-${language}-${direction}-${refreshKey}`}
       dir={direction}
       style={{
         direction: direction,
@@ -833,72 +905,72 @@ function AdminDashboard() {
       {/* Main Dashboard Card */}
       <div className={`analytics-card p-0 ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
         {/* Card Header with full-width border line */}
-        <div className={`flex justify-between items-center px-4 pt-4 pb-3 border-b ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`} style={{ borderBottomColor: '#eef2f6' }}>
+        <div className={`flex justify-between items-center px-4 pt-4 pb-3 border-b ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
           <h1 className={`text-lg font-semibold text-gray-900 dark:text-white ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>Dashboard</h1>
           <div className={`flex items-center text-sm ${direction === 'rtl' ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
             {/* Time Period Filter */}
-            <div className={`flex items-center rounded-lg overflow-hidden ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`} style={{ border: '1px solid #eef2f6' }}>
+            <div className={`flex items-center rounded-lg overflow-hidden border ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
             <button 
               onClick={() => setSelectedTimeRange('All')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                 selectedTimeRange === 'All' 
-                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
-{t.all}
+              {getTranslation('all')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <div className="w-px h-6 bg-gray-200"></div>
             <button 
               onClick={() => setSelectedTimeRange('Today')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                 selectedTimeRange === 'Today' 
-                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
-              {t.today}
+              {getTranslation('today')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <div className="w-px h-6 bg-gray-200"></div>
             <button 
               onClick={() => setSelectedTimeRange('This Week')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                 selectedTimeRange === 'This Week' 
-                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
-              {t.thisWeek}
+              {getTranslation('thisWeek')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <div className="w-px h-6 bg-gray-200"></div>
             <button 
               onClick={() => setSelectedTimeRange('This Month')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                 selectedTimeRange === 'This Month' 
-                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
-              {t.thisMonth}
+              {getTranslation('thisMonth')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <div className="w-px h-6 bg-gray-200"></div>
             <button 
               onClick={() => setSelectedTimeRange('This Year')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                 selectedTimeRange === 'This Year' 
-                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20' 
+                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
-              {t.thisYear}
+              {getTranslation('thisYear')}
             </button>
-            <div className="w-px h-6" style={{ backgroundColor: '#eef2f6' }}></div>
+            <div className="w-px h-6 bg-gray-200"></div>
             <div className="relative date-picker-container">
               <button 
                 onClick={() => setShowDatePicker(!showDatePicker)}
                 className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                {selectedDate ? formatDate(selectedDate) : t.selectDate}
+                {selectedDate ? formatDate(selectedDate) : getTranslation('selectDate')}
               </button>
               
               {/* Date Picker Popover */}
@@ -906,19 +978,6 @@ function AdminDashboard() {
                 <div 
                   className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded z-[9999] p-4 w-80"
                   style={{ border: '1px solid #eef2f6' }}
-                  style={{ 
-                    position: 'absolute',
-                    top: '100%',
-                    right: '0',
-                    marginTop: '8px',
-                    backgroundColor: 'white',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04)',
-                    zIndex: 9999,
-                    padding: '16px',
-                    width: '320px'
-                  }}
                 >
                   {/* Calendar Header */}
                   <div className="flex items-center justify-between mb-4">
@@ -984,7 +1043,7 @@ function AdminDashboard() {
                   </div>
                   
                   {/* Today Button */}
-                  <div className="mt-4 pt-3 border-t" style={{ borderTopColor: '#eef2f6' }}>
+                  <div className="mt-4 pt-3 border-t">
                     <button
                       onClick={() => {
                         setSelectedDate(new Date());
@@ -1006,9 +1065,9 @@ function AdminDashboard() {
         {/* Card Content */}
         <div className="px-4 py-4">
           {/* Stats Grid */}
-        <div className={`flex ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
+        <div className="flex flex-row">
           {stats.map((stat, index) => (
-            <div key={index} className={`flex-1 py-4 px-4 ${direction === 'rtl' ? 'border-l last:border-l-0' : 'border-r last:border-r-0'}`} style={{ borderRightColor: '#eef2f6' }}>
+            <div key={index} className="flex-1 py-4 px-4 border-e last:border-e-0">
               <div className="flex items-center justify-between mb-1">
                 <h3 className="text-xs font-medium text-gray-600 dark:text-gray-300">{stat.title}</h3>
                 {stat.icon}
@@ -1018,8 +1077,8 @@ function AdminDashboard() {
                 <div className="flex items-center text-xs mt-1 text-gray-500 dark:text-gray-400">
                   <span className={`flex items-center font-medium ${stat.changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`}>
                     {stat.changeType === 'positive' ? 
-                      <ArrowUpRight className="w-3 h-3 mr-1" /> : 
-                      <ArrowUpRight className="w-3 h-3 mr-1 transform rotate-90" />
+                      <ArrowUpRight className="w-3 h-3 me-1" /> : 
+                      <ArrowUpRight className="w-3 h-3 me-1 transform rotate-90" />
                     }
                     {stat.change}
                   </span>
@@ -1031,9 +1090,9 @@ function AdminDashboard() {
           {/* Live Visitors */}
           <div className="flex-1 py-4 px-4">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Live Visitors</h3>
+              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{getTranslation('liveVisitors')}</h3>
               <div className="flex items-center">
-                <div className={`w-2 h-2 rounded-full mr-2 ${true ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
+                <div className={`w-2 h-2 rounded-full me-2 ${true ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
                 <span className="text-xs text-gray-500 dark:text-gray-400">Live</span>
               </div>
             </div>
@@ -1058,8 +1117,8 @@ function AdminDashboard() {
         <div className="lg:col-span-2">
           <div className="analytics-card p-0">
             {/* Chart Header with full-width border line */}
-            <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Analytics Overview</h3>
+            <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('overview')}</h3>
               <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                 <Activity className="w-3 h-3 mr-1" />
                 Last 30 days
@@ -1068,7 +1127,7 @@ function AdminDashboard() {
 
             {/* Chart Content */}
             <div>
-              <ModernChart timeRange={selectedDate ? 'Custom Date' : selectedTimeRange} selectedDate={selectedDate} currentCurrency={currentCurrency} t={t} />
+              <ModernChart timeRange={selectedDate ? 'Custom Date' : selectedTimeRange} selectedDate={selectedDate} currentCurrency={currentCurrency} />
             </div>
           </div>
         </div>
@@ -1078,8 +1137,8 @@ function AdminDashboard() {
           {/* Top Pages */}
           <div className="analytics-card">
           {/* Card Header with full-width border line */}
-          <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b" style={{ borderBottomColor: '#eef2f6' }}>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.topPages}</h3>
+          <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('topPages')}</h3>
           </div>
 
           {/* Card Content */}
@@ -1123,8 +1182,8 @@ function AdminDashboard() {
           {/* Live Visitors */}
           <div className="analytics-card">
           {/* Card Header with full-width border line */}
-          <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b" style={{ borderBottomColor: '#eef2f6' }}>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t.liveVisitors}</h3>
+          <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{getTranslation('liveVisitors')}</h3>
               <div className="flex items-center">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">Live</span>
@@ -1165,13 +1224,13 @@ function AdminDashboard() {
 
       {/* Traffic Sources & Device Analytics */}
       <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
-        <TrafficSources t={t} />
-        <DeviceAnalytics t={t} />
+        <TrafficSources />
+        <DeviceAnalytics />
       </div>
 
       {/* Conversion Funnel */}
       <div className={`grid grid-cols-1 gap-4 ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
-        <ConversionFunnel t={t} />
+        <ConversionFunnel />
       </div>
     </div>
   );

@@ -1,0 +1,597 @@
+/* RTL (Right-to-Left) Support Styles */
+
+/* Base RTL Styles */
+html[dir="rtl"] {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+html[dir="rtl"] body {
+  font-family: 'Noto Sans Arabic', 'Inter', system-ui, -apple-system, sans-serif !important;
+  direction: rtl !important;
+}
+
+/* RTL Logical Properties */
+html[dir="rtl"] * {
+  direction: inherit !important;
+}
+
+/* Override Ant Design or other external CSS */
+html[dir="rtl"] .ant-typography,
+html[dir="rtl"] .ant-typography-ellipsis,
+html[dir="rtl"] .ant-typography-single-line {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+/* RTL Flexbox - Only apply to specific elements, not all flex containers */
+html[dir="rtl"] .flex-row:not(.no-rtl-flip) {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .flex-row-reverse {
+  flex-direction: row;
+}
+
+/* RTL Grid */
+html[dir="rtl"] .grid {
+  direction: rtl;
+}
+
+html[dir="rtl"] .grid-cols-1,
+html[dir="rtl"] .grid-cols-2,
+html[dir="rtl"] .grid-cols-3,
+html[dir="rtl"] .grid-cols-4,
+html[dir="rtl"] .grid-cols-5,
+html[dir="rtl"] .grid-cols-6 {
+  direction: rtl;
+}
+
+/* RTL Text Alignment */
+html[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+html[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+html[dir="rtl"] .text-center {
+  text-align: center;
+}
+
+/* RTL Justify Content */
+html[dir="rtl"] .justify-start {
+  justify-content: flex-end;
+}
+
+html[dir="rtl"] .justify-end {
+  justify-content: flex-start;
+}
+
+html[dir="rtl"] .justify-center {
+  justify-content: center;
+}
+
+/* RTL Items Alignment */
+html[dir="rtl"] .items-start {
+  align-items: flex-end;
+}
+
+html[dir="rtl"] .items-end {
+  align-items: flex-start;
+}
+
+html[dir="rtl"] .items-center {
+  align-items: center;
+}
+
+/* RTL Spacing - Convert to logical properties */
+html[dir="rtl"] .ml-1 { margin-left: 0 !important; margin-right: 0.25rem !important; }
+html[dir="rtl"] .ml-2 { margin-left: 0 !important; margin-right: 0.5rem !important; }
+html[dir="rtl"] .ml-3 { margin-left: 0 !important; margin-right: 0.75rem !important; }
+html[dir="rtl"] .ml-4 { margin-left: 0 !important; margin-right: 1rem !important; }
+html[dir="rtl"] .ml-6 { margin-left: 0 !important; margin-right: 1.5rem !important; }
+html[dir="rtl"] .ml-8 { margin-left: 0 !important; margin-right: 2rem !important; }
+html[dir="rtl"] .ml-12 { margin-left: 0 !important; margin-right: 3rem !important; }
+html[dir="rtl"] .ml-16 { margin-left: 0 !important; margin-right: 4rem !important; }
+html[dir="rtl"] .ml-20 { margin-left: 0 !important; margin-right: 5rem !important; }
+html[dir="rtl"] .ml-24 { margin-left: 0 !important; margin-right: 6rem !important; }
+html[dir="rtl"] .ml-32 { margin-left: 0 !important; margin-right: 8rem !important; }
+html[dir="rtl"] .ml-40 { margin-left: 0 !important; margin-right: 10rem !important; }
+html[dir="rtl"] .ml-48 { margin-left: 0 !important; margin-right: 12rem !important; }
+html[dir="rtl"] .ml-56 { margin-left: 0 !important; margin-right: 14rem !important; }
+html[dir="rtl"] .ml-64 { margin-left: 0 !important; margin-right: 16rem !important; }
+
+html[dir="rtl"] .mr-1 { margin-right: 0 !important; margin-left: 0.25rem !important; }
+html[dir="rtl"] .mr-2 { margin-right: 0 !important; margin-left: 0.5rem !important; }
+html[dir="rtl"] .mr-3 { margin-right: 0 !important; margin-left: 0.75rem !important; }
+html[dir="rtl"] .mr-4 { margin-right: 0 !important; margin-left: 1rem !important; }
+html[dir="rtl"] .mr-6 { margin-right: 0 !important; margin-left: 1.5rem !important; }
+html[dir="rtl"] .mr-8 { margin-right: 0 !important; margin-left: 2rem !important; }
+html[dir="rtl"] .mr-12 { margin-right: 0 !important; margin-left: 3rem !important; }
+html[dir="rtl"] .mr-16 { margin-right: 0 !important; margin-left: 4rem !important; }
+html[dir="rtl"] .mr-20 { margin-right: 0 !important; margin-left: 5rem !important; }
+html[dir="rtl"] .mr-24 { margin-right: 0 !important; margin-left: 6rem !important; }
+html[dir="rtl"] .mr-32 { margin-right: 0 !important; margin-left: 8rem !important; }
+html[dir="rtl"] .mr-40 { margin-right: 0 !important; margin-left: 10rem !important; }
+html[dir="rtl"] .mr-48 { margin-right: 0 !important; margin-left: 12rem !important; }
+html[dir="rtl"] .mr-56 { margin-right: 0 !important; margin-left: 14rem !important; }
+html[dir="rtl"] .mr-64 { margin-right: 0 !important; margin-left: 16rem !important; }
+
+/* RTL Padding */
+html[dir="rtl"] .pl-1 { padding-left: 0 !important; padding-right: 0.25rem !important; }
+html[dir="rtl"] .pl-2 { padding-left: 0 !important; padding-right: 0.5rem !important; }
+html[dir="rtl"] .pl-3 { padding-left: 0 !important; padding-right: 0.75rem !important; }
+html[dir="rtl"] .pl-4 { padding-left: 0 !important; padding-right: 1rem !important; }
+html[dir="rtl"] .pl-6 { padding-left: 0 !important; padding-right: 1.5rem !important; }
+html[dir="rtl"] .pl-8 { padding-left: 0 !important; padding-right: 2rem !important; }
+html[dir="rtl"] .pl-12 { padding-left: 0 !important; padding-right: 3rem !important; }
+html[dir="rtl"] .pl-16 { padding-left: 0 !important; padding-right: 4rem !important; }
+html[dir="rtl"] .pl-20 { padding-left: 0 !important; padding-right: 5rem !important; }
+html[dir="rtl"] .pl-24 { padding-left: 0 !important; padding-right: 6rem !important; }
+html[dir="rtl"] .pl-32 { padding-left: 0 !important; padding-right: 8rem !important; }
+html[dir="rtl"] .pl-40 { padding-left: 0 !important; padding-right: 10rem !important; }
+html[dir="rtl"] .pl-48 { padding-left: 0 !important; padding-right: 12rem !important; }
+html[dir="rtl"] .pl-56 { padding-left: 0 !important; padding-right: 14rem !important; }
+html[dir="rtl"] .pl-64 { padding-left: 0 !important; padding-right: 16rem !important; }
+
+html[dir="rtl"] .pr-1 { padding-right: 0 !important; padding-left: 0.25rem !important; }
+html[dir="rtl"] .pr-2 { padding-right: 0 !important; padding-left: 0.5rem !important; }
+html[dir="rtl"] .pr-3 { padding-right: 0 !important; padding-left: 0.75rem !important; }
+html[dir="rtl"] .pr-4 { padding-right: 0 !important; padding-left: 1rem !important; }
+html[dir="rtl"] .pr-6 { padding-right: 0 !important; padding-left: 1.5rem !important; }
+html[dir="rtl"] .pr-8 { padding-right: 0 !important; padding-left: 2rem !important; }
+html[dir="rtl"] .pr-12 { padding-right: 0 !important; padding-left: 3rem !important; }
+html[dir="rtl"] .pr-16 { padding-right: 0 !important; padding-left: 4rem !important; }
+html[dir="rtl"] .pr-20 { padding-right: 0 !important; padding-left: 5rem !important; }
+html[dir="rtl"] .pr-24 { padding-right: 0 !important; padding-left: 6rem !important; }
+html[dir="rtl"] .pr-32 { padding-right: 0 !important; padding-left: 8rem !important; }
+html[dir="rtl"] .pr-40 { padding-right: 0 !important; padding-left: 10rem !important; }
+html[dir="rtl"] .pr-48 { padding-right: 0 !important; padding-left: 12rem !important; }
+html[dir="rtl"] .pr-56 { padding-right: 0 !important; padding-left: 14rem !important; }
+html[dir="rtl"] .pr-64 { padding-right: 0 !important; padding-left: 16rem !important; }
+
+/* RTL Space Between */
+html[dir="rtl"] .space-x-1 > * + * { margin-left: 0 !important; margin-right: 0.25rem !important; }
+html[dir="rtl"] .space-x-2 > * + * { margin-left: 0 !important; margin-right: 0.5rem !important; }
+html[dir="rtl"] .space-x-3 > * + * { margin-left: 0 !important; margin-right: 0.75rem !important; }
+html[dir="rtl"] .space-x-4 > * + * { margin-left: 0 !important; margin-right: 1rem !important; }
+html[dir="rtl"] .space-x-6 > * + * { margin-left: 0 !important; margin-right: 1.5rem !important; }
+html[dir="rtl"] .space-x-8 > * + * { margin-left: 0 !important; margin-right: 2rem !important; }
+
+/* RTL Border */
+html[dir="rtl"] .border-l { border-left: none !important; border-right: 1px solid !important; }
+html[dir="rtl"] .border-r { border-right: none !important; border-left: 1px solid !important; }
+html[dir="rtl"] .border-l-2 { border-left: none !important; border-right: 2px solid !important; }
+html[dir="rtl"] .border-r-2 { border-right: none !important; border-left: 2px solid !important; }
+html[dir="rtl"] .border-l-4 { border-left: none !important; border-right: 4px solid !important; }
+html[dir="rtl"] .border-r-4 { border-right: none !important; border-left: 4px solid !important; }
+
+/* RTL Border Radius */
+html[dir="rtl"] .rounded-l { border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; border-top-right-radius: 0.25rem !important; border-bottom-right-radius: 0.25rem !important; }
+html[dir="rtl"] .rounded-r { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; border-top-left-radius: 0.25rem !important; border-bottom-left-radius: 0.25rem !important; }
+html[dir="rtl"] .rounded-l-lg { border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; border-top-right-radius: 0.5rem !important; border-bottom-right-radius: 0.5rem !important; }
+html[dir="rtl"] .rounded-r-lg { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; border-top-left-radius: 0.5rem !important; border-bottom-left-radius: 0.5rem !important; }
+
+/* RTL Positioning */
+html[dir="rtl"] .left-0 { left: auto !important; right: 0 !important; }
+html[dir="rtl"] .right-0 { right: auto !important; left: 0 !important; }
+html[dir="rtl"] .left-1 { left: auto !important; right: 0.25rem !important; }
+html[dir="rtl"] .right-1 { right: auto !important; left: 0.25rem !important; }
+html[dir="rtl"] .left-2 { left: auto !important; right: 0.5rem !important; }
+html[dir="rtl"] .right-2 { right: auto !important; left: 0.5rem !important; }
+html[dir="rtl"] .left-4 { left: auto !important; right: 1rem !important; }
+html[dir="rtl"] .right-4 { right: auto !important; left: 1rem !important; }
+html[dir="rtl"] .left-8 { left: auto !important; right: 2rem !important; }
+html[dir="rtl"] .right-8 { right: auto !important; left: 2rem !important; }
+
+/* RTL Transform */
+html[dir="rtl"] .translate-x-0 { transform: translateX(0) !important; }
+html[dir="rtl"] .translate-x-full { transform: translateX(100%) !important; }
+html[dir="rtl"] .-translate-x-full { transform: translateX(-100%) !important; }
+html[dir="rtl"] .translate-x-1 { transform: translateX(0.25rem) !important; }
+html[dir="rtl"] .-translate-x-1 { transform: translateX(-0.25rem) !important; }
+html[dir="rtl"] .translate-x-2 { transform: translateX(0.5rem) !important; }
+html[dir="rtl"] .-translate-x-2 { transform: translateX(-0.5rem) !important; }
+
+/* RTL Icons */
+html[dir="rtl"] .icon-flip {
+  transform: scaleX(-1);
+}
+
+html[dir="rtl"] .icon-rotate {
+  transform: rotate(180deg);
+}
+
+/* RTL Forms */
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select {
+  text-align: right;
+  direction: rtl;
+}
+
+html[dir="rtl"] input::placeholder,
+html[dir="rtl"] textarea::placeholder {
+  text-align: right;
+}
+
+/* RTL Buttons */
+html[dir="rtl"] button {
+  text-align: right;
+  direction: rtl;
+}
+
+/* RTL Tables */
+html[dir="rtl"] table {
+  direction: rtl;
+}
+
+html[dir="rtl"] th,
+html[dir="rtl"] td {
+  text-align: right;
+}
+
+/* RTL Lists */
+html[dir="rtl"] ul,
+html[dir="rtl"] ol {
+  direction: rtl;
+}
+
+html[dir="rtl"] li {
+  text-align: right;
+}
+
+/* RTL Navigation */
+html[dir="rtl"] .nav-item {
+  text-align: right;
+}
+
+html[dir="rtl"] .nav-link {
+  text-align: right;
+}
+
+/* RTL Cards */
+html[dir="rtl"] .card {
+  direction: rtl;
+}
+
+html[dir="rtl"] .card-header,
+html[dir="rtl"] .card-body,
+html[dir="rtl"] .card-footer {
+  text-align: right;
+}
+
+/* RTL Modals */
+html[dir="rtl"] .modal {
+  direction: rtl;
+}
+
+html[dir="rtl"] .modal-header,
+html[dir="rtl"] .modal-body,
+html[dir="rtl"] .modal-footer {
+  text-align: right;
+}
+
+/* RTL Dropdowns */
+html[dir="rtl"] .dropdown-menu {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .dropdown-item {
+  text-align: right;
+}
+
+/* RTL Alerts */
+html[dir="rtl"] .alert {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Badges */
+html[dir="rtl"] .badge {
+  direction: rtl;
+}
+
+/* RTL Progress */
+html[dir="rtl"] .progress {
+  direction: rtl;
+}
+
+/* RTL Carousel */
+html[dir="rtl"] .carousel {
+  direction: rtl;
+}
+
+/* RTL Accordion */
+html[dir="rtl"] .accordion {
+  direction: rtl;
+}
+
+html[dir="rtl"] .accordion-header,
+html[dir="rtl"] .accordion-body {
+  text-align: right;
+}
+
+/* RTL Tabs */
+html[dir="rtl"] .tabs {
+  direction: rtl;
+}
+
+html[dir="rtl"] .tab-content {
+  text-align: right;
+}
+
+/* RTL Sidebar */
+html[dir="rtl"] .sidebar {
+  right: 0;
+  left: auto;
+}
+
+html[dir="rtl"] .sidebar-content {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Admin Layout */
+html[dir="rtl"] .admin-layout {
+  direction: rtl;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+}
+
+html[dir="rtl"] .admin-sidebar {
+  right: 0 !important;
+  left: auto !important;
+}
+
+html[dir="rtl"] .admin-main {
+  margin-right: 16rem !important;
+  margin-left: 0 !important;
+}
+
+/* Force main content margin in RTL */
+html[dir="rtl"] .flex-1.flex.flex-col.lg\\:me-64 {
+  margin-right: 16rem !important;
+  margin-left: 0 !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  max-width: calc(100% - 16rem) !important;
+}
+
+/* Consolidated RTL Admin Sidebar Rules */
+html[dir="rtl"] .fixed.inset-y-0.z-50.w-64 {
+  right: 0 !important;
+  left: auto !important;
+  position: fixed !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 16rem !important;
+  z-index: 50 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Only apply transform when sidebar is open in RTL */
+html[dir="rtl"] .fixed.inset-y-0.z-50.w-64.lg\\:translate-x-0 {
+  transform: translateX(0) !important;
+}
+
+html[dir="rtl"] .fixed.inset-y-0.z-50.w-64 > div {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+html[dir="rtl"] .fixed.inset-y-0.z-50.w-64 .flex {
+  flex-direction: row-reverse !important;
+}
+
+html[dir="rtl"] .fixed.inset-y-0.z-50.w-64 p,
+html[dir="rtl"] .fixed.inset-y-0.z-50.w-64 span,
+html[dir="rtl"] .fixed.inset-y-0.z-50.w-64 div {
+  text-align: right !important;
+  direction: rtl !important;
+}
+
+/* RTL Dashboard */
+html[dir="rtl"] .dashboard {
+  direction: rtl;
+}
+
+/* Global Website Scrollbar Styling */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #2e2e33 #ffffff;
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #2e2e33;
+  border-radius: 6px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #3e3e43;
+}
+
+/* Dark mode scrollbar */
+html[data-theme="dark"] * {
+  scrollbar-color: #2e2e33 #1f2937;
+}
+
+html[data-theme="dark"] *::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+/* Admin Sidebar Scrollbar Styling */
+.sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #2e2e33 #000000;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: #2e2e33;
+  border-radius: 3px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3e3e43;
+}
+
+html[dir="rtl"] .dashboard-card {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Product Cards */
+html[dir="rtl"] .product-card {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .product-title,
+html[dir="rtl"] .product-description,
+html[dir="rtl"] .product-price {
+  text-align: right;
+}
+
+/* RTL Cart */
+html[dir="rtl"] .cart {
+  direction: rtl;
+}
+
+html[dir="rtl"] .cart-item {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Checkout */
+html[dir="rtl"] .checkout {
+  direction: rtl;
+}
+
+html[dir="rtl"] .checkout-form {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Search */
+html[dir="rtl"] .search {
+  direction: rtl;
+}
+
+html[dir="rtl"] .search-results {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Filters */
+html[dir="rtl"] .filters {
+  direction: rtl;
+}
+
+html[dir="rtl"] .filter-group {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Pagination */
+html[dir="rtl"] .pagination {
+  direction: rtl;
+}
+
+html[dir="rtl"] .pagination-item {
+  text-align: right;
+}
+
+/* RTL Breadcrumbs */
+html[dir="rtl"] .breadcrumbs {
+  direction: rtl;
+}
+
+html[dir="rtl"] .breadcrumb-item {
+  text-align: right;
+}
+
+/* RTL Tooltips */
+html[dir="rtl"] .tooltip {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Popovers */
+html[dir="rtl"] .popover {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Loading */
+html[dir="rtl"] .loading {
+  direction: rtl;
+}
+
+/* RTL Error States */
+html[dir="rtl"] .error {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Success States */
+html[dir="rtl"] .success {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Warning States */
+html[dir="rtl"] .warning {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Info States */
+html[dir="rtl"] .info {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Responsive Design */
+@media (max-width: 768px) {
+  html[dir="rtl"] .mobile-menu {
+    right: 0;
+    left: auto;
+  }
+  
+  html[dir="rtl"] .mobile-content {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+/* RTL Print Styles */
+@media print {
+  html[dir="rtl"] {
+    direction: rtl;
+  }
+  
+  html[dir="rtl"] * {
+    direction: inherit;
+  }
+}

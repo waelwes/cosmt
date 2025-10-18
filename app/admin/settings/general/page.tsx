@@ -435,7 +435,7 @@ export default function GeneralSettingsPage() {
       <div className="analytics-card">
         {/* Tabs */}
         <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
-          <nav className="flex space-x-8 px-6">
+          <nav className="flex space-x-8 px-6 tab-navigation">
             {tabs.map((tab) => (
               <button
                 key={tab.id}

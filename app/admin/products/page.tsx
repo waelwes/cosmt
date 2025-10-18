@@ -97,11 +97,11 @@ export default function ProductsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-green-100 text-green-800';
+        return 'status-active';
       case 'inactive':
-        return 'bg-red-100 text-red-800';
+        return 'status-inactive';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'status-inactive';
     }
   };
 
@@ -116,7 +116,7 @@ export default function ProductsPage() {
   const topRatedCount = products.filter(product => product.rating >= 4.5).length;
 
   return (
-    <div className="space-y-4" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <div className="space-y-4">
       {/* Combined Products Card */}
       <div className="analytics-card p-6">
         {/* Header */}
@@ -135,11 +135,11 @@ export default function ProductsPage() {
         </div>
         
         {/* Horizontal Line */}
-        <div className="border-t mb-4" style={{ borderTopColor: '#eef2f6' }}></div>
+        <div className="border-t mb-4"></div>
         
         {/* Stats Grid */}
         <div className="flex">
-          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
+          <div className="flex-1 py-4 px-4 border-r">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Products</h3>
               <Package className="w-5 h-5 text-gray-400" />
@@ -150,7 +150,7 @@ export default function ProductsPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
+          <div className="flex-1 py-4 px-4 border-r">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Low Stock</h3>
               <AlertTriangle className="w-5 h-5 text-orange-400" />
@@ -161,7 +161,7 @@ export default function ProductsPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r" style={{ borderRightColor: '#eef2f6' }}>
+          <div className="flex-1 py-4 px-4 border-r">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Top Rated</h3>
               <Star className="w-5 h-5 text-yellow-400" />
@@ -191,13 +191,13 @@ export default function ProductsPage() {
           {/* Search */}
           <div className="md:col-span-2">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 filter-input"
+                className="w-full pl-3 pr-10 py-2 filter-input"
               />
             </div>
           </div>
@@ -236,8 +236,8 @@ export default function ProductsPage() {
       {/* Products Table */}
       <div className="analytics-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y" style={{ borderColor: '#eef2f6' }}>
-            <thead className="bg-gray-50 dark:bg-gray-700" style={{ borderColor: '#eef2f6' }}>
+          <table className="min-w-full divide-y">
+            <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider">
                   Product
@@ -262,7 +262,7 @@ export default function ProductsPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y" style={{ borderColor: '#eef2f6' }}>
+            <tbody className="bg-white dark:bg-gray-800 divide-y">
               {filteredProducts.map((product) => (
                 <tr key={product.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -289,7 +289,7 @@ export default function ProductsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium status-active">
                       {product.category}
                     </span>
                   </td>
