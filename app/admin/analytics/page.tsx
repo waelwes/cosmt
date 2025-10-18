@@ -336,7 +336,7 @@ export default function AnalyticsDashboard() {
 
   return (
     <div 
-      className={`space-y-4 ${direction === 'rtl' ? 'rtl' : 'ltr'}`} 
+      className={`space-y-6 ${direction === 'rtl' ? 'rtl' : 'ltr'}`} 
       style={{ 
         backgroundColor: '#f8fafc', 
         minHeight: '100vh',
@@ -345,12 +345,13 @@ export default function AnalyticsDashboard() {
       }}
     >
       {/* Combined Analytics Card */}
-      <div className="analytics-card p-6">
+      <div className="analytics-card p-0">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Analytics</h1>
-          </div>
+        <div className="px-6 pt-6 pb-4 border-b">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Analytics</h1>
+            </div>
           
           {/* Time Period Filter */}
           <div className={`flex items-center rounded-lg overflow-hidden border ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
@@ -361,7 +362,6 @@ export default function AnalyticsDashboard() {
             }`}>
               {getTranslation('all')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <button className={`px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
               timeRange === 'today' 
                 ? 'text-white bg-cosmt-primary shadow-sm hover:bg-cosmt-primary-dark' 
@@ -369,7 +369,6 @@ export default function AnalyticsDashboard() {
             }`}>
               {getTranslation('today')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <button className={`px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
               timeRange === 'week' 
                 ? 'text-white bg-cosmt-primary shadow-sm hover:bg-cosmt-primary-dark' 
@@ -377,7 +376,6 @@ export default function AnalyticsDashboard() {
             }`}>
               {getTranslation('thisWeek')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <button className={`px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
               timeRange === 'month' 
                 ? 'text-white bg-cosmt-primary shadow-sm hover:bg-cosmt-primary-dark' 
@@ -385,7 +383,6 @@ export default function AnalyticsDashboard() {
             }`}>
               {getTranslation('thisMonth')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <button className={`px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md ${
               timeRange === 'year' 
                 ? 'text-white bg-cosmt-primary shadow-sm hover:bg-cosmt-primary-dark' 
@@ -393,7 +390,6 @@ export default function AnalyticsDashboard() {
             }`}>
               {getTranslation('thisYear')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <div className="relative date-picker-container">
               <button 
                 onClick={() => setShowDatePicker(!showDatePicker)}
@@ -484,33 +480,34 @@ export default function AnalyticsDashboard() {
               )}
             </div>
           </div>
+          </div>
         </div>
         
-        {/* Horizontal Line */}
-        <div className="border-t mb-4 -mx-6" style={{ borderTopColor: '#eef2f6', borderTopWidth: '1px' }}></div>
-        
-        {/* Stats Grid */}
-        <div className="flex">
-          {analyticsStats.map((stat, index) => (
-            <div key={index} className="flex-1 py-4 px-4 border-r last:border-r-0" style={{ borderRightColor: '#eef2f6' }}>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{stat.title}</h3>
-                {stat.icon}
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
-                <div className="flex items-center text-xs mt-1 text-gray-500 dark:text-gray-400">
-                  <span className={`flex items-center font-medium ${stat.changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`}>
-                    {stat.changeType === 'positive' ? 
-                      <TrendingUp className="w-3 h-3 mr-1" /> : 
-                      <TrendingUp className="w-3 h-3 mr-1 transform rotate-180" />
-                    }
-                    {stat.change}
-                  </span>
+        {/* Card Content */}
+        <div className="px-6 py-6">
+          {/* Stats Grid */}
+          <div className="flex">
+            {analyticsStats.map((stat, index) => (
+              <div key={index} className="flex-1 py-4 px-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{stat.title}</h3>
+                  {stat.icon}
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                  <div className="flex items-center text-xs mt-1 text-gray-500 dark:text-gray-400">
+                    <span className={`flex items-center font-medium ${stat.changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`}>
+                      {stat.changeType === 'positive' ? 
+                        <TrendingUp className="w-3 h-3 mr-1" /> : 
+                        <TrendingUp className="w-3 h-3 mr-1 transform rotate-180" />
+                      }
+                      {stat.change}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 

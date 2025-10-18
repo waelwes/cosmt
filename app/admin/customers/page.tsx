@@ -213,27 +213,33 @@ export default function CustomersPage() {
   };
 
   return (
-    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Customers</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your customer database</p>
+    <div className="space-y-6">
+      {/* Main Customers Card */}
+      <div className="analytics-card p-0">
+        {/* Header */}
+        <div className="px-6 pt-6 pb-4 border-b">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Customers</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Manage your customer database</p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <button className="flex items-center px-4 py-2 border rounded-lg hover:bg-gray-50" style={{ borderColor: '#eef2f6' }}>
+                <Mail className="w-4 h-4 mr-2" />
+                Send Email
+              </button>
+              <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                Add Customer
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <button className="flex items-center px-4 py-2 border rounded-lg hover:bg-gray-50" style={{ borderColor: '#eef2f6' }}>
-            <Mail className="w-4 h-4 mr-2" />
-            Send Email
-          </button>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-            Add Customer
-          </button>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="analytics-card p-6">
+        
+        {/* Card Content */}
+        <div className="px-6 py-6">
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
               <UserPlus className="w-6 h-6 text-blue-600" />
@@ -244,7 +250,7 @@ export default function CustomersPage() {
             </div>
           </div>
         </div>
-        <div className="analytics-card p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
               <UserCheck className="w-6 h-6 text-blue-600" />
@@ -277,10 +283,15 @@ export default function CustomersPage() {
             </div>
           </div>
         </div>
+        </div>
       </div>
 
       {/* Filters */}
-      <div className="analytics-card p-6">
+      <div className="analytics-card p-0">
+        <div className="px-6 pt-6 pb-4 border-b">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters & Search</h2>
+        </div>
+        <div className="px-6 py-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Search */}
           <div className="md:col-span-2">
@@ -329,10 +340,11 @@ export default function CustomersPage() {
             </select>
           </div>
         </div>
+        </div>
       </div>
 
       {/* Customers Table */}
-      <div className="analytics-card overflow-hidden">
+      <div className="analytics-card p-0 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">

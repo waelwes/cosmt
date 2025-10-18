@@ -261,44 +261,44 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Combined Products Card */}
-      <div className="analytics-card p-6">
+      <div className="analytics-card p-0">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Products</h1>
-          </div>
-          
-          {/* Action Buttons */}
-          <div className="flex items-center space-x-3">
-            <Button 
-              onClick={refetch} 
-              variant="secondary" 
-              className="flex items-center"
-              disabled={loading}
-            >
-              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
-            <Link href="/admin/products/add">
+        <div className="px-6 pt-6 pb-4 border-b">
+          <div className="flex items-center justify-between">
+            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Products</h1>
+            
+            {/* Action Buttons */}
+            <div className="flex items-center space-x-3">
               <Button 
-                variant="primary" 
+                onClick={refetch} 
+                variant="secondary" 
                 className="flex items-center"
+                disabled={loading}
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Product
+                <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Refresh
               </Button>
-            </Link>
+              <Link href="/admin/products/add">
+                <Button 
+                  variant="primary" 
+                  className="flex items-center"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Product
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
         
-        {/* Horizontal Line */}
-        <div className="border-t mb-4"></div>
+        {/* Card Content */}
+        <div className="px-6 py-6">
         
         {/* Stats Grid */}
         <div className="flex">
-          <div className="flex-1 py-4 px-4 border-r">
+          <div className="flex-1 py-4 px-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Products</h3>
               <Package className="w-5 h-5 text-gray-400" />
@@ -309,7 +309,7 @@ export default function ProductsPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r">
+          <div className="flex-1 py-4 px-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Low Stock</h3>
               <AlertTriangle className="w-5 h-5 text-orange-400" />
@@ -320,7 +320,7 @@ export default function ProductsPage() {
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r">
+          <div className="flex-1 py-4 px-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Top Rated</h3>
               <Star className="w-5 h-5 text-yellow-400" />
@@ -342,10 +342,15 @@ export default function ProductsPage() {
             </div>
           </div>
         </div>
+        </div>
       </div>
 
       {/* Filters and Search */}
-      <div className="analytics-card p-6">
+      <div className="analytics-card p-0">
+        <div className="px-6 pt-6 pb-4 border-b">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters & Search</h2>
+        </div>
+        <div className="px-6 py-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Search */}
           <div className="md:col-span-2">
@@ -390,10 +395,11 @@ export default function ProductsPage() {
             </select>
           </div>
         </div>
+        </div>
       </div>
 
       {/* Products Table */}
-      <div className="analytics-card overflow-hidden">
+      <div className="analytics-card p-0 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y">
             <thead className="bg-gray-50 dark:bg-gray-700">

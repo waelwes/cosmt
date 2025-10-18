@@ -425,17 +425,19 @@ export default function GeneralSettingsPage() {
   };
 
   return (
-    <div className="space-y-6 settings-general-page" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
-      {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Settings</h1>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your store configuration and preferences</p>
-      </div>
-
-      <div className="analytics-card">
+    <div className="space-y-6">
+      {/* Main Settings Card */}
+      <div className="analytics-card p-0">
+        {/* Header */}
+        <div className="px-6 pt-6 pb-4 border-b">
+          <div>
+            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Settings</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Manage your store configuration and preferences</p>
+          </div>
+        </div>
         {/* Tabs */}
-        <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
-          <nav className="flex space-x-8 px-6 tab-navigation">
+        <div className="px-6 pt-4 pb-0">
+          <nav className="flex space-x-8 tab-navigation">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -454,7 +456,7 @@ export default function GeneralSettingsPage() {
         </div>
 
         {/* Tab Content */}
-        <div className="p-6">
+        <div className="px-6 py-6">
           {renderTabContent()}
         </div>
 

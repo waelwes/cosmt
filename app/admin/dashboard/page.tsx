@@ -1063,7 +1063,6 @@ function AdminDashboard() {
             >
               {getTranslation('all')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <button 
               onClick={() => setSelectedTimeRange('Today')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -1074,7 +1073,6 @@ function AdminDashboard() {
             >
               {getTranslation('today')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <button 
               onClick={() => setSelectedTimeRange('This Week')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -1085,7 +1083,6 @@ function AdminDashboard() {
             >
               {getTranslation('thisWeek')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <button 
               onClick={() => setSelectedTimeRange('This Month')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -1096,7 +1093,6 @@ function AdminDashboard() {
             >
               {getTranslation('thisMonth')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <button 
               onClick={() => setSelectedTimeRange('This Year')}
               className={`px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -1107,7 +1103,6 @@ function AdminDashboard() {
             >
               {getTranslation('thisYear')}
             </button>
-            <div className="w-px h-6 bg-gray-200"></div>
             <div className="relative date-picker-container">
               <button 
                 onClick={() => setShowDatePicker(!showDatePicker)}
@@ -1210,7 +1205,7 @@ function AdminDashboard() {
           {/* Stats Grid */}
         <div className="flex flex-row">
           {stats.map((stat, index) => (
-            <div key={index} className="flex-1 py-4 px-4 border-e last:border-e-0">
+            <div key={index} className="flex-1 py-4 px-4">
               <div className="flex items-center justify-between mb-1">
                 <h3 className="text-xs font-medium text-gray-600 dark:text-gray-300">{stat.title}</h3>
                 {stat.icon}

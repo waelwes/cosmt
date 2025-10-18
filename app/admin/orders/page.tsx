@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Search, 
   Filter, 
@@ -16,9 +16,16 @@ import {
   AlertTriangle,
   X,
   Save,
-  Check
+  Check,
+  RefreshCw,
+  Download,
+  Plus,
+  Calendar,
+  DollarSign,
+  User
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 
 interface Order {
   id: string;
@@ -32,6 +39,8 @@ interface Order {
   date: string;
   items: number;
   shippingAddress: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export default function OrdersPage() {
@@ -40,77 +49,51 @@ export default function OrdersPage() {
   const [selectedDateRange, setSelectedDateRange] = useState('all');
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [showViewModal, setShowViewModal] = useState<Order | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // State for orders - in real app, this would come from API
-  const [orders, setOrders] = useState<Order[]>([
-    {
-      id: '#12345',
-      customer: 'Ahmet Yılmaz',
-      email: 'ahmet@example.com',
-      phone: '+90 555 123 4567',
-      total: 89.99,
-      status: 'completed',
-      paymentStatus: 'paid',
-      shippingStatus: 'delivered',
-      date: '2024-01-15',
-      items: 2,
-      shippingAddress: 'İstanbul, Turkey'
-    },
-    {
-      id: '#12346',
-      customer: 'Ayşe Demir',
-      email: 'ayse@example.com',
-      phone: '+90 555 234 5678',
-      total: 156.50,
-      status: 'processing',
-      paymentStatus: 'paid',
-      shippingStatus: 'preparing',
-      date: '2024-01-15',
-      items: 3,
-      shippingAddress: 'Ankara, Turkey'
-    },
-    {
-      id: '#12347',
-      customer: 'Mehmet Kaya',
-      email: 'mehmet@example.com',
-      phone: '+90 555 345 6789',
-      total: 67.25,
-      status: 'shipped',
-      paymentStatus: 'paid',
-      shippingStatus: 'in_transit',
-      date: '2024-01-14',
-      items: 1,
-      shippingAddress: 'İzmir, Turkey'
-    },
-    {
-      id: '#12348',
-      customer: 'Fatma Öz',
-      email: 'fatma@example.com',
-      phone: '+90 555 456 7890',
-      total: 124.99,
-      status: 'pending',
-      paymentStatus: 'pending',
-      shippingStatus: 'pending',
-      date: '2024-01-14',
-      items: 2,
-      shippingAddress: 'Bursa, Turkey'
-    },
-    {
-      id: '#12349',
-      customer: 'Ali Veli',
-      email: 'ali@example.com',
-      phone: '+90 555 567 8901',
-      total: 234.75,
-      status: 'cancelled',
-      paymentStatus: 'refunded',
-      shippingStatus: 'cancelled',
-      date: '2024-01-13',
-      items: 4,
-      shippingAddress: 'Antalya, Turkey'
+  // State for orders - now connected to API
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [originalOrders, setOriginalOrders] = useState<Order[]>([]);
+
+  // Fetch orders from API
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch('/api/admin/orders');
+      const result = await response.json();
+      
+      if (result.success) {
+        setOrders(result.data);
+        setOriginalOrders(result.data);
+        console.log('Orders fetched:', result.data);
+      } else {
+        console.error('Failed to fetch orders:', result.error);
+        setError(result.error || 'Failed to fetch orders');
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      setError('Network error while fetching orders');
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
 
-  const statuses = ['all', 'pending', 'processing', 'shipped', 'completed', 'cancelled'];
+  // Refresh orders
+  const refreshOrders = async () => {
+    setRefreshing(true);
+    await fetchOrders();
+    setRefreshing(false);
+  };
+
+  // Load orders on component mount
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const statuses = ['all', 'pending', 'processing', 'completed', 'cancelled'];
   const dateRanges = ['all', 'today', 'week', 'month', 'year'];
 
   // CRUD Operations
@@ -118,12 +101,28 @@ export default function OrdersPage() {
     setEditingOrder({ ...order });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (editingOrder) {
-      setOrders(prev => 
-        prev.map(o => o.id === editingOrder.id ? editingOrder : o)
-      );
-      setEditingOrder(null);
+      try {
+        const response = await fetch(`/api/admin/orders/${editingOrder.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editingOrder),
+        });
+
+        if (response.ok) {
+          setOrders(prev => 
+            prev.map(o => o.id === editingOrder.id ? editingOrder : o)
+          );
+          setEditingOrder(null);
+        } else {
+          console.error('Failed to update order');
+        }
+      } catch (error) {
+        console.error('Error updating order:', error);
+      }
     }
   };
 
@@ -141,556 +140,517 @@ export default function OrdersPage() {
     }
   };
 
-  const handleStatusUpdate = (orderId: string, newStatus: string) => {
-    setOrders(prev => 
-      prev.map(o => o.id === orderId ? { ...o, status: newStatus as any } : o)
-    );
+  const handleStatusUpdate = async (orderId: string, newStatus: string) => {
+    try {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        setOrders(prev => 
+          prev.map(o => o.id === orderId ? { ...o, status: newStatus as any } : o)
+        );
+      }
+    } catch (error) {
+      console.error('Error updating order status:', error);
+    }
   };
 
-  // Memoized filtered orders
+  // Filter and search logic
   const filteredOrders = useMemo(() => {
-    return orders.filter(order => {
-      const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           order.email.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = selectedStatus === 'all' || order.status === selectedStatus;
-      return matchesSearch && matchesStatus;
-    });
-  }, [orders, searchTerm, selectedStatus]);
+    let filtered = [...orders];
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'status-active';
-      case 'processing':
-        return 'status-active';
-      case 'shipped':
-        return 'status-active';
-      case 'pending':
-        return 'status-inactive';
-      case 'cancelled':
-        return 'status-inactive';
-      default:
-        return 'status-inactive';
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(order =>
+        order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.id.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
-  };
 
-  const getPaymentStatusColor = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return 'status-active';
-      case 'pending':
-        return 'status-inactive';
-      case 'refunded':
-        return 'status-active';
-      case 'failed':
-        return 'status-inactive';
-      default:
-        return 'status-inactive';
+    // Status filter
+    if (selectedStatus !== 'all') {
+      filtered = filtered.filter(order => order.status === selectedStatus);
     }
-  };
 
-  const getShippingStatusColor = (status: string) => {
-    switch (status) {
-      case 'delivered':
-        return 'status-active';
-      case 'in_transit':
-        return 'status-active';
-      case 'preparing':
-        return 'status-inactive';
-      case 'pending':
-        return 'status-inactive';
-      case 'cancelled':
-        return 'status-inactive';
-      default:
-        return 'status-inactive';
+    // Date range filter
+    if (selectedDateRange !== 'all') {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      
+      filtered = filtered.filter(order => {
+        const orderDate = new Date(order.date);
+        
+        switch (selectedDateRange) {
+          case 'today':
+            return orderDate >= today;
+          case 'week':
+            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            return orderDate >= weekAgo;
+          case 'month':
+            const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+            return orderDate >= monthAgo;
+          case 'year':
+            const yearAgo = new Date(today.getTime() - 365 * 24 * 60 * 60 * 1000);
+            return orderDate >= yearAgo;
+          default:
+            return true;
+        }
+      });
     }
-  };
+
+    return filtered;
+  }, [orders, searchTerm, selectedStatus, selectedDateRange]);
+
+  // Statistics
+  const stats = useMemo(() => {
+    const total = orders.length;
+    const pending = orders.filter(o => o.status === 'pending').length;
+    const processing = orders.filter(o => o.status === 'processing').length;
+    const completed = orders.filter(o => o.status === 'completed').length;
+    const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+
+    return { total, pending, processing, completed, totalRevenue };
+  }, [orders]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
-        return <CheckCircle className="w-4 h-4" />;
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
       case 'processing':
-        return <Package className="w-4 h-4" />;
-      case 'shipped':
-        return <Truck className="w-4 h-4" />;
+        return <Clock className="w-4 h-4 text-blue-500" />;
       case 'pending':
-        return <Clock className="w-4 h-4" />;
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
       case 'cancelled':
-        return <XCircle className="w-4 h-4" />;
+        return <XCircle className="w-4 h-4 text-red-500" />;
       default:
-        return <AlertTriangle className="w-4 h-4" />;
+        return <Package className="w-4 h-4 text-gray-500" />;
     }
   };
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      case 'processing':
+        return 'bg-blue-100 text-blue-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500 text-lg">Loading orders...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Combined Orders Card */}
-      <div className="analytics-card p-6">
+      <div className="analytics-card p-0">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Orders</h1>
+        <div className="px-6 pt-6 pb-4 border-b">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Orders</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Manage and track customer orders</p>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex items-center space-x-3">
+              <Button
+                onClick={refreshOrders}
+                disabled={refreshing}
+                variant="secondary"
+                className="flex items-center"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <Button variant="secondary" className="flex items-center">
+                <Download className="w-4 h-4 mr-2" />
+                Export
+              </Button>
+            </div>
           </div>
-          
-          {/* Action Buttons */}
-          <div className="flex items-center space-x-3">
-            <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-              <Printer className="w-4 h-4 mr-2" />
-            Export
-          </button>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-            New Order
-          </button>
-        </div>
         </div>
         
-        {/* Horizontal Line */}
-        <div className="border-t mb-4"></div>
-        
+        {/* Card Content */}
+        <div className="px-6 py-6">
+
         {/* Stats Grid */}
-        <div className="flex">
-          <div className="flex-1 py-4 px-4 border-r">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Orders</h3>
-              <Package className="w-5 h-5 text-gray-400" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{orders.length}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">All orders</p>
-            </div>
-          </div>
-          
-          <div className="flex-1 py-4 px-4 border-r">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Pending</h3>
-              <Clock className="w-5 h-5 text-yellow-400" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{orders.filter(o => o.status === 'pending').length}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Awaiting processing</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+          <div className="stat-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Total Orders</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
+              </div>
+              <Package className="w-8 h-8 text-blue-500" />
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4 border-r">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Shipped</h3>
-              <Truck className="w-5 h-5 text-blue-400" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{orders.filter(o => o.status === 'shipped').length}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">In transit</p>
+          <div className="stat-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Pending</p>
+                <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
+              </div>
+              <Clock className="w-8 h-8 text-yellow-500" />
             </div>
           </div>
           
-          <div className="flex-1 py-4 px-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Completed</h3>
-              <CheckCircle className="w-5 h-5 text-green-400" />
+          <div className="stat-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Processing</p>
+                <p className="text-2xl font-bold text-blue-600">{stats.processing}</p>
+              </div>
+              <Truck className="w-8 h-8 text-blue-500" />
             </div>
+          </div>
+          
+          <div className="stat-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Completed</p>
+                <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-green-500" />
+            </div>
+          </div>
+          
+          <div className="stat-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Total Revenue</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">${stats.totalRevenue.toFixed(2)}</p>
+              </div>
+              <DollarSign className="w-8 h-8 text-green-500" />
+            </div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{orders.filter(o => o.status === 'completed').length}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Successfully delivered</p>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Search</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  type="text"
+                  placeholder="Search orders..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              >
+                {statuses.map(status => (
+                  <option key={status} value={status}>
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date Range</label>
+              <select
+                value={selectedDateRange}
+                onChange={(e) => setSelectedDateRange(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              >
+                {dateRanges.map(range => (
+                  <option key={range} value={range}>
+                    {range.charAt(0).toUpperCase() + range.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="flex items-end">
+              <Button
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedStatus('all');
+                  setSelectedDateRange('all');
+                }}
+                variant="secondary"
+                className="w-full"
+              >
+                Clear Filters
+              </Button>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="analytics-card p-6">
-          <div className="flex items-center">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Clock className="w-6 h-6 text-blue-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Pending</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">12</p>
-            </div>
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded mb-6">
+            {error}
           </div>
-        </div>
-        <div className="analytics-card p-6">
-          <div className="flex items-center">
-            <div className="p-2 bg-yellow-100 rounded-lg">
-              <Package className="w-6 h-6 text-yellow-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Processing</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">8</p>
-            </div>
-          </div>
-        </div>
-        <div className="analytics-card p-6">
-          <div className="flex items-center">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <Truck className="w-6 h-6 text-purple-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Shipped</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">15</p>
-            </div>
-          </div>
-        </div>
-        <div className="analytics-card p-6">
-          <div className="flex items-center">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-blue-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Completed</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">234</p>
-            </div>
-          </div>
-        </div>
-      </div>
+        )}
 
-      {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Search */}
-          <div className="md:col-span-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search orders..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 filter-input"
-              />
-            </div>
-          </div>
-
-          {/* Status Filter */}
-          <div>
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full filter-select"
-            >
-              {statuses.map(status => (
-                <option key={status} value={status}>
-                  {status === 'all' ? 'All Statuses' : status.charAt(0).toUpperCase() + status.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Date Range Filter */}
-          <div>
-            <select
-              value={selectedDateRange}
-              onChange={(e) => setSelectedDateRange(e.target.value)}
-              className="w-full filter-select"
-            >
-              {dateRanges.map(range => (
-                <option key={range} value={range}>
-                  {range === 'all' ? 'All Time' : range.charAt(0).toUpperCase() + range.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Orders Table */}
-      <div className="analytics-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Order
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Customer
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Total
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Payment
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Shipping
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y" style={{ borderColor: '#eef2f6' }}>
-              {filteredOrders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                          <Package className="w-4 h-4 text-gray-600" />
+        {/* Orders Table */}
+        <div className="overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Order
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Customer
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Payment
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Total
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Date
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                {filteredOrders.map((order) => (
+                  <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">{order.id}</div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">{order.items} items</div>
                         </div>
                       </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{order.id}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">{order.items} items</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">{order.customer}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{order.email}</div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{order.customer}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">{order.email}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">{order.phone}</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">${order.total.toFixed(2)}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                      {getStatusIcon(order.status)}
-                      <span className="ml-1">{order.status}</span>
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentStatusColor(order.paymentStatus)}`}>
-                      {order.paymentStatus}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getShippingStatusColor(order.shippingStatus)}`}>
-                      {order.shippingStatus.replace('_', ' ')}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {order.date}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end space-x-2">
-                      <button 
-                        onClick={() => handleView(order)}
-                        className="text-gray-400 hover:text-blue-600 transition-colors" 
-                        title="View Details"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button 
-                        onClick={() => handleEdit(order)}
-                        className="text-gray-400 hover:text-green-600 transition-colors" 
-                        title="Edit Order"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button className="text-gray-400 hover:text-gray-600 transition-colors" title="Print Invoice">
-                        <Printer className="w-4 h-4" />
-                      </button>
-                      <select
-                        value={order.status}
-                        onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
-                        className="text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        title="Update Status"
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="processing">Processing</option>
-                        <option value="completed">Completed</option>
-                        <option value="cancelled">Cancelled</option>
-                      </select>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-2">
+                        {getStatusIcon(order.status)}
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                          {order.status}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        order.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 
+                        order.paymentStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {order.paymentStatus}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      ${order.total.toFixed(2)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                      {new Date(order.date).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex space-x-2">
+                        <Button
+                          onClick={() => handleView(order)}
+                          variant="secondary"
+                          size="sm"
+                          className="flex items-center space-x-1"
+                        >
+                          <Eye className="w-3 h-3" />
+                          <span>View</span>
+                        </Button>
+                        <Button
+                          onClick={() => handleEdit(order)}
+                          variant="secondary"
+                          size="sm"
+                          className="flex items-center space-x-1"
+                        >
+                          <Edit className="w-3 h-3" />
+                          <span>Edit</span>
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
         </div>
       </div>
 
-      {/* Pagination */}
-      <div className="analytics-card px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-700 dark:text-gray-300">
-            Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredOrders.length}</span> of{' '}
-            <span className="font-medium">{orders.length}</span> results
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
-              Previous
-            </button>
-            <button className="px-3 py-1 text-sm text-white bg-cosmt-primary rounded">
-              1
-            </button>
-            <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Edit Order Modal */}
-      {editingOrder && (
-        <div className="modal-overlay" onClick={handleCancel}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Edit Order</h3>
-              <button onClick={handleCancel} className="text-gray-400 hover:text-gray-600">
-                <X className="w-5 h-5" />
-              </button>
+      {/* View Modal */}
+      {showViewModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Order Details - {showViewModal.id}</h2>
+              <Button
+                onClick={() => setShowViewModal(null)}
+                variant="secondary"
+                size="sm"
+              >
+                <X className="w-4 h-4" />
+              </Button>
             </div>
             
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Order ID
-                </label>
-                <input
-                  type="text"
-                  value={editingOrder.id}
-                  onChange={(e) => handleUpdateField('id', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Customer Name
-                </label>
-                <input
-                  type="text"
-                  value={editingOrder.customer}
-                  onChange={(e) => handleUpdateField('customer', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={editingOrder.email}
-                  onChange={(e) => handleUpdateField('email', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Total Amount
-                </label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={editingOrder.total}
-                  onChange={(e) => handleUpdateField('total', parseFloat(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Status
-                </label>
-                <select
-                  value={editingOrder.status}
-                  onChange={(e) => handleUpdateField('status', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="processing">Processing</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-              </div>
-            </div>
-            
-            <div className="flex justify-end space-x-3 mt-6">
-              <Button variant="secondary" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleSave}>
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* View Order Modal */}
-      {showViewModal && (
-        <div className="modal-overlay" onClick={handleCancel}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Order Details - {showViewModal.id}</h3>
-              <button onClick={() => setShowViewModal(null)} className="text-gray-400 hover:text-gray-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-6">
-              {/* Customer Info */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer</label>
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.customer}</p>
+                  <p className="text-sm text-gray-900 dark:text-white">{showViewModal.customer}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.email}</p>
+                  <p className="text-sm text-gray-900 dark:text-white">{showViewModal.email}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.phone}</p>
+                  <p className="text-sm text-gray-900 dark:text-white">{showViewModal.phone}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.date}</p>
-                </div>
-              </div>
-              
-              {/* Order Info */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Amount</label>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">${showViewModal.total.toFixed(2)}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Items</label>
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.items} items</p>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Total</label>
+                  <p className="text-sm text-gray-900 dark:text-white">${showViewModal.total.toFixed(2)}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(showViewModal.status)}`}>
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(showViewModal.status)}`}>
                     {showViewModal.status}
                   </span>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Status</label>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(showViewModal.paymentStatus)}`}>
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    showViewModal.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 
+                    showViewModal.paymentStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
                     {showViewModal.paymentStatus}
                   </span>
                 </div>
               </div>
               
-              {/* Shipping Info */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shipping Address</label>
-                <p className="text-sm text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700 p-3 rounded-md">
-                  {showViewModal.shippingAddress}
-                </p>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Shipping Address</label>
+                <p className="text-sm text-gray-900 dark:text-white">{showViewModal.shippingAddress}</p>
               </div>
             </div>
-            
-            <div className="flex justify-end mt-6">
-              <Button variant="secondary" onClick={() => setShowViewModal(null)}>
-                Close
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {editingOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Edit Order - {editingOrder.id}</h2>
+              <Button
+                onClick={handleCancel}
+                variant="secondary"
+                size="sm"
+              >
+                <X className="w-4 h-4" />
               </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                  <select
+                    value={editingOrder.status}
+                    onChange={(e) => handleUpdateField('status', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Status</label>
+                  <select
+                    value={editingOrder.paymentStatus}
+                    onChange={(e) => handleUpdateField('paymentStatus', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="failed">Failed</option>
+                    <option value="refunded">Refunded</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Shipping Status</label>
+                  <select
+                    value={editingOrder.shippingStatus}
+                    onChange={(e) => handleUpdateField('shippingStatus', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="preparing">Preparing</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="returned">Returned</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Total</label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={editingOrder.total}
+                    onChange={(e) => handleUpdateField('total', parseFloat(e.target.value))}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3">
+                <Button onClick={handleCancel} variant="secondary">
+                  Cancel
+                </Button>
+                <Button onClick={handleSave} variant="primary" className="flex items-center space-x-2">
+                  <Save className="w-4 h-4" />
+                  <span>Save Changes</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

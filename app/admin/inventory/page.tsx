@@ -109,7 +109,7 @@ const InventoryCard = memo(({ title, value, change, icon: Icon, color }: {
   icon: any;
   color: string;
 }) => (
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -270,23 +270,30 @@ export default function InventoryManagement() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Inventory Management</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your product inventory and stock levels</p>
+      {/* Main Inventory Card */}
+      <div className="analytics-card p-0">
+        {/* Header */}
+        <div className="px-6 pt-6 pb-4 border-b">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Inventory Management</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Manage your product inventory and stock levels</p>
+            </div>
+            <div className="flex space-x-3">
+              <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                <Download className="w-4 h-4" />
+                <span>Export</span>
+              </button>
+              <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                <Plus className="w-4 h-4" />
+                <span>Add Product</span>
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="flex space-x-3">
-          <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-            <Download className="w-4 h-4" />
-            <span>Export</span>
-          </button>
-          <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-            <Plus className="w-4 h-4" />
-            <span>Add Product</span>
-          </button>
-        </div>
-      </div>
+        
+        {/* Card Content */}
+        <div className="px-6 py-6">
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -322,10 +329,16 @@ export default function InventoryManagement() {
           icon={TrendingUp}
           color="bg-purple-100 text-purple-600"
         />
+        </div>
+        </div>
       </div>
 
       {/* Filters and Search */}
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
+      <div className="analytics-card p-0">
+        <div className="px-6 pt-6 pb-4 border-b">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters & Search</h2>
+        </div>
+        <div className="px-6 py-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
           <div className="flex-1">
             <div className="relative">
@@ -370,42 +383,48 @@ export default function InventoryManagement() {
             </button>
           </div>
         </div>
+        </div>
       </div>
 
       {/* Inventory Items */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+      <div className="analytics-card p-0">
+        <div className="px-6 pt-6 pb-4 border-b">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Products ({filteredItems.length})
           </h2>
         </div>
-        
-        <div className="space-y-4">
-          {filteredItems.map((item) => (
-            <InventoryItem
-              key={item.id}
-              item={item}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onView={handleView}
-            />
-          ))}
+        <div className="px-6 py-6">
+          <div className="space-y-4">
+            {filteredItems.map((item) => (
+              <InventoryItem
+                key={item.id}
+                item={item}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onView={handleView}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Recent Stock Movements */}
-        <div className="dashboard-card border border-gray-200 dark:border-gray-700  p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Stock Movements</h2>
-          <button className="text-blue-600 hover:text-green-700 text-sm font-medium">
-            View All
-          </button>
+      <div className="analytics-card p-0">
+        <div className="px-6 pt-6 pb-4 border-b">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Stock Movements</h2>
+            <button className="text-blue-600 hover:text-green-700 text-sm font-medium">
+              View All
+            </button>
+          </div>
         </div>
+        <div className="px-6 py-6">
         
-        <div className="space-y-2">
-          {stockMovements.slice(0, 5).map((movement) => (
-            <StockMovementItem key={movement.id} movement={movement} />
-          ))}
+          <div className="space-y-2">
+            {stockMovements.slice(0, 5).map((movement) => (
+              <StockMovementItem key={movement.id} movement={movement} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

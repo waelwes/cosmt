@@ -390,7 +390,7 @@ html body div[data-admin="true"] .admin-sidebar a:hover {
   background: #2e2e33 !important;
 }
 
-/* Analytics page border fixes */
+/* Analytics page border fixes - Remove vertical lines */
 [data-admin="true"] .analytics-card .border-t {
   border-top-color: var(--admin-border) !important;
 }
@@ -399,101 +399,53 @@ html body div[data-admin="true"] .admin-sidebar a:hover {
   border-top-color: var(--admin-border) !important;
 }
 
-/* Force admin pages to always use light theme borders */
+/* Force admin pages to always use light theme borders - Remove vertical lines */
 [data-admin="true"] .border-t,
 [data-admin="true"] .border-b,
-[data-admin="true"] .border-l,
-[data-admin="true"] .border-r,
 [data-admin="true"] .border {
   border-color: var(--admin-border) !important;
 }
 
-/* Override any dark mode border colors in admin pages */
+/* Remove all vertical lines from admin pages */
+[data-admin="true"] .border-r,
+[data-admin="true"] .border-l,
+[data-admin="true"] .border-x,
+[data-admin="true"] .border-r-2,
+[data-admin="true"] .border-l-2,
+[data-admin="true"] .border-r-4,
+[data-admin="true"] .border-l-4 {
+  border-right: none !important;
+  border-left: none !important;
+}
+
+/* Override any dark mode border colors in admin pages - Remove vertical lines */
 [data-admin="true"] .dark .border-t,
 [data-admin="true"] .dark .border-b,
-[data-admin="true"] .dark .border-l,
-[data-admin="true"] .dark .border-r,
 [data-admin="true"] .dark .border {
   border-color: var(--admin-border) !important;
 }
 
-/* Specific border-r fixes for admin pages */
-[data-admin="true"] .border-r {
-  border-right-color: var(--admin-border) !important;
+[data-admin="true"] .dark .border-r,
+[data-admin="true"] .dark .border-l,
+[data-admin="true"] .dark .border-x {
+  border-right: none !important;
+  border-left: none !important;
 }
 
-[data-admin="true"] .dark .border-r {
-  border-right-color: var(--admin-border) !important;
-}
-
-/* RTL border fixes for admin pages */
-[data-admin="true"][dir="rtl"] .border-r {
-  border-left-color: var(--admin-border) !important;
-}
-
-[data-admin="true"][dir="rtl"] .border-l {
-  border-right-color: var(--admin-border) !important;
-}
-
-/* Ultra specific border-r fixes for analytics page */
+/* Remove vertical lines from specific elements */
 [data-admin="true"] .analytics-card .border-r,
-[data-admin="true"] .analytics-card .border-r[style*="borderRightColor"] {
-  border-right-color: var(--admin-border) !important;
+[data-admin="true"] .analytics-card .border-l,
+[data-admin="true"] .stat-card .border-r,
+[data-admin="true"] .stat-card .border-l,
+[data-admin="true"] .dashboard-card .border-r,
+[data-admin="true"] .dashboard-card .border-l {
+  border-right: none !important;
+  border-left: none !important;
 }
 
-/* Force override for any dark mode or other overrides */
-[data-admin="true"] .dark .analytics-card .border-r,
-[data-admin="true"] .dark .analytics-card .border-r[style*="borderRightColor"] {
-  border-right-color: var(--admin-border) !important;
-}
-
-/* Nuclear option - maximum specificity */
-html body [data-admin="true"] .analytics-card .border-r,
-html body [data-admin="true"] .analytics-card .border-r[style*="borderRightColor"] {
-  border-right-color: var(--admin-border) !important;
-}
-
-/* Final override - target the exact structure in analytics page */
-[data-admin="true"] .analytics-card .flex .border-r {
-  border-right-color: var(--admin-border) !important;
-  border-right: 1px solid var(--admin-border) !important;
-}
-
-/* Force override with maximum specificity for analytics stats */
-html body div[data-admin="true"] .analytics-card .flex .border-r {
-  border-right-color: var(--admin-border) !important;
-  border-right: 1px solid var(--admin-border) !important;
-}
-
-/* Ultimate override - target every possible selector */
-[data-admin="true"] .analytics-card .flex > div.border-r,
-[data-admin="true"] .analytics-card .flex > div[class*="border-r"],
-[data-admin="true"] .analytics-card .flex > div[style*="borderRightColor"] {
-  border-right-color: var(--admin-border) !important;
-  border-right: 1px solid var(--admin-border) !important;
-}
-
-/* Force override for any remaining black borders */
-[data-admin="true"] .analytics-card .flex > div {
-  border-right-color: var(--admin-border) !important;
-}
-
-/* Nuclear option - override everything */
-html body div[data-admin="true"] .analytics-card .flex > div.border-r,
-html body div[data-admin="true"] .analytics-card .flex > div[class*="border-r"],
-html body div[data-admin="true"] .analytics-card .flex > div[style*="borderRightColor"] {
-  border-right-color: var(--admin-border) !important;
-  border-right: 1px solid var(--admin-border) !important;
-}
-
-/* Final nuclear option - target the exact structure with maximum specificity */
-html body div[data-admin="true"] .analytics-card .flex > div:not(:last-child) {
-  border-right-color: var(--admin-border) !important;
-  border-right: 1px solid var(--admin-border) !important;
-}
-
-/* Override any remaining black borders with maximum specificity */
-html body div[data-admin="true"] .analytics-card .flex > div[class*="border"] {
-  border-right-color: var(--admin-border) !important;
-  border-right: 1px solid var(--admin-border) !important;
+/* Remove vertical lines from grid items */
+[data-admin="true"] .grid > div:not(:last-child),
+[data-admin="true"] .flex > div:not(:last-child) {
+  border-right: none !important;
+  border-left: none !important;
 }
