@@ -109,11 +109,6 @@ export default function SignInPage() {
                 </div>
               </div>
 
-              {/* Instructions */}
-              <div className="bg-blue-50 p-3 rounded-md">
-                <p className="text-cosmt-xs text-blue-600 mb-1 font-medium">Create an account to get started</p>
-                <p className="text-cosmt-xs text-blue-600 font-medium">Use your email and password to sign in</p>
-              </div>
 
               {/* Submit Button */}
               <Button
