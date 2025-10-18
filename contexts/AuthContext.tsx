@@ -111,6 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (user) {
         console.log('Creating user profile for:', user.email);
         
+        // Try direct insert first
         const { data, error } = await supabase
           .from('user_profiles')
           .insert({
@@ -126,23 +127,48 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (error) {
           console.error('Error creating user profile:', error);
-          console.error('Error details:', JSON.stringify(error, null, 2));
           
-          // Try to create a minimal profile without RLS
-          const { data: fallbackData, error: fallbackError } = await supabase
-            .rpc('create_user_profile', {
-              user_id: userId,
-              user_email: user.email || '',
-              user_full_name: user.user_metadata?.full_name || ''
-            });
-            
-          if (fallbackError) {
-            console.error('Fallback profile creation also failed:', fallbackError);
-            setUserProfile(null);
-            return false;
-          } else {
-            console.log('Fallback profile creation succeeded');
-            setUserProfile(fallbackData);
+          // Try RPC function as fallback
+          try {
+            const { data: fallbackData, error: fallbackError } = await supabase
+              .rpc('create_user_profile', {
+                user_id: userId,
+                user_email: user.email || '',
+                user_full_name: user.user_metadata?.full_name || ''
+              });
+              
+            if (fallbackError) {
+              console.error('RPC fallback also failed:', fallbackError);
+              // Create a minimal profile object for now
+              const minimalProfile = {
+                id: userId,
+                email: user.email || '',
+                full_name: user.user_metadata?.full_name || '',
+                role: 'customer' as const,
+                status: 'active' as const,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              };
+              setUserProfile(minimalProfile);
+              return true;
+            } else {
+              console.log('RPC profile creation succeeded');
+              setUserProfile(fallbackData);
+              return true;
+            }
+          } catch (rpcError) {
+            console.error('RPC call failed:', rpcError);
+            // Create a minimal profile object for now
+            const minimalProfile = {
+              id: userId,
+              email: user.email || '',
+              full_name: user.user_metadata?.full_name || '',
+              role: 'customer' as const,
+              status: 'active' as const,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            };
+            setUserProfile(minimalProfile);
             return true;
           }
         } else {

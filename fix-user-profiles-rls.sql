@@ -1,6 +1,11 @@
 -- Fix user_profiles table RLS issues
 -- Run this in your Supabase SQL Editor
 
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Users can read own profile" ON user_profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON user_profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON user_profiles;
+
 -- Temporarily disable RLS for user_profiles table
 ALTER TABLE user_profiles DISABLE ROW LEVEL SECURITY;
 

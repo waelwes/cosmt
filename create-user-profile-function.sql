@@ -1,47 +1,54 @@
--- Create User Profile Function (bypasses RLS)
+-- Create user profile function for RLS bypass
 -- Run this in your Supabase SQL Editor
 
--- Create a function that can create user profiles without RLS restrictions
-CREATE OR REPLACE FUNCTION create_user_profile(
+-- Create the create_user_profile function
+CREATE OR REPLACE FUNCTION public.create_user_profile(
   user_id UUID,
   user_email TEXT,
-  user_full_name TEXT DEFAULT ''
+  user_full_name TEXT
 )
-RETURNS user_profiles
+RETURNS TABLE(
+  id UUID,
+  email TEXT,
+  full_name TEXT,
+  role TEXT,
+  status TEXT,
+  created_at TIMESTAMP WITH TIME ZONE,
+  updated_at TIMESTAMP WITH TIME ZONE
+)
 LANGUAGE plpgsql
-SECURITY DEFINER -- This allows the function to bypass RLS
+SECURITY DEFINER
 AS $$
-DECLARE
-  new_profile user_profiles;
 BEGIN
   -- Insert the user profile
-  INSERT INTO user_profiles (
+  INSERT INTO public.user_profiles (
     id,
     email,
     full_name,
-    avatar_url,
     role,
-    status,
-    created_at,
-    updated_at
+    status
   ) VALUES (
     user_id,
     user_email,
     user_full_name,
-    '',
     'customer',
-    'active',
-    NOW(),
-    NOW()
-  )
-  RETURNING * INTO new_profile;
+    'active'
+  );
   
-  RETURN new_profile;
+  -- Return the created profile
+  RETURN QUERY
+  SELECT 
+    up.id,
+    up.email,
+    up.full_name,
+    up.role,
+    up.status,
+    up.created_at,
+    up.updated_at
+  FROM public.user_profiles up
+  WHERE up.id = user_id;
 END;
 $$;
 
 -- Grant execute permission to authenticated users
-GRANT EXECUTE ON FUNCTION create_user_profile(UUID, TEXT, TEXT) TO authenticated;
-
--- Test the function
-SELECT 'User profile creation function created successfully' as status;
+GRANT EXECUTE ON FUNCTION public.create_user_profile TO authenticated;
