@@ -76,16 +76,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single();
 
       if (error) {
-        console.log('User profile not found, continuing without it...', error);
-        // For now, just continue without creating a profile
-        setUserProfile(null);
+        console.log('User profile not found, creating one...', error);
+        // Try to create a profile if it doesn't exist
+        const created = await createUserProfile(userId);
+        if (!created) {
+          setUserProfile(null);
+        }
       } else {
         console.log('User profile found:', data);
         setUserProfile(data);
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
-      setUserProfile(null);
+      // Try to create a profile as fallback
+      try {
+        const created = await createUserProfile(userId);
+        if (!created) {
+          setUserProfile(null);
+        }
+      } catch (createError) {
+        console.error('Error creating user profile:', createError);
+        setUserProfile(null);
+      }
     } finally {
       setLoading(false);
     }
