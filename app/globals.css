@@ -840,7 +840,7 @@ html body [data-admin="true"] .admin-sidebar a:active {
 
 .admin-sidebar {
   flex-shrink: 0;
-  width: 14rem; /* 224px */
+  width: 16rem; /* 256px */
   background: #000000 !important; /* Black background */
   will-change: transform;
   min-height: 100vh; /* Full height */
