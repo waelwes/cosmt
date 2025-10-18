@@ -9,7 +9,7 @@ import { MegaMenu } from './MegaMenu';
 import { CartSidebar } from '../ui/CartSidebar';
 import { useCart } from '../../contexts/CartContext';
 import { useSearch } from '../../contexts/SearchContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContextBypass';
 import { useWishlist } from '../../contexts/WishlistContext';
 import { useRTL } from '../../contexts/UnifiedLanguageContext';
 import { useLanguage } from '../../contexts/UnifiedLanguageContext';

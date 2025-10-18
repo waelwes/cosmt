@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { User, LogOut, Settings, Package, Heart, MapPin, Phone, Mail } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContextBypass';
 
 interface UserProfileProps {
   onClose: () => void;

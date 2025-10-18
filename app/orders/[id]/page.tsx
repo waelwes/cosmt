@@ -3,7 +3,7 @@
 import React from 'react';
 import { Package, MapPin, CreditCard, Truck, Calendar, ArrowLeft, Phone, Mail } from 'lucide-react';
 import { useOrder } from '@/hooks/useOrderManagement';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContextBypass';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';

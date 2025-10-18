@@ -9,7 +9,7 @@ import { Footer } from '../../components/layout/Footer';
 import { Button } from '../../components/ui/Button';
 import { useWishlist } from '../../contexts/WishlistContext';
 import { useCart } from '../../contexts/CartContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContextBypass';
 import { useRouter } from 'next/navigation';
 
 export default function WishlistPage() {

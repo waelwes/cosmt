@@ -7,7 +7,7 @@ import { AdminSidebar } from '../../components/admin/AdminSidebar';
 import { SimpleCurrencySelector } from '../../components/admin/SimpleCurrencySelector';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { useRTL } from '../../contexts/UnifiedLanguageContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContextBypass';
 import {
   Bell,
   Settings,

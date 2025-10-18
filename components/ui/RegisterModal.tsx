@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { X, Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { Button } from './Button';
 import { Input } from './Input';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContextBypass';
 
 interface RegisterModalProps {
   isOpen: boolean;
