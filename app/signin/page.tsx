@@ -8,14 +8,26 @@ import { PageLayout } from '../../components/layout/PageLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const { signIn, loading } = useAuth();
+  const { signIn, loading, user, isAdmin } = useAuth();
   const router = useRouter();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user && !loading) {
+      if (isAdmin) {
+        router.push('/admin');
+      } else {
+        router.push('/');
+      }
+    }
+  }, [user, loading, isAdmin, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +48,7 @@ export default function SignInPage() {
         setError(error.message || 'Invalid email or password');
       } else {
         console.log('Sign in successful, redirecting...');
-        router.push('/');
+        // The useEffect will handle the redirect based on user role
       }
     } catch (error) {
       console.error('Login error:', error);

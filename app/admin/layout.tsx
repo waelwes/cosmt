@@ -7,6 +7,7 @@ import { AdminSidebar } from '../../components/admin/AdminSidebar';
 import { SimpleCurrencySelector } from '../../components/admin/SimpleCurrencySelector';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { useRTL } from '../../contexts/UnifiedLanguageContext';
+import { useAuth } from '../../contexts/AuthContext';
 import {
   Bell,
   Settings,
@@ -26,12 +27,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  // Auth context
+  const { user, userProfile, loading, signOut, isAdmin } = useAuth();
   
   // RTL context
   const { language, direction, isRTL, isArabic } = useRTL();
@@ -41,27 +43,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     setMounted(true);
   }, []);
 
-  // Check if admin is logged in
+  // Check if user is admin and redirect if not
   useEffect(() => {
-    const checkAuth = () => {
-      const adminLoggedIn = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('adminLoggedIn='))
-        ?.split('=')[1];
-      
-      if (adminLoggedIn === 'true') {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
+    if (mounted && !loading) {
+      if (!user) {
+        router.push('/signin');
+      } else if (!isAdmin) {
         router.push('/signin');
       }
-      setIsLoading(false);
-    };
-
-    if (mounted) {
-      checkAuth();
     }
-  }, [mounted, router]);
+  }, [mounted, loading, user, isAdmin, router]);
 
   // Load dark mode preference
   useEffect(() => {
@@ -90,8 +81,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
   };
 
-  const handleLogout = () => {
-    document.cookie = 'adminLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  const handleLogout = async () => {
+    await signOut();
     router.push('/signin');
   };
 
@@ -112,7 +103,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     );
   }
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-500 text-lg">Checking authentication...</div>
@@ -120,7 +111,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!user || !isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-red-500 text-lg">Access denied. Redirecting...</div>
@@ -268,7 +259,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     className="flex items-center space-x-2 p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors admin-header-button"
                   >
                     <User className="w-5 h-5" />
-                    <span className="text-sm font-medium">Admin</span>
+                    <span className="text-sm font-medium">
+                      {userProfile?.full_name || user?.email || 'Admin'}
+                    </span>
                     <ChevronDown className="w-4 h-4" />
                   </button>
                   
