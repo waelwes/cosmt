@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { PageLayout } from '../../components/layout/PageLayout';
-import { ProductListingPage } from '../../components/pages/ProductListingPage';
+import { PageLayout } from '../../../components/layout/PageLayout';
+import { ProductListingPage } from '../../../components/pages/ProductListingPage';
 
 export default function MomBabyCarePage() {
   return (
