@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Plus, 
   Search, 
@@ -12,17 +12,39 @@ import {
   Package,
   Star,
   TrendingUp,
-  AlertTriangle
+  AlertTriangle,
+  X,
+  Save,
+  Check
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+
+interface Product {
+  id: number;
+  name: string;
+  brand: string;
+  category: string;
+  price: number;
+  originalPrice: number | null;
+  stock: number;
+  status: 'active' | 'inactive';
+  rating: number;
+  reviews: number;
+  image: string;
+  isBestSeller: boolean;
+  isOnSale: boolean;
+}
 
 export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('name');
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState<number | null>(null);
+  const [showViewModal, setShowViewModal] = useState<Product | null>(null);
 
-  // Mock data - in real app, this would come from API
-  const products = [
+  // State for products - in real app, this would come from API
+  const [products, setProducts] = useState<Product[]>([
     {
       id: 1,
       name: 'Hair Mask',
@@ -83,16 +105,70 @@ export default function ProductsPage() {
       isBestSeller: true,
       isOnSale: false
     }
-  ];
+  ]);
 
   const categories = ['all', 'Hair Care', 'Skin Care', 'Makeup', 'Fragrance'];
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.brand.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // CRUD Operations
+  const handleEdit = (product: Product) => {
+    setEditingProduct({ ...product });
+  };
+
+  const handleSave = () => {
+    if (editingProduct) {
+      setProducts(prev => 
+        prev.map(p => p.id === editingProduct.id ? editingProduct : p)
+      );
+      setEditingProduct(null);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditingProduct(null);
+  };
+
+  const handleDelete = (id: number) => {
+    setProducts(prev => prev.filter(p => p.id !== id));
+    setShowDeleteModal(null);
+  };
+
+  const handleView = (product: Product) => {
+    setShowViewModal(product);
+  };
+
+  const handleUpdateField = (field: keyof Product, value: any) => {
+    if (editingProduct) {
+      setEditingProduct(prev => prev ? { ...prev, [field]: value } : null);
+    }
+  };
+
+  // Memoized filtered and sorted products
+  const filteredProducts = useMemo(() => {
+    let filtered = products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.brand.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+
+    // Sort products
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'price':
+          return a.price - b.price;
+        case 'stock':
+          return a.stock - b.stock;
+        case 'rating':
+          return b.rating - a.rating;
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [products, searchTerm, selectedCategory, sortBy]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -326,17 +402,26 @@ export default function ProductsPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <button 
+                        onClick={() => handleView(product)}
+                        className="text-gray-400 hover:text-blue-600 transition-colors"
+                        title="View Product"
+                      >
                         <Eye className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <button 
+                        onClick={() => handleEdit(product)}
+                        className="text-gray-400 hover:text-green-600 transition-colors"
+                        title="Edit Product"
+                      >
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-400 hover:text-red-600">
+                      <button 
+                        onClick={() => setShowDeleteModal(product.id)}
+                        className="text-gray-400 hover:text-red-600 transition-colors"
+                        title="Delete Product"
+                      >
                         <Trash2 className="w-4 h-4" />
-                      </button>
-                      <button className="text-gray-400 hover:text-gray-600">
-                        <MoreVertical className="w-4 h-4" />
                       </button>
                     </div>
                   </td>
@@ -351,8 +436,8 @@ export default function ProductsPage() {
       <div className="analytics-card px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-700 dark:text-gray-300">
-            Showing <span className="font-medium">1</span> to <span className="font-medium">4</span> of{' '}
-            <span className="font-medium">4</span> results
+            Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredProducts.length}</span> of{' '}
+            <span className="font-medium">{products.length}</span> results
           </div>
           <div className="flex items-center space-x-2">
             <Button variant="secondary" size="sm">
@@ -367,6 +452,186 @@ export default function ProductsPage() {
           </div>
         </div>
       </div>
+
+      {/* Edit Product Modal */}
+      {editingProduct && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Edit Product</h3>
+              <button onClick={handleCancel} className="text-gray-400 hover:text-gray-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Product Name
+                </label>
+                <input
+                  type="text"
+                  value={editingProduct.name}
+                  onChange={(e) => handleUpdateField('name', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Brand
+                </label>
+                <input
+                  type="text"
+                  value={editingProduct.brand}
+                  onChange={(e) => handleUpdateField('brand', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Price
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={editingProduct.price}
+                  onChange={(e) => handleUpdateField('price', parseFloat(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Stock
+                </label>
+                <input
+                  type="number"
+                  value={editingProduct.stock}
+                  onChange={(e) => handleUpdateField('stock', parseInt(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Status
+                </label>
+                <select
+                  value={editingProduct.status}
+                  onChange={(e) => handleUpdateField('status', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-3 mt-6">
+              <Button variant="secondary" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleSave}>
+                <Save className="w-4 h-4 mr-2" />
+                Save Changes
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Product Modal */}
+      {showViewModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Product Details</h3>
+              <button onClick={() => setShowViewModal(null)} className="text-gray-400 hover:text-gray-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <img
+                  src={showViewModal.image}
+                  alt={showViewModal.name}
+                  className="w-20 h-20 rounded-lg object-cover"
+                />
+                <div>
+                  <h4 className="text-xl font-semibold">{showViewModal.name}</h4>
+                  <p className="text-gray-600 dark:text-gray-400">{showViewModal.brand}</p>
+                  <div className="flex items-center mt-1">
+                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                    <span className="ml-1 text-sm">{showViewModal.rating} ({showViewModal.reviews} reviews)</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.category}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Price</label>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">₺{showViewModal.price.toFixed(2)}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Stock</label>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.stock} units</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(showViewModal.status)}`}>
+                    {showViewModal.status}
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-end mt-6">
+              <Button variant="secondary" onClick={() => setShowViewModal(null)}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-red-600">Delete Product</h3>
+              <button onClick={() => setShowDeleteModal(null)} className="text-gray-400 hover:text-gray-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              Are you sure you want to delete this product? This action cannot be undone.
+            </p>
+            
+            <div className="flex justify-end space-x-3">
+              <Button variant="secondary" onClick={() => setShowDeleteModal(null)}>
+                Cancel
+              </Button>
+              <Button 
+                variant="primary" 
+                onClick={() => handleDelete(showDeleteModal)}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete Product
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
