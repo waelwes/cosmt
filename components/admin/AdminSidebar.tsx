@@ -235,7 +235,7 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
   ];
 
   const isActive = (href: string) => pathname === href;
-  const isParentActive = (children: any[]) => children.some(child => pathname === child.href);
+  const isParentActive = (children: any[]) => children && children.some(child => pathname === child.href);
 
   return (
     <>
@@ -296,28 +296,44 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
             <div key={item.title}>
               {/* Parent Item */}
               <div className="mb-1">
-                <button
-                  onClick={() => toggleTab(item.title)}
-                  className={`w-full flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} justify-between px-3 py-2 text-sm font-medium transition-colors duration-200 text-white`}
-                  style={{
-                    backgroundColor: isActive(item.href) || isParentActive(item.children) ? '#2e2e33' : 'transparent',
-                    borderRadius: '0.25rem'
-                  }}
-                >
-                  <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                    <item.icon className="w-5 h-5 me-3" />
-                    {item.title}
-                  </div>
-                  <ChevronDown 
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      expandedTabs.includes(item.title) ? 'rotate-180' : ''
-                    }`} 
-                  />
-                </button>
+                {item.children ? (
+                  <button
+                    onClick={() => toggleTab(item.title)}
+                    className={`w-full flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} justify-between px-3 py-2 text-sm font-medium transition-colors duration-200 text-white`}
+                    style={{
+                      backgroundColor: isActive(item.href) || isParentActive(item.children) ? '#2e2e33' : 'transparent',
+                      borderRadius: '0.25rem'
+                    }}
+                  >
+                    <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+                      <item.icon className="w-5 h-5 me-3" />
+                      {item.title}
+                    </div>
+                    <ChevronDown 
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        expandedTabs.includes(item.title) ? 'rotate-180' : ''
+                      }`} 
+                    />
+                  </button>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={`w-full flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} px-3 py-2 text-sm font-medium transition-colors duration-200 text-white`}
+                    style={{
+                      backgroundColor: isActive(item.href) ? '#2e2e33' : 'transparent',
+                      borderRadius: '0.25rem'
+                    }}
+                  >
+                    <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+                      <item.icon className="w-5 h-5 me-3" />
+                      {item.title}
+                    </div>
+                  </Link>
+                )}
               </div>
 
               {/* Children Items */}
-              {expandedTabs.includes(item.title) && (
+              {expandedTabs.includes(item.title) && item.children && (
                 <div className="ms-6 space-y-1">
                   {item.children.map((child, index) => (
                     <Link 

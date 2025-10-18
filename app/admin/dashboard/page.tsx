@@ -67,7 +67,7 @@ const RealTimeNotifications = memo(() => {
   const { isArabic } = useRTL();
   const [notifications, setNotifications] = useState([
     { id: 1, type: 'order', message: 'New order #12345 received', time: '2 min ago', priority: 'high' },
-    { id: 2, type: 'payment', message: 'Payment of ₺89.99 completed', time: '5 min ago', priority: 'medium' },
+    { id: 2, type: 'payment', message: 'Payment of $89.99 completed', time: '5 min ago', priority: 'medium' },
     { id: 3, type: 'inventory', message: 'Low stock alert: Hair Mask', time: '10 min ago', priority: 'high' },
     { id: 4, type: 'customer', message: 'New customer registered', time: '15 min ago', priority: 'low' }
   ]);
@@ -92,14 +92,14 @@ const RealTimeNotifications = memo(() => {
   };
 
   return (
-    <div className="analytics-card p-4">
-      <div className="flex items-center justify-between mb-4">
+    <div className="analytics-card p-0">
+      <div className="px-4 pt-4 pb-3 border-b flex items-center justify-between">
         <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Recent Activity</h3>
         <button className="text-gray-400 hover:text-gray-600">
           <Settings className="w-4 h-4" />
         </button>
       </div>
-      <div className="space-y-3">
+      <div className="p-4 space-y-3">
         {notifications.map((notification) => (
           <div key={notification.id} className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
             <div className={`p-1 rounded-full ${getPriorityColor(notification.priority)}`}>
@@ -128,8 +128,11 @@ const QuickActions = memo(() => {
   ];
 
   return (
-    <div className="analytics-card p-4">
-      <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-4">Quick Actions</h3>
+    <div className="analytics-card p-0">
+      <div className="px-4 pt-4 pb-3 border-b">
+        <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Quick Actions</h3>
+      </div>
+      <div className="p-4">
       <div className="grid grid-cols-2 gap-3">
         {actions.map((action, index) => (
           <a
@@ -143,6 +146,7 @@ const QuickActions = memo(() => {
             <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{action.label}</span>
           </a>
         ))}
+      </div>
       </div>
     </div>
   );
@@ -170,15 +174,17 @@ const DataStatus = memo(() => {
   };
 
   return (
-    <div className="analytics-card p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <div className={`w-2 h-2 rounded-full ${isUpdating ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`}></div>
-          <span className="text-sm text-gray-600 dark:text-gray-300">Data Status</span>
-        </div>
-        <div className="text-right">
-          <div className="text-xs text-gray-500 dark:text-gray-400">Last updated</div>
-          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{formatTime(lastUpdated)}</div>
+    <div className="analytics-card p-0">
+      <div className="px-4 pt-4 pb-3 border-b">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className={`w-2 h-2 rounded-full ${isUpdating ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`}></div>
+            <span className="text-sm text-gray-600 dark:text-gray-300">Data Status</span>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-gray-500 dark:text-gray-400">Last updated</div>
+            <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{formatTime(lastUpdated)}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -221,14 +227,15 @@ const LiveVisitorCount = memo(() => {
   }, []);
 
   return (
-    <div className="analytics-card p-4">
-      <div className="flex items-center justify-between mb-2">
+    <div className="analytics-card p-0">
+      <div className="px-4 pt-4 pb-3 border-b flex items-center justify-between">
         <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{getTranslation('liveVisitors')}</h3>
         <div className="flex items-center">
           <div className={`w-2 h-2 rounded-full mr-2 ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
           <span className="text-xs text-gray-500 dark:text-gray-400">Live</span>
         </div>
       </div>
+      <div className="p-4">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">{visitorCount}</p>
@@ -238,6 +245,7 @@ const LiveVisitorCount = memo(() => {
           <Eye className="w-4 h-4 text-gray-400" />
           <Globe className="w-4 h-4 text-gray-400" />
         </div>
+      </div>
       </div>
     </div>
   );
@@ -567,11 +575,12 @@ const ConversionFunnel = () => {
 
 // Memoized components for better performance
 const StatCard = memo(({ stat, index }: { stat: any; index: number }) => (
-  <div className="analytics-card p-4">
-    <div className="flex items-center justify-between mb-2">
+  <div className="analytics-card p-0">
+    <div className="px-4 pt-4 pb-3 border-b flex items-center justify-between">
       <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{stat.title}</h3>
       {stat.icon}
     </div>
+    <div className="p-4">
     <div>
       <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
       <div className="flex items-center text-xs mt-1 text-gray-500 dark:text-gray-400">
@@ -583,6 +592,7 @@ const StatCard = memo(({ stat, index }: { stat: any; index: number }) => (
           {stat.change}
         </span>
       </div>
+    </div>
     </div>
   </div>
 ));
@@ -1281,7 +1291,7 @@ function AdminDashboard() {
         {/* Right Side - Top Pages and Live Visitors stacked */}
         <div className="lg:col-span-1 space-y-6">
           {/* Top Pages */}
-          <div className="analytics-card">
+          <div className="analytics-card p-0">
           {/* Card Header with full-width border line */}
           <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('topPages')}</h3>
@@ -1326,7 +1336,7 @@ function AdminDashboard() {
           </div>
 
           {/* Live Visitors */}
-          <div className="analytics-card">
+          <div className="analytics-card p-0">
           {/* Card Header with full-width border line */}
           <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{getTranslation('liveVisitors')}</h3>

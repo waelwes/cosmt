@@ -450,7 +450,7 @@ export default function OrdersPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">₺{order.total.toFixed(2)}</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">${order.total.toFixed(2)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
@@ -658,7 +658,7 @@ export default function OrdersPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Amount</label>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">₺{showViewModal.total.toFixed(2)}</p>
+                  <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">${showViewModal.total.toFixed(2)}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Items</label>

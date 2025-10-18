@@ -30,7 +30,7 @@ export default function GeneralSettingsPage() {
     address: 'İstanbul, Turkey',
     
     // Currency & Language
-    currency: 'TRY',
+    currency: 'USD',
     language: 'tr',
     timezone: 'Europe/Istanbul',
     
@@ -164,9 +164,9 @@ export default function GeneralSettingsPage() {
             onChange={(e) => handleInputChange('currency', e.target.value)}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           >
-            <option value="TRY">Turkish Lira (₺)</option>
             <option value="USD">US Dollar ($)</option>
             <option value="EUR">Euro (€)</option>
+            <option value="TRY">Turkish Lira (₺)</option>
           </select>
         </div>
         <div>
@@ -244,7 +244,7 @@ export default function GeneralSettingsPage() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Free Shipping Threshold (₺)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Free Shipping Threshold ($)</label>
           <input
             type="number"
             value={settings.freeShippingThreshold}
@@ -253,7 +253,7 @@ export default function GeneralSettingsPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Standard Shipping Cost (₺)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Standard Shipping Cost ($)</label>
           <input
             type="number"
             value={settings.shippingCost}
@@ -271,8 +271,8 @@ export default function GeneralSettingsPage() {
           <div className="ml-3">
             <h3 className="text-sm font-medium text-blue-800">Shipping Information</h3>
             <div className="mt-2 text-sm text-blue-700">
-              <p>Orders over ₺{settings.freeShippingThreshold} qualify for free shipping.</p>
-              <p className="mt-1">Standard shipping cost is ₺{settings.shippingCost} for orders below the threshold.</p>
+              <p>Orders over ${settings.freeShippingThreshold} qualify for free shipping.</p>
+              <p className="mt-1">Standard shipping cost is ${settings.shippingCost} for orders below the threshold.</p>
             </div>
           </div>
         </div>

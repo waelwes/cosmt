@@ -407,7 +407,7 @@ export default function CustomersPage() {
                     <div className="text-sm text-gray-500 dark:text-gray-400">orders</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">₺{customer.totalSpent.toFixed(2)}</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">${customer.totalSpent.toFixed(2)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(customer.status)}`}>
@@ -637,7 +637,7 @@ export default function CustomersPage() {
                   <div className="text-sm text-gray-500 dark:text-gray-400">Total Orders</div>
                 </div>
                 <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">₺{showViewModal.totalSpent.toFixed(2)}</div>
+                  <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">${showViewModal.totalSpent.toFixed(2)}</div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">Total Spent</div>
                 </div>
                 <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">

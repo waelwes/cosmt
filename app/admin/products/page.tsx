@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { 
   Plus, 
   Search, 
@@ -44,7 +45,6 @@ export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('name');
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState<number | null>(null);
   const [showViewModal, setShowViewModal] = useState<Product | null>(null);
 
@@ -62,12 +62,16 @@ export default function ProductsPage() {
       refetch(); // Refresh data after successful operation
       setEditingProduct(null);
       setShowDeleteModal(null);
+      setFormErrors({});
+      setIsSubmitting(false);
     },
     (error) => {
       console.error('CRUD operation failed:', error);
+      setIsSubmitting(false);
       // You could add a toast notification here
     }
   );
+
 
   // Mock data for reference (will be removed)
   const mockProducts: Product[] = [
@@ -137,26 +141,10 @@ export default function ProductsPage() {
 
   // CRUD Operations using API
   const handleEdit = (product: Product) => {
-    setEditingProduct({ ...product });
+    // Navigate to edit page
+    window.location.href = `/admin/products/edit/${product.id}`;
   };
 
-  const handleSave = async () => {
-    if (editingProduct) {
-      try {
-        if (editingProduct.id) {
-          await update(editingProduct.id, editingProduct);
-        } else {
-          await create(editingProduct);
-        }
-      } catch (error) {
-        console.error('Failed to save product:', error);
-      }
-    }
-  };
-
-  const handleCancel = () => {
-    setEditingProduct(null);
-  };
 
   const handleDelete = async (id: number) => {
     try {
@@ -172,12 +160,26 @@ export default function ProductsPage() {
 
   const handleUpdateField = (field: keyof Product, value: any) => {
     if (editingProduct) {
-      setEditingProduct(prev => prev ? { ...prev, [field]: value } : null);
+      const updatedProduct = { ...editingProduct, [field]: value };
+      setEditingProduct(updatedProduct);
+      
+      // Clear error for this field when user starts typing
+      if (formErrors[field]) {
+        setFormErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[field];
+          return newErrors;
+        });
+      }
     }
   };
 
   // Memoized filtered and sorted products
   const filteredProducts = useMemo(() => {
+    if (!products || !Array.isArray(products)) {
+      return [];
+    }
+    
     let filtered = products.filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            product.brand.toLowerCase().includes(searchTerm.toLowerCase());
@@ -222,8 +224,8 @@ export default function ProductsPage() {
   };
 
   // Calculate stats for the header
-  const lowStockCount = products.filter(product => product.stock < 10).length;
-  const topRatedCount = products.filter(product => product.rating >= 4.5).length;
+  const lowStockCount = products && Array.isArray(products) ? products.filter(product => product.stock < 10).length : 0;
+  const topRatedCount = products && Array.isArray(products) ? products.filter(product => product.rating >= 4.5).length : 0;
 
   // Loading state
   if (loading) {
@@ -279,10 +281,15 @@ export default function ProductsPage() {
               <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
-            <Button variant="primary" className="flex items-center">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Product
-            </Button>
+            <Link href="/admin/products/add">
+              <Button 
+                variant="primary" 
+                className="flex items-center"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Product
+              </Button>
+            </Link>
           </div>
         </div>
         
@@ -297,7 +304,7 @@ export default function ProductsPage() {
               <Package className="w-5 h-5 text-gray-400" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{products.length}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{products && Array.isArray(products) ? products.length : 0}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">Active products</p>
             </div>
           </div>
@@ -421,7 +428,7 @@ export default function ProductsPage() {
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-12 w-12">
                         <img
-                          className="h-12 w-12 rounded-lg object-cover"
+                          className="h-12 w-12 rounded object-cover"
                           src={product.image}
                           alt={product.name}
                         />
@@ -446,10 +453,10 @@ export default function ProductsPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 dark:text-gray-100">₺{product.price.toFixed(2)}</div>
+                    <div className="text-sm text-gray-900 dark:text-gray-100">${product.price.toFixed(2)}</div>
                     {product.originalPrice && (
                       <div className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                        ₺{product.originalPrice.toFixed(2)}
+                        ${product.originalPrice.toFixed(2)}
                       </div>
                     )}
                   </td>
@@ -513,7 +520,7 @@ export default function ProductsPage() {
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-700 dark:text-gray-300">
             Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredProducts.length}</span> of{' '}
-            <span className="font-medium">{products.length}</span> results
+            <span className="font-medium">{products && Array.isArray(products) ? products.length : 0}</span> results
           </div>
           <div className="flex items-center space-x-2">
             <Button variant="secondary" size="sm">
@@ -529,112 +536,30 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* Edit Product Modal */}
-      {editingProduct && (
-        <div className="modal-overlay" onClick={handleCancel}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Edit Product</h3>
-              <button onClick={handleCancel} className="text-gray-400 hover:text-gray-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Product Name
-                </label>
-                <input
-                  type="text"
-                  value={editingProduct.name}
-                  onChange={(e) => handleUpdateField('name', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Brand
-                </label>
-                <input
-                  type="text"
-                  value={editingProduct.brand}
-                  onChange={(e) => handleUpdateField('brand', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Price
-                </label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={editingProduct.price}
-                  onChange={(e) => handleUpdateField('price', parseFloat(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Stock
-                </label>
-                <input
-                  type="number"
-                  value={editingProduct.stock}
-                  onChange={(e) => handleUpdateField('stock', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Status
-                </label>
-                <select
-                  value={editingProduct.status}
-                  onChange={(e) => handleUpdateField('status', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </div>
-            </div>
-            
-            <div className="flex justify-end space-x-3 mt-6">
-              <Button variant="secondary" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleSave}>
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* View Product Modal */}
       {showViewModal && (
-        <div className="modal-overlay" onClick={handleCancel}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Product Details</h3>
-              <button onClick={() => setShowViewModal(null)} className="text-gray-400 hover:text-gray-600">
-                <X className="w-5 h-5" />
-              </button>
+        <div className="modal-overlay" onClick={() => setShowViewModal(null)}>
+          <div className="bg-white rounded w-full max-w-lg">
+            {/* Header with title and horizontal line */}
+            <div className="px-6 pt-6 pb-4 border-b" style={{ borderColor: '#eef2f6' }}>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Product Details</h3>
+                <button onClick={() => setShowViewModal(null)} className="text-gray-400 hover:text-gray-600">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
+            
+            {/* Content */}
+            <div className="p-6">
             
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <img
                   src={showViewModal.image}
                   alt={showViewModal.name}
-                  className="w-20 h-20 rounded-lg object-cover"
+                  className="w-20 h-20 rounded object-cover"
                 />
                 <div>
                   <h4 className="text-xl font-semibold">{showViewModal.name}</h4>
@@ -653,7 +578,7 @@ export default function ProductsPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Price</label>
-                  <p className="text-sm text-gray-900 dark:text-gray-100">₺{showViewModal.price.toFixed(2)}</p>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">${showViewModal.price.toFixed(2)}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Stock</label>
@@ -673,20 +598,27 @@ export default function ProductsPage() {
                 Close
               </Button>
             </div>
+            </div>
           </div>
         </div>
       )}
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="modal-overlay" onClick={handleCancel}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-red-600">Delete Product</h3>
-              <button onClick={() => setShowDeleteModal(null)} className="text-gray-400 hover:text-gray-600">
-                <X className="w-5 h-5" />
-              </button>
+        <div className="modal-overlay" onClick={() => setShowDeleteModal(null)}>
+          <div className="bg-white rounded w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+            {/* Header with title and horizontal line */}
+            <div className="px-6 pt-6 pb-4 border-b" style={{ borderColor: '#eef2f6' }}>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-red-600">Delete Product</h3>
+                <button onClick={() => setShowDeleteModal(null)} className="text-gray-400 hover:text-gray-600">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
+            
+            {/* Content */}
+            <div className="p-6">
             
             <p className="text-gray-700 dark:text-gray-300 mb-6">
               Are you sure you want to delete this product? This action cannot be undone.
@@ -704,6 +636,7 @@ export default function ProductsPage() {
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete Product
               </Button>
+            </div>
             </div>
           </div>
         </div>

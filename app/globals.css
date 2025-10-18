@@ -2757,6 +2757,59 @@ html[dir="rtl"] .admin-header {
   text-align: right !important;
 }
 
+/* Remove all dividers and borders from admin pages */
+[data-admin="true"] * {
+  border: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+[data-admin="true"] *::after,
+[data-admin="true"] *::before {
+  content: none !important;
+  border: none !important;
+  display: none !important;
+  visibility: hidden !important;
+}
+
+[data-admin="true"] h1,
+[data-admin="true"] h2,
+[data-admin="true"] h3,
+[data-admin="true"] h4,
+[data-admin="true"] h5,
+[data-admin="true"] h6,
+[data-admin="true"] p,
+[data-admin="true"] div,
+[data-admin="true"] span,
+[data-admin="true"] strong,
+[data-admin="true"] b,
+[data-admin="true"] em,
+[data-admin="true"] i {
+  border: none !important;
+  border-right: none !important;
+  border-left: none !important;
+}
+
+[data-admin="true"] h1::after,
+[data-admin="true"] h2::after,
+[data-admin="true"] h3::after,
+[data-admin="true"] h4::after,
+[data-admin="true"] h5::after,
+[data-admin="true"] h6::after,
+[data-admin="true"] p::after,
+[data-admin="true"] div::after,
+[data-admin="true"] span::after,
+[data-admin="true"] strong::after,
+[data-admin="true"] b::after,
+[data-admin="true"] em::after,
+[data-admin="true"] i::after {
+  content: none !important;
+  display: none !important;
+  visibility: hidden !important;
+}
+
 /* RTL Grid */
 [dir="rtl"] .grid {
   direction: rtl !important;
