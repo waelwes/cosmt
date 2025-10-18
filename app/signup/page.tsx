@@ -4,8 +4,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
-import { Header } from '../../components/layout/Header';
-import { Footer } from '../../components/layout/Footer';
+import { PageLayout } from '../../components/layout/PageLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -22,7 +21,7 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
-  const { register, isLoading } = useAuth();
+  const { signUp, loading } = useAuth();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,27 +51,28 @@ export default function SignUpPage() {
       return;
     }
 
-    const success = await register({
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      phone: formData.phone,
-      password: formData.password
-    });
-
-    if (success) {
-      router.push('/');
-    } else {
+    try {
+      const { error } = await signUp(
+        formData.email, 
+        formData.password, 
+        `${formData.firstName} ${formData.lastName}`
+      );
+      
+      if (error) {
+        setError(error.message || 'Registration failed. Please try again.');
+      } else {
+        router.push('/');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
       setError('Registration failed. Please try again.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <main>
-        <div className="cosmt-container py-8">
-        <div className="max-w-sm mx-auto">
+    <PageLayout>
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-sm mx-auto px-4">
 
           {/* Sign Up Form */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -224,9 +224,9 @@ export default function SignUpPage() {
                 type="submit"
                 variant="primary"
                 className="w-full"
-                disabled={isLoading}
+                disabled={loading}
               >
-                {isLoading ? 'Creating Account...' : 'Create Account'}
+                {loading ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>
 
@@ -244,9 +244,7 @@ export default function SignUpPage() {
             </div>
           </div>
         </div>
-        </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </PageLayout>
   );
 }

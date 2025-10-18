@@ -1,157 +1,239 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { User, Session, AuthError } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 
-export interface User {
+interface UserProfile {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  full_name?: string;
   phone?: string;
-  address?: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  };
-  createdAt: string;
+  avatar_url?: string;
+  role: 'customer' | 'admin' | 'moderator';
+  status: 'active' | 'inactive' | 'suspended';
+  created_at: string;
+  updated_at: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (userData: RegisterData) => Promise<boolean>;
-  logout: () => void;
-  updateProfile: (userData: Partial<User>) => Promise<boolean>;
-}
-
-interface RegisterData {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
+  userProfile: UserProfile | null;
+  session: Session | null;
+  loading: boolean;
+  signUp: (email: string, password: string, fullName?: string) => Promise<{ error: AuthError | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signOut: () => Promise<{ error: AuthError | null }>;
+  updateProfile: (updates: Partial<UserProfile>) => Promise<{ error: AuthError | null }>;
+  isAdmin: boolean;
+  isModerator: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Check for existing session on mount
   useEffect(() => {
-    const checkAuth = () => {
-      const savedUser = localStorage.getItem('cosmat_user');
-      if (savedUser) {
-        try {
-          setUser(JSON.parse(savedUser));
-        } catch (error) {
-          localStorage.removeItem('cosmat_user');
-        }
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setLoading(false);
       }
-      setIsLoading(false);
-    };
+    });
 
-    checkAuth();
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        await fetchUserProfile(session.user.id);
+      } else {
+        setUserProfile(null);
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Mock authentication - in real app, this would be an API call
-    if (email === 'demo@cosmat.com' && password === 'password') {
-      const userData: User = {
-        id: '1',
-        email: 'demo@cosmat.com',
-        firstName: 'Demo',
-        lastName: 'User',
-        phone: '+1 (555) 123-4567',
-        address: {
-          street: '123 Beauty Street',
-          city: 'New York',
-          state: 'NY',
-          zipCode: '10001',
-          country: 'United States'
-        },
-        createdAt: new Date().toISOString()
-      };
-      
-      setUser(userData);
-      localStorage.setItem('cosmat_user', JSON.stringify(userData));
-      setIsLoading(false);
-      return true;
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.log('User profile not found, continuing without it...', error);
+        // For now, just continue without creating a profile
+        setUserProfile(null);
+      } else {
+        console.log('User profile found:', data);
+        setUserProfile(data);
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      setUserProfile(null);
+    } finally {
+      setLoading(false);
     }
-    
-    setIsLoading(false);
-    return false;
   };
 
-  const register = async (userData: RegisterData): Promise<boolean> => {
-    setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Mock registration - in real app, this would be an API call
-    const newUser: User = {
-      id: Date.now().toString(),
-      email: userData.email,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      phone: userData.phone,
-      createdAt: new Date().toISOString()
-    };
-    
-    setUser(newUser);
-    localStorage.setItem('cosmat_user', JSON.stringify(newUser));
-    setIsLoading(false);
-    return true;
+  const createUserProfile = async (userId: string): Promise<boolean> => {
+    try {
+      // Get user data from auth
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        console.log('Creating user profile for:', user.email);
+        
+        const { data, error } = await supabase
+          .from('user_profiles')
+          .insert({
+            id: userId,
+            email: user.email || '',
+            full_name: user.user_metadata?.full_name || '',
+            avatar_url: user.user_metadata?.avatar_url || '',
+            role: 'customer',
+            status: 'active'
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error('Error creating user profile:', error);
+          console.error('Error details:', JSON.stringify(error, null, 2));
+          
+          // Try to create a minimal profile without RLS
+          const { data: fallbackData, error: fallbackError } = await supabase
+            .rpc('create_user_profile', {
+              user_id: userId,
+              user_email: user.email || '',
+              user_full_name: user.user_metadata?.full_name || ''
+            });
+            
+          if (fallbackError) {
+            console.error('Fallback profile creation also failed:', fallbackError);
+            setUserProfile(null);
+            return false;
+          } else {
+            console.log('Fallback profile creation succeeded');
+            setUserProfile(fallbackData);
+            return true;
+          }
+        } else {
+          console.log('User profile created successfully:', data);
+          setUserProfile(data);
+          return true;
+        }
+      }
+      return false;
+    } catch (error) {
+      console.error('Error creating user profile:', error);
+      setUserProfile(null);
+      return false;
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('cosmat_user');
+  const signUp = async (email: string, password: string, fullName?: string) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName || '',
+          },
+        },
+      });
+
+      return { error };
+    } catch (error) {
+      return { error: error as AuthError };
+    }
   };
 
-  const updateProfile = async (userData: Partial<User>): Promise<boolean> => {
-    if (!user) return false;
-    
-    setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const updatedUser = { ...user, ...userData };
-    setUser(updatedUser);
-    localStorage.setItem('cosmat_user', JSON.stringify(updatedUser));
-    setIsLoading(false);
-    return true;
+  const signIn = async (email: string, password: string) => {
+    try {
+      console.log('AuthContext: Attempting sign in for:', email);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      console.log('AuthContext: Sign in response:', { data, error });
+      return { error };
+    } catch (error) {
+      console.error('AuthContext: Sign in exception:', error);
+      return { error: error as AuthError };
+    }
   };
 
-  return (
-    <AuthContext.Provider value={{
-      user,
-      isLoading,
-      login,
-      register,
-      logout,
-      updateProfile
-    }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  const signOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      return { error };
+    } catch (error) {
+      return { error: error as AuthError };
+    }
+  };
 
-export const useAuth = () => {
+  const updateProfile = async (updates: Partial<UserProfile>) => {
+    if (!user) {
+      return { error: { message: 'No user logged in' } as AuthError };
+    }
+
+    try {
+      const { error } = await supabase
+        .from('user_profiles')
+        .update(updates)
+        .eq('id', user.id);
+
+      if (!error) {
+        setUserProfile(prev => prev ? { ...prev, ...updates } : null);
+      }
+
+      return { error: error as AuthError | null };
+    } catch (error) {
+      return { error: error as AuthError };
+    }
+  };
+
+  const isAdmin = userProfile?.role === 'admin';
+  const isModerator = userProfile?.role === 'moderator' || isAdmin;
+
+  const value = {
+    user,
+    userProfile,
+    session,
+    loading,
+    signUp,
+    signIn,
+    signOut,
+    updateProfile,
+    isAdmin,
+    isModerator,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};
+}

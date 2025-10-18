@@ -4,8 +4,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
-import { Header } from '../../components/layout/Header';
-import { Footer } from '../../components/layout/Footer';
+import { PageLayout } from '../../components/layout/PageLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -15,7 +14,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const { login, isLoading } = useAuth();
+  const { signIn, loading } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,31 +26,30 @@ export default function SignInPage() {
       return;
     }
 
-    // Check for admin credentials
-    if (email === 'admin@cosmat.com' && password === 'admin123') {
-      // Set admin session cookie
-      document.cookie = 'adminLoggedIn=true; path=/; max-age=86400'; // 24 hours
-      router.push('/admin/dashboard');
-      return;
-    }
-
-    const success = await login(email, password);
-    if (success) {
-      router.push('/');
-    } else {
-      setError('Invalid email or password');
+    try {
+      console.log('Attempting to sign in with:', email);
+      const { error } = await signIn(email, password);
+      console.log('Sign in result:', { error });
+      
+      if (error) {
+        console.error('Sign in error:', error);
+        setError(error.message || 'Invalid email or password');
+      } else {
+        console.log('Sign in successful, redirecting...');
+        router.push('/');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Login failed. Please try again.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <main>
-        <div className="cosmt-container py-8">
-        <div className="max-w-sm mx-auto">
-
+    <PageLayout>
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-sm mx-auto px-4">
           {/* Sign In Form */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             {/* Header */}
             <div className="text-center mb-6">
               <h1 className="text-cosmt-2xl font-bold text-gray-900 mb-2">Welcome Back</h1>
@@ -111,10 +109,10 @@ export default function SignInPage() {
                 </div>
               </div>
 
-              {/* Demo Credentials */}
-              <div className="bg-gray-50 p-3 rounded-md">
-                <p className="text-cosmt-xs text-gray-600 mb-1 font-medium">Demo: demo@cosmat.com / password</p>
-                <p className="text-cosmt-xs text-gray-600 font-medium">Admin: admin@cosmat.com / admin123</p>
+              {/* Instructions */}
+              <div className="bg-blue-50 p-3 rounded-md">
+                <p className="text-cosmt-xs text-blue-600 mb-1 font-medium">Create an account to get started</p>
+                <p className="text-cosmt-xs text-blue-600 font-medium">Use your email and password to sign in</p>
               </div>
 
               {/* Submit Button */}
@@ -122,9 +120,9 @@ export default function SignInPage() {
                 type="submit"
                 variant="primary"
                 className="w-full"
-                disabled={isLoading}
+                disabled={loading}
               >
-                {isLoading ? 'Signing In...' : 'Sign In'}
+                {loading ? 'Signing In...' : 'Sign In'}
               </Button>
 
               {/* Forgot Password */}
@@ -152,9 +150,7 @@ export default function SignInPage() {
             </div>
           </div>
         </div>
-        </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </PageLayout>
   );
 }

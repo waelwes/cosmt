@@ -127,7 +127,7 @@ function CheckoutSuccessContent() {
             </Link>
             <Link href="/orders" className="flex-1">
               <Button variant="outline" className="w-full">
-                Siparişlerimi Görüntüle
+                View My Orders
               </Button>
             </Link>
           </div>

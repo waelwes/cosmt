@@ -15,9 +15,11 @@ import {
   AlertTriangle,
   X,
   Save,
-  Check
+  Check,
+  RefreshCw
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { useProducts, useCrudOperations } from '@/hooks/useAdminData';
 
 interface Product {
   id: number;
@@ -33,6 +35,9 @@ interface Product {
   image: string;
   isBestSeller: boolean;
   isOnSale: boolean;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export default function ProductsPage() {
@@ -43,8 +48,29 @@ export default function ProductsPage() {
   const [showDeleteModal, setShowDeleteModal] = useState<number | null>(null);
   const [showViewModal, setShowViewModal] = useState<Product | null>(null);
 
-  // State for products - in real app, this would come from API
-  const [products, setProducts] = useState<Product[]>([
+  // Use API hooks instead of mock data
+  const { data: products = [], loading, error, refetch } = useProducts({
+    search: searchTerm,
+    category: selectedCategory,
+    sortBy,
+    sortOrder: 'asc'
+  });
+
+  const { create, update, remove, loading: crudLoading } = useCrudOperations<Product>(
+    '/api/admin/products',
+    () => {
+      refetch(); // Refresh data after successful operation
+      setEditingProduct(null);
+      setShowDeleteModal(null);
+    },
+    (error) => {
+      console.error('CRUD operation failed:', error);
+      // You could add a toast notification here
+    }
+  );
+
+  // Mock data for reference (will be removed)
+  const mockProducts: Product[] = [
     {
       id: 1,
       name: 'Hair Mask',
@@ -105,21 +131,26 @@ export default function ProductsPage() {
       isBestSeller: true,
       isOnSale: false
     }
-  ]);
+  ];
 
   const categories = ['all', 'Hair Care', 'Skin Care', 'Makeup', 'Fragrance'];
 
-  // CRUD Operations
+  // CRUD Operations using API
   const handleEdit = (product: Product) => {
     setEditingProduct({ ...product });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (editingProduct) {
-      setProducts(prev => 
-        prev.map(p => p.id === editingProduct.id ? editingProduct : p)
-      );
-      setEditingProduct(null);
+      try {
+        if (editingProduct.id) {
+          await update(editingProduct.id, editingProduct);
+        } else {
+          await create(editingProduct);
+        }
+      } catch (error) {
+        console.error('Failed to save product:', error);
+      }
     }
   };
 
@@ -127,9 +158,12 @@ export default function ProductsPage() {
     setEditingProduct(null);
   };
 
-  const handleDelete = (id: number) => {
-    setProducts(prev => prev.filter(p => p.id !== id));
-    setShowDeleteModal(null);
+  const handleDelete = async (id: number) => {
+    try {
+      await remove(id);
+    } catch (error) {
+      console.error('Failed to delete product:', error);
+    }
   };
 
   const handleView = (product: Product) => {
@@ -191,6 +225,39 @@ export default function ProductsPage() {
   const lowStockCount = products.filter(product => product.stock < 10).length;
   const topRatedCount = products.filter(product => product.rating >= 4.5).length;
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-center h-64">
+          <div className="flex items-center space-x-2">
+            <RefreshCw className="w-5 h-5 animate-spin" />
+            <span>Loading products...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Error Loading Products</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+            <Button onClick={refetch} variant="primary">
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Try Again
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {/* Combined Products Card */}
@@ -203,6 +270,15 @@ export default function ProductsPage() {
           
           {/* Action Buttons */}
           <div className="flex items-center space-x-3">
+            <Button 
+              onClick={refetch} 
+              variant="secondary" 
+              className="flex items-center"
+              disabled={loading}
+            >
+              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
             <Button variant="primary" className="flex items-center">
               <Plus className="w-4 h-4 mr-2" />
               Add Product
@@ -455,8 +531,8 @@ export default function ProductsPage() {
 
       {/* Edit Product Modal */}
       {editingProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+        <div className="modal-overlay" onClick={handleCancel}>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Edit Product</h3>
               <button onClick={handleCancel} className="text-gray-400 hover:text-gray-600">
@@ -544,7 +620,7 @@ export default function ProductsPage() {
 
       {/* View Product Modal */}
       {showViewModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="modal-overlay" onClick={handleCancel}>
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Product Details</h3>
@@ -603,8 +679,8 @@ export default function ProductsPage() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+        <div className="modal-overlay" onClick={handleCancel}>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-red-600">Delete Product</h3>
               <button onClick={() => setShowDeleteModal(null)} className="text-gray-400 hover:text-gray-600">

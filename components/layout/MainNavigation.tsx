@@ -16,6 +16,7 @@ import { useLanguage } from '../../contexts/UnifiedLanguageContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { LanguageSwitcher } from '../ui/LanguageSwitcher';
+import { UserProfile } from '../auth/UserProfile';
 
 interface MainNavigationProps {
   isMobileMenuOpen: boolean;
@@ -32,7 +33,7 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
 }) => {
   const { getTotalItems, isCartOpen, setIsCartOpen } = useCart();
   const { setSearchQuery } = useSearch();
-  const { user, logout } = useAuth();
+  const { user, userProfile, signOut } = useAuth();
   const { getWishlistCount } = useWishlist();
   const { isRTL } = useRTL();
   const { t } = useLanguage();
@@ -40,6 +41,7 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [showUserProfile, setShowUserProfile] = useState(false);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -191,17 +193,22 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
                     {user ? (
                       <>
                         <div className="px-4 py-2 border-b border-gray-200">
-                          <p className="text-cosmt-sm font-medium text-gray-900">{user.firstName} {user.lastName}</p>
-                          <p className="text-cosmt-xs text-gray-600">{user.email}</p>
+                          <p className="text-cosmt-sm font-medium text-gray-900">{userProfile?.full_name || user.email || 'User'}</p>
+                          <p className="text-cosmt-xs text-gray-600">{userProfile?.email || user.email}</p>
+                          {userProfile?.role === 'admin' && (
+                            <span className="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full mt-1">
+                              Admin
+                            </span>
+                          )}
                         </div>
                         <button
                           onClick={() => {
-                            router.push('/account');
+                            setShowUserProfile(true);
                             setIsUserMenuOpen(false);
                           }}
                           className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
                         >
-                          My Account
+                          My Profile
                         </button>
                         <button
                           onClick={() => {
@@ -212,9 +219,20 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
                         >
                           Order History
                         </button>
+                        {(userProfile?.role === 'admin' || user.email === 'admin@cosmat.com') && (
+                          <button
+                            onClick={() => {
+                              router.push('/admin');
+                              setIsUserMenuOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
+                          >
+                            Admin Dashboard
+                          </button>
+                        )}
                         <button
                           onClick={() => {
-                            logout();
+                            signOut();
                             setIsUserMenuOpen(false);
                           }}
                           className="w-full text-left px-4 py-2 text-cosmt-sm text-red-600 hover:bg-red-50 flex items-center"
@@ -378,6 +396,13 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
         onClose={() => setIsCartOpen(false)} 
       />
 
+
+      {/* User Profile Modal */}
+      {showUserProfile && (
+        <UserProfile
+          onClose={() => setShowUserProfile(false)}
+        />
+      )}
 
       {/* Close dropdown when clicking outside */}
       {isUserMenuOpen && (

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Search, 
   Filter, 
@@ -13,16 +13,36 @@ import {
   CheckCircle,
   Clock,
   XCircle,
-  AlertTriangle
+  AlertTriangle,
+  X,
+  Save,
+  Check
 } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+
+interface Order {
+  id: string;
+  customer: string;
+  email: string;
+  phone: string;
+  total: number;
+  status: 'pending' | 'processing' | 'completed' | 'cancelled';
+  paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded';
+  shippingStatus: 'pending' | 'preparing' | 'shipped' | 'delivered' | 'returned';
+  date: string;
+  items: number;
+  shippingAddress: string;
+}
 
 export default function OrdersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedDateRange, setSelectedDateRange] = useState('all');
+  const [editingOrder, setEditingOrder] = useState<Order | null>(null);
+  const [showViewModal, setShowViewModal] = useState<Order | null>(null);
 
-  // Mock data - in real app, this would come from API
-  const orders = [
+  // State for orders - in real app, this would come from API
+  const [orders, setOrders] = useState<Order[]>([
     {
       id: '#12345',
       customer: 'Ahmet Yılmaz',
@@ -88,18 +108,55 @@ export default function OrdersPage() {
       items: 4,
       shippingAddress: 'Antalya, Turkey'
     }
-  ];
+  ]);
 
   const statuses = ['all', 'pending', 'processing', 'shipped', 'completed', 'cancelled'];
   const dateRanges = ['all', 'today', 'week', 'month', 'year'];
 
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         order.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === 'all' || order.status === selectedStatus;
-    return matchesSearch && matchesStatus;
-  });
+  // CRUD Operations
+  const handleEdit = (order: Order) => {
+    setEditingOrder({ ...order });
+  };
+
+  const handleSave = () => {
+    if (editingOrder) {
+      setOrders(prev => 
+        prev.map(o => o.id === editingOrder.id ? editingOrder : o)
+      );
+      setEditingOrder(null);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditingOrder(null);
+  };
+
+  const handleView = (order: Order) => {
+    setShowViewModal(order);
+  };
+
+  const handleUpdateField = (field: keyof Order, value: any) => {
+    if (editingOrder) {
+      setEditingOrder(prev => prev ? { ...prev, [field]: value } : null);
+    }
+  };
+
+  const handleStatusUpdate = (orderId: string, newStatus: string) => {
+    setOrders(prev => 
+      prev.map(o => o.id === orderId ? { ...o, status: newStatus as any } : o)
+    );
+  };
+
+  // Memoized filtered orders
+  const filteredOrders = useMemo(() => {
+    return orders.filter(order => {
+      const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           order.email.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = selectedStatus === 'all' || order.status === selectedStatus;
+      return matchesSearch && matchesStatus;
+    });
+  }, [orders, searchTerm, selectedStatus]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -416,18 +473,34 @@ export default function OrdersPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
-                      <button className="text-gray-400 hover:text-gray-600" title="View Details">
+                      <button 
+                        onClick={() => handleView(order)}
+                        className="text-gray-400 hover:text-blue-600 transition-colors" 
+                        title="View Details"
+                      >
                         <Eye className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-400 hover:text-gray-600" title="Edit Order">
+                      <button 
+                        onClick={() => handleEdit(order)}
+                        className="text-gray-400 hover:text-green-600 transition-colors" 
+                        title="Edit Order"
+                      >
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-400 hover:text-gray-600" title="Print Invoice">
+                      <button className="text-gray-400 hover:text-gray-600 transition-colors" title="Print Invoice">
                         <Printer className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-400 hover:text-gray-600" title="More Actions">
-                        <MoreVertical className="w-4 h-4" />
-                      </button>
+                      <select
+                        value={order.status}
+                        onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
+                        className="text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        title="Update Status"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
                     </div>
                   </td>
                 </tr>
@@ -441,8 +514,8 @@ export default function OrdersPage() {
       <div className="analytics-card px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-700 dark:text-gray-300">
-            Showing <span className="font-medium">1</span> to <span className="font-medium">5</span> of{' '}
-            <span className="font-medium">5</span> results
+            Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredOrders.length}</span> of{' '}
+            <span className="font-medium">{orders.length}</span> results
           </div>
           <div className="flex items-center space-x-2">
             <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
@@ -457,6 +530,171 @@ export default function OrdersPage() {
           </div>
         </div>
       </div>
+
+      {/* Edit Order Modal */}
+      {editingOrder && (
+        <div className="modal-overlay" onClick={handleCancel}>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Edit Order</h3>
+              <button onClick={handleCancel} className="text-gray-400 hover:text-gray-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Order ID
+                </label>
+                <input
+                  type="text"
+                  value={editingOrder.id}
+                  onChange={(e) => handleUpdateField('id', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Customer Name
+                </label>
+                <input
+                  type="text"
+                  value={editingOrder.customer}
+                  onChange={(e) => handleUpdateField('customer', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={editingOrder.email}
+                  onChange={(e) => handleUpdateField('email', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Total Amount
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={editingOrder.total}
+                  onChange={(e) => handleUpdateField('total', parseFloat(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Status
+                </label>
+                <select
+                  value={editingOrder.status}
+                  onChange={(e) => handleUpdateField('status', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="processing">Processing</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-3 mt-6">
+              <Button variant="secondary" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleSave}>
+                <Save className="w-4 h-4 mr-2" />
+                Save Changes
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Order Modal */}
+      {showViewModal && (
+        <div className="modal-overlay" onClick={handleCancel}>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Order Details - {showViewModal.id}</h3>
+              <button onClick={() => setShowViewModal(null)} className="text-gray-400 hover:text-gray-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-6">
+              {/* Customer Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer</label>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.customer}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.email}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.phone}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.date}</p>
+                </div>
+              </div>
+              
+              {/* Order Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Amount</label>
+                  <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">₺{showViewModal.total.toFixed(2)}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Items</label>
+                  <p className="text-sm text-gray-900 dark:text-gray-100">{showViewModal.items} items</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(showViewModal.status)}`}>
+                    {showViewModal.status}
+                  </span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Status</label>
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(showViewModal.paymentStatus)}`}>
+                    {showViewModal.paymentStatus}
+                  </span>
+                </div>
+              </div>
+              
+              {/* Shipping Info */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shipping Address</label>
+                <p className="text-sm text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700 p-3 rounded-md">
+                  {showViewModal.shippingAddress}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex justify-end mt-6">
+              <Button variant="secondary" onClick={() => setShowViewModal(null)}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

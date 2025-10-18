@@ -22,7 +22,17 @@ import {
   CheckCircle,
   ArrowDown,
   Target,
-  Zap
+  Zap,
+  RefreshCw,
+  Calendar,
+  Filter,
+  Download,
+  Settings,
+  Bell,
+  AlertCircle,
+  Star,
+  Package,
+  Truck
 } from 'lucide-react';
 import { formatPrice } from '../../../utils/currency';
 import { useRTL } from '../../../contexts/UnifiedLanguageContext';
@@ -51,6 +61,129 @@ ChartJS.register(
   Filler
 );
 
+
+// Real-time Notifications Component
+const RealTimeNotifications = memo(() => {
+  const { isArabic } = useRTL();
+  const [notifications, setNotifications] = useState([
+    { id: 1, type: 'order', message: 'New order #12345 received', time: '2 min ago', priority: 'high' },
+    { id: 2, type: 'payment', message: 'Payment of ₺89.99 completed', time: '5 min ago', priority: 'medium' },
+    { id: 3, type: 'inventory', message: 'Low stock alert: Hair Mask', time: '10 min ago', priority: 'high' },
+    { id: 4, type: 'customer', message: 'New customer registered', time: '15 min ago', priority: 'low' }
+  ]);
+
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'order': return <ShoppingCart className="w-4 h-4" />;
+      case 'payment': return <CreditCard className="w-4 h-4" />;
+      case 'inventory': return <Package className="w-4 h-4" />;
+      case 'customer': return <Users className="w-4 h-4" />;
+      default: return <Bell className="w-4 h-4" />;
+    }
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'text-red-600 bg-red-50';
+      case 'medium': return 'text-yellow-600 bg-yellow-50';
+      case 'low': return 'text-green-600 bg-green-50';
+      default: return 'text-gray-600 bg-gray-50';
+    }
+  };
+
+  return (
+    <div className="analytics-card p-4">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">Recent Activity</h3>
+        <button className="text-gray-400 hover:text-gray-600">
+          <Settings className="w-4 h-4" />
+        </button>
+      </div>
+      <div className="space-y-3">
+        {notifications.map((notification) => (
+          <div key={notification.id} className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+            <div className={`p-1 rounded-full ${getPriorityColor(notification.priority)}`}>
+              {getNotificationIcon(notification.type)}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-gray-900 dark:text-gray-100">{notification.message}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{notification.time}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+});
+
+// Quick Actions Component
+const QuickActions = memo(() => {
+  const { isArabic } = useRTL();
+  
+  const actions = [
+    { icon: Package, label: 'Add Product', color: 'bg-blue-500', href: '/admin/products' },
+    { icon: Users, label: 'View Customers', color: 'bg-green-500', href: '/admin/customers' },
+    { icon: ShoppingCart, label: 'Process Orders', color: 'bg-purple-500', href: '/admin/orders' },
+    { icon: Settings, label: 'Settings', color: 'bg-gray-500', href: '/admin/settings' }
+  ];
+
+  return (
+    <div className="analytics-card p-4">
+      <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-4">Quick Actions</h3>
+      <div className="grid grid-cols-2 gap-3">
+        {actions.map((action, index) => (
+          <a
+            key={index}
+            href={action.href}
+            className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            <div className={`p-2 rounded-lg ${action.color} text-white`}>
+              <action.icon className="w-4 h-4" />
+            </div>
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{action.label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+});
+
+// Data Status Component
+const DataStatus = memo(() => {
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLastUpdated(new Date());
+    }, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: false 
+    });
+  };
+
+  return (
+    <div className="analytics-card p-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className={`w-2 h-2 rounded-full ${isUpdating ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`}></div>
+          <span className="text-sm text-gray-600 dark:text-gray-300">Data Status</span>
+        </div>
+        <div className="text-right">
+          <div className="text-xs text-gray-500 dark:text-gray-400">Last updated</div>
+          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{formatTime(lastUpdated)}</div>
+        </div>
+      </div>
+    </div>
+  );
+});
 
 // Live Visitor Count Component
 const LiveVisitorCount = memo(() => {
@@ -1106,6 +1239,19 @@ function AdminDashboard() {
                 <Globe className="w-4 h-4 text-gray-400" />
               </div>
             </div>
+            
+            {/* Refresh Button */}
+            <button 
+              onClick={() => {
+                setRefreshKey(prev => prev + 1);
+                setForceUpdate(prev => prev + 1);
+              }}
+              className="flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors ml-2"
+              title="Refresh Data"
+            >
+              <RefreshCw className="w-4 h-4 mr-1" />
+              Refresh
+            </button>
           </div>
         </div>
         </div>
@@ -1219,6 +1365,15 @@ function AdminDashboard() {
               </div>
             </div>
           </div>
+
+          {/* Real-time Notifications */}
+          <RealTimeNotifications />
+
+          {/* Quick Actions */}
+          <QuickActions />
+
+          {/* Data Status */}
+          <DataStatus />
         </div>
       </div>
 

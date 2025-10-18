@@ -2368,6 +2368,28 @@ input[type="reset"][class*="rounded"] {
   padding-right: 1rem;
 }
 
+/* Modal Overlay Styles - Ensure black shadow is visible */
+.modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  backdrop-filter: blur(2px) !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Force modal overlay to be visible */
+[data-admin="true"] .fixed.inset-0.bg-black {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  backdrop-filter: blur(2px) !important;
+  z-index: 9999 !important;
+}
+
 /* RTL-specific adjustments for admin dashboard */
 [dir="rtl"] .admin-sidebar {
   right: 0;
