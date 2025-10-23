@@ -16,7 +16,7 @@ export default function AdminPage() {
       <div className="flex flex-col items-center space-y-4">
         <div className="h-32 w-32">
           <img
-            src="/images/logos/COSMT.png"
+            src="http://localhost:3000/images/logos/COSMT.png"
             alt="COSMT Logo"
             className="h-full w-full object-contain"
           />

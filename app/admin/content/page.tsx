@@ -81,8 +81,8 @@ const menuItems = [
   },
   {
     id: 4,
-    title: 'Skincare',
-    url: '/categories/skincare',
+    title: 'Skin Care',
+    url: '/categories/skin-care',
     type: 'category',
     position: 2,
     status: 'active',
@@ -464,7 +464,7 @@ export default function ContentManagement() {
       {/* Tabs */}
       <div className="dashboard-card">
         <div className="border-b border-gray-200 dark:border-gray-700">
-          <nav className="flex space-x-8 px-6 tab-navigation">
+          <nav className="flex space-x-8 px-4 tab-navigation">
             {[
               { id: 'pages', name: 'Pages', count: pages.length },
               { id: 'menus', name: 'Menus', count: menuItems.length },
@@ -475,7 +475,7 @@ export default function ContentManagement() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-green-500 text-green-600'
+                    ? 'border-[#00514B] text-[#00514B]'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >

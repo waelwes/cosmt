@@ -170,7 +170,7 @@ export default function ThemeCustomizer() {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--cosmt-background, #f8fafc)' }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--cosmt-background, #f1f5f9)' }}>
       {/* Header */}
       <div className="border-b px-6 py-4" style={{ backgroundColor: 'var(--cosmt-background, #ffffff)', borderColor: 'var(--cosmt-gray-200, #e5e7eb)' }}>
         <div className="flex items-center justify-between">
@@ -235,8 +235,8 @@ export default function ThemeCustomizer() {
                  }`}
                  style={{
                    borderRadius: '0 !important',
-                   borderBottomColor: activeTab === 'sections' ? 'var(--cosmt-primary, #059669)' : 'transparent',
-                   color: activeTab === 'sections' ? 'var(--cosmt-primary, #059669)' : 'var(--cosmt-text-light, #6b7280)',
+                   borderBottomColor: activeTab === 'sections' ? 'var(--cosmt-primary, #00514B)' : 'transparent',
+                   color: activeTab === 'sections' ? 'var(--cosmt-primary, #00514B)' : 'var(--cosmt-text-light, #6b7280)',
                    backgroundColor: activeTab === 'sections' ? 'var(--cosmt-primary-light, #ecfdf5)' : 'transparent'
                  }}
                 onClick={() => setActiveTab('sections')}

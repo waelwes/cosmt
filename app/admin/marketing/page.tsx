@@ -433,7 +433,7 @@ export default function MarketingTools() {
   };
 
   return (
-    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <div className="space-y-6" style={{ backgroundColor: '#f1f5f9', minHeight: '100vh' }}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -484,7 +484,7 @@ export default function MarketingTools() {
       {/* Tabs */}
       <div className="analytics-card">
         <div className="border-b" style={{ borderBottomColor: '#eef2f6' }}>
-          <nav className="flex space-x-8 px-6 tab-navigation">
+          <nav className="flex space-x-8 px-4 tab-navigation">
             {[
               { id: 'campaigns', name: 'Campaigns', count: campaigns.length },
               { id: 'coupons', name: 'Coupons', count: coupons.length },
@@ -495,7 +495,7 @@ export default function MarketingTools() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-green-500 text-green-600'
+                    ? 'border-[#00514B] text-[#00514B]'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
                 }`}
               >

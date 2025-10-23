@@ -429,14 +429,14 @@ export default function GeneralSettingsPage() {
       {/* Main Settings Card */}
       <div className="analytics-card p-0">
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b">
+        <div className="px-4 pt-4 pb-3 border-b">
           <div>
             <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Settings</h1>
             <p className="text-sm text-gray-600 dark:text-gray-400">Manage your store configuration and preferences</p>
           </div>
         </div>
         {/* Tabs */}
-        <div className="px-6 pt-4 pb-0">
+        <div className="px-4 pt-3 pb-0">
           <nav className="flex space-x-8 tab-navigation">
             {tabs.map((tab) => (
               <button
@@ -444,7 +444,7 @@ export default function GeneralSettingsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center ${
                   activeTab === tab.id
-                    ? 'border-green-500 text-green-600'
+                    ? 'border-[#00514B] text-[#00514B]'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
                 }`}
               >
@@ -456,12 +456,12 @@ export default function GeneralSettingsPage() {
         </div>
 
         {/* Tab Content */}
-        <div className="px-6 py-6">
+        <div className="px-4 py-4">
           {renderTabContent()}
         </div>
 
         {/* Save Button */}
-        <div className="px-6 py-4 bg-gray-50 border-t flex justify-end" style={{ borderTopColor: '#eef2f6' }}>
+        <div className="px-4 py-3 bg-gray-50 border-t flex justify-end" style={{ borderTopColor: '#eef2f6' }}>
           <button
             onClick={handleSave}
             disabled={isLoading}

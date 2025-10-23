@@ -50,7 +50,22 @@ export const Input: React.FC<InputProps> = ({
         disabled={disabled}
         required={required}
         autoComplete={autoComplete}
-        className={`cosmt-input-base ${icon ? 'pr-10' : ''} ${disabled ? 'bg-gray-50 cursor-not-allowed' : ''} ${className}`}
+        className={`w-full px-3 py-2 text-sm border rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${icon ? 'pr-10' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
+        style={{
+          backgroundColor: 'var(--admin-surface)',
+          borderColor: 'var(--admin-border)',
+          color: 'var(--admin-text-primary)',
+        }}
+        onFocus={(e) => {
+          e.target.style.borderColor = 'var(--admin-primary)';
+          e.target.style.boxShadow = '0 0 0 3px rgba(0, 81, 75, 0.1)';
+          onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          e.target.style.borderColor = 'var(--admin-border)';
+          e.target.style.boxShadow = 'none';
+          onBlur?.(e);
+        }}
       />
     </div>
   );

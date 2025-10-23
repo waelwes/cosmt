@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-export type Language = 'en' | 'ar';
+export type Language = 'en' | 'ar' | 'tr' | 'de' | 'fr' | 'es';
 export type Direction = 'ltr' | 'rtl';
 
 interface Language {
@@ -15,6 +15,10 @@ interface Language {
 const languages: Language[] = [
   { code: 'en', name: 'English', flag: '🇺🇸', direction: 'ltr' },
   { code: 'ar', name: 'العربية', flag: '🇸🇦', direction: 'rtl' },
+  { code: 'tr', name: 'Türkçe', flag: '🇹🇷', direction: 'ltr' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪', direction: 'ltr' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷', direction: 'ltr' },
+  { code: 'es', name: 'Español', flag: '🇪🇸', direction: 'ltr' },
 ];
 
 interface Translations {
@@ -194,11 +198,14 @@ export function UnifiedLanguageProvider({ children }: { children: React.ReactNod
     setCurrentLanguage(savedLanguage);
   }, []);
 
-  // Save to localStorage when language changes
+  // Save to localStorage when language changes (only when actually changed)
   useEffect(() => {
     if (mounted) {
-      console.log('UnifiedLanguageProvider: Saving language to localStorage:', currentLanguage);
-      localStorage.setItem('preferred-language', currentLanguage);
+      const savedLang = localStorage.getItem('preferred-language');
+      if (savedLang !== currentLanguage) {
+        console.log('UnifiedLanguageProvider: Saving language to localStorage:', currentLanguage);
+        localStorage.setItem('preferred-language', currentLanguage);
+      }
     }
   }, [currentLanguage, mounted]);
 

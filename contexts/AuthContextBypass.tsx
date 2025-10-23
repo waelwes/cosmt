@@ -38,37 +38,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('Initial session:', session);
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        console.log('Creating initial bypass profile for:', session.user.email);
-        createBypassProfile(session.user);
-      } else {
-        setLoading(false);
+    let isMounted = true;
+    
+    // Get initial session with caching
+    const initializeAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (isMounted) {
+          console.log('Initial session:', session);
+          setSession(session);
+          setUser(session?.user ?? null);
+          if (session?.user) {
+            console.log('Creating initial bypass profile for:', session.user.email);
+            createBypassProfile(session.user);
+          } else {
+            setLoading(false);
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
-    });
+    };
+
+    initializeAuth();
 
     // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state change:', event, session);
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        console.log('Creating bypass profile for auth change:', session.user.email);
-        createBypassProfile(session.user);
-      } else {
-        setUserProfile(null);
-        setLoading(false);
+      if (isMounted) {
+        console.log('Auth state change:', event, session);
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          console.log('Creating bypass profile for auth change:', session.user.email);
+          createBypassProfile(session.user);
+        } else {
+          setUserProfile(null);
+          setLoading(false);
+        }
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const createBypassProfile = (user: User) => {

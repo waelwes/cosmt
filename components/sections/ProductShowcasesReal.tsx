@@ -9,6 +9,7 @@ import { Button } from '../ui/Button';
 import { useStorefrontData } from '../../hooks/useStorefrontData';
 import { useRTL } from '../../contexts/UnifiedLanguageContext';
 import { useLanguage } from '../../contexts/UnifiedLanguageContext';
+import { buildProductPath } from '../../utils/slug';
 import Link from 'next/link';
 
 export const ProductShowcasesReal: React.FC = () => {
@@ -36,7 +37,7 @@ export const ProductShowcasesReal: React.FC = () => {
   }) => (
     <div className="group bg-white cosmt-product-card">
       <div className="relative">
-        <Link href={`/product/${product.id}`}>
+        <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
           <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
             <Image
               src={product.image}
@@ -71,7 +72,7 @@ export const ProductShowcasesReal: React.FC = () => {
               <ShoppingCart className="w-4 h-4 mr-1" />
               Add to Cart
             </Button>
-            <Link href={`/product/${product.id}`}>
+            <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
               <Button
                 variant="secondary"
                 size="sm"
@@ -88,7 +89,7 @@ export const ProductShowcasesReal: React.FC = () => {
       <div className="mt-4">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-gray-900 line-clamp-1">
-            <Link href={`/product/${product.id}`} className="hover:text-cosmt-primary">
+            <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)} className="hover:text-cosmt-primary">
               {product.name}
             </Link>
           </h3>
@@ -147,7 +148,6 @@ export const ProductShowcasesReal: React.FC = () => {
         <div className="cosmt-container">
           <div className="flex items-center justify-center h-64">
             <div className="flex items-center space-x-2">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cosmt-primary"></div>
               <span className="text-gray-600">Loading products...</span>
             </div>
           </div>
@@ -180,8 +180,8 @@ export const ProductShowcasesReal: React.FC = () => {
       <div className="cosmt-container">
         {/* Best Sellers Section */}
         {bestSellers.length > 0 && (
-          <div className="mb-16">
-            <div className="mb-8">
+          <div className="mb-8">
+            <div className="mb-4">
               <h2 className="text-cosmt-3xl font-bold text-gray-900">{t.bestSellers}</h2>
             </div>
             
@@ -195,8 +195,8 @@ export const ProductShowcasesReal: React.FC = () => {
 
         {/* New Products Section */}
         {newProducts.length > 0 && (
-          <div className="mb-16">
-            <div className="mb-8">
+          <div className="mb-8">
+            <div className="mb-4">
               <h2 className="text-cosmt-3xl font-bold text-gray-900">New Arrivals</h2>
             </div>
             
@@ -215,8 +215,8 @@ export const ProductShowcasesReal: React.FC = () => {
 
         {/* On Sale Products Section */}
         {onSaleProducts.length > 0 && (
-          <div className="mb-16">
-            <div className="mb-8">
+          <div className="mb-8">
+            <div className="mb-4">
               <h2 className="text-cosmt-3xl font-bold text-gray-900">On Sale</h2>
             </div>
             
@@ -235,7 +235,7 @@ export const ProductShowcasesReal: React.FC = () => {
 
         {/* No Products Message */}
         {bestSellers.length === 0 && newProducts.length === 0 && onSaleProducts.length === 0 && (
-          <div className="text-center py-16">
+          <div className="text-center py-8">
             <div className="text-gray-400 mb-4">📦</div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No Products Available</h3>
             <p className="text-gray-600">Check back later for new products!</p>

@@ -27,7 +27,7 @@ export const BrandLogosCarousel: React.FC = () => {
 
   if (!isMounted) {
     return (
-      <div className="py-12 bg-white border-t border-gray-200">
+      <div className="py-6 bg-white border-t border-gray-200">
         <div className="cosmt-container">
           <div className="text-center mb-8">
             <h2 className="text-cosmt-2xl font-bold text-gray-900 mb-2">Trusted by Professionals</h2>
@@ -42,7 +42,7 @@ export const BrandLogosCarousel: React.FC = () => {
   }
 
   return (
-    <div className="py-12 bg-white border-t border-gray-200">
+    <div className="py-6 bg-white border-t border-gray-200">
       <div className="cosmt-container">
         <div className="text-center mb-8">
           <h2 className="text-cosmt-2xl font-bold text-gray-900 mb-2">Trusted by Professionals</h2>

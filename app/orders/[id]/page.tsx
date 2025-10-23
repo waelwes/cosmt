@@ -104,8 +104,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="flex items-center justify-center h-64">
             <div className="flex items-center space-x-2">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cosmt-primary"></div>
-              <span className="text-gray-600">Loading order details...</span>
+              <span className="text-gray-600">Loading order...</span>
             </div>
           </div>
         </div>

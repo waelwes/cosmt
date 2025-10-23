@@ -4,10 +4,11 @@ import { supabaseDb } from '@/lib/supabase-database';
 // GET /api/admin/orders/[id] - Get single order
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const order = await supabaseDb.getOrder(params.id);
+    const { id } = await params;
+    const order = await supabaseDb.getOrder(id);
     if (!order) {
       return NextResponse.json(
         { success: false, error: 'Order not found' },
@@ -31,13 +32,14 @@ export async function GET(
 // PUT /api/admin/orders/[id] - Update order
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     
     // Validate that order exists
-    const existingOrder = await supabaseDb.getOrder(params.id);
+    const existingOrder = await supabaseDb.getOrder(id);
     if (!existingOrder) {
       return NextResponse.json(
         { success: false, error: 'Order not found' },
@@ -45,7 +47,7 @@ export async function PUT(
       );
     }
 
-    const updatedOrder = await supabaseDb.updateOrder(params.id, {
+    const updatedOrder = await supabaseDb.updateOrder(id, {
       customer: body.customer,
       email: body.email,
       phone: body.phone,
@@ -81,10 +83,11 @@ export async function PUT(
 // DELETE /api/admin/orders/[id] - Delete order
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const success = await supabaseDb.deleteOrder(params.id);
+    const { id } = await params;
+    const success = await supabaseDb.deleteOrder(id);
     if (!success) {
       return NextResponse.json(
         { success: false, error: 'Order not found' },

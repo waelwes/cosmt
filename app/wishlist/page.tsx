@@ -11,6 +11,7 @@ import { useWishlist } from '../../contexts/WishlistContext';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContextBypass';
 import { useRouter } from 'next/navigation';
+import { buildProductPath } from '../../utils/slug';
 
 export default function WishlistPage() {
   const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlist();
@@ -93,7 +94,13 @@ export default function WishlistPage() {
                   <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group">
                     {/* Product Image */}
                     <div className="relative aspect-square overflow-hidden">
-                      <Link href={`/product/${item.slug}`}>
+                      <Link href={buildProductPath({ 
+                        name: item.name, 
+                        categorySlug: item.categories?.slug, 
+                        subcategorySlug: null, 
+                        productSlug: item.slug, 
+                        id: item.id 
+                      })}>
                         <Image
                           src={item.image}
                           alt={item.name}

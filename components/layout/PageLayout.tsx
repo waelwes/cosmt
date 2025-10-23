@@ -12,7 +12,7 @@ interface PageLayoutProps {
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ children, className = '' }) => {
   return (
-    <div className={`min-h-screen bg-white ${className}`}>
+    <div className={`min-h-screen ${className}`} style={{backgroundColor: '#fbfbfb'}}>
       <Header />
       <main>
         {children}

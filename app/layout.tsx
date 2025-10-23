@@ -6,8 +6,10 @@ import { SearchProvider } from "../contexts/SearchContext";
 import { AuthProvider } from "../contexts/AuthContextBypass";
 import { WishlistProvider } from "../contexts/WishlistContext";
 import { UnifiedLanguageProvider } from "../contexts/UnifiedLanguageContext";
+import { CurrencyProvider } from "../contexts/CurrencyContext";
 import { ErrorBoundary } from "../components/ui/ErrorBoundary";
 import { HTMLAttributes } from "../components/layout/HTMLAttributes";
+import { Toaster } from "../components/ui/toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,11 +39,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/images/logos/COSMT.png', sizes: '32x32', type: 'image/png' },
-      { url: '/images/logos/COSMT.png', sizes: '16x16', type: 'image/png' },
+      { url: 'http://localhost:3000/images/logos/COSMT.png', sizes: '32x32', type: 'image/png' },
+      { url: 'http://localhost:3000/images/logos/COSMT.png', sizes: '16x16', type: 'image/png' },
     ],
-    shortcut: '/images/logos/COSMT.png',
-    apple: '/images/logos/COSMT.png',
+    shortcut: 'http://localhost:3000/images/logos/COSMT.png',
+    apple: 'http://localhost:3000/images/logos/COSMT.png',
   },
   openGraph: {
     title: "COSMAT - Premium Beauty & Hair Care Products",
@@ -91,16 +93,19 @@ export default function RootLayout({
       >
         <ErrorBoundary>
           <UnifiedLanguageProvider>
-            <HTMLAttributes />
-            <AuthProvider>
-              <WishlistProvider>
-                <CartProvider>
-                  <SearchProvider>
-                    {children}
-                  </SearchProvider>
-                </CartProvider>
-              </WishlistProvider>
-            </AuthProvider>
+            <CurrencyProvider>
+              <HTMLAttributes />
+              <AuthProvider>
+                <WishlistProvider>
+                  <CartProvider>
+                    <SearchProvider>
+                      {children}
+                      <Toaster />
+                    </SearchProvider>
+                  </CartProvider>
+                </WishlistProvider>
+              </AuthProvider>
+            </CurrencyProvider>
           </UnifiedLanguageProvider>
         </ErrorBoundary>
       </body>

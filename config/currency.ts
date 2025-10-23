@@ -63,6 +63,15 @@ export const currencies: Record<string, CurrencyConfig> = {
     exchangeRate: 1.52,
     decimalPlaces: 2,
     position: 'before'
+  },
+  SAR: {
+    code: 'SAR',
+    symbol: '﷼',
+    name: 'Saudi Riyal',
+    country: 'Saudi Arabia',
+    exchangeRate: 3.75,
+    decimalPlaces: 2,
+    position: 'before'
   }
 };
 
@@ -100,7 +109,8 @@ export const getCurrencyByCountry = (country: string): CurrencyConfig => {
     'France': 'EUR',
     'Italy': 'EUR',
     'Spain': 'EUR',
-    'Netherlands': 'EUR'
+    'Netherlands': 'EUR',
+    'Saudi Arabia': 'SAR'
   };
   
   const currencyCode = countryCurrencyMap[country] || defaultCurrency;
@@ -118,5 +128,6 @@ export const supportedCountries = [
   { name: 'France', code: 'FR', currency: 'EUR' },
   { name: 'Italy', code: 'IT', currency: 'EUR' },
   { name: 'Spain', code: 'ES', currency: 'EUR' },
-  { name: 'Netherlands', code: 'NL', currency: 'EUR' }
+  { name: 'Netherlands', code: 'NL', currency: 'EUR' },
+  { name: 'Saudi Arabia', code: 'SA', currency: 'SAR' }
 ];

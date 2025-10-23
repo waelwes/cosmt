@@ -121,7 +121,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <div 
-      className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100`}
+      className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-slate-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100`}
       data-admin="true"
       dir={direction as 'ltr' | 'rtl'}
       style={{ 
@@ -173,9 +173,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 {/* Mobile menu button */}
                 <button
                   onClick={() => setSidebarOpen(true)}
-                  className="lg:hidden p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors me-4 admin-header-button"
+                  className="lg:hidden p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors me-4 admin-header-button touch-manipulation"
+                  style={{ minWidth: '44px', minHeight: '44px' }}
+                  title="Open Navigation Menu"
                 >
-                  <Menu className="w-5 h-5" />
+                  <Menu className="w-6 h-6" />
                 </button>
                 
                 <div>

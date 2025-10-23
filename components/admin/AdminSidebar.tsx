@@ -67,6 +67,20 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
   const { isRTL, isArabic, direction } = useRTL();
   const [expandedTabs, setExpandedTabs] = React.useState<string[]>(['Dashboard']);
   
+  // Prevent body scroll when sidebar is open on mobile
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('sidebar-open');
+    } else {
+      document.body.classList.remove('sidebar-open');
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('sidebar-open');
+    };
+  }, [isOpen]);
+  
 
   const toggleTab = (tabTitle: string) => {
     setExpandedTabs(prev => 
@@ -242,14 +256,14 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
       {/* Mobile overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden"
+          className="mobile-sidebar-overlay lg:hidden"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar Container */}
       <div 
-        className={`fixed inset-y-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 z-[70] w-64 transform transition-transform duration-300 ease-in-out ${
           isRTL 
             ? `right-0 ${isOpen ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0`
             : `left-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`
@@ -257,7 +271,7 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
       >
         {/* Sidebar */}
         <div 
-          className="admin-sidebar w-full h-full flex flex-col bg-black dark:bg-black" 
+          className={`admin-sidebar w-full h-full flex flex-col bg-black dark:bg-black ${isOpen ? 'open' : ''}`}
           style={{ 
             backgroundColor: '#000000',
             direction: direction,
@@ -269,18 +283,18 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
           {/* Close button - positioned absolutely */}
           <button
             onClick={onClose}
-            className="lg:hidden absolute right-4 top-1/2 transform -translate-y-1/2 p-2 text-white hover:bg-gray-700 transition duration-150"
-            style={{ borderRadius: '0.25rem' }}
+            className="lg:hidden absolute right-4 top-1/2 transform -translate-y-1/2 p-3 text-white hover:bg-gray-700 transition duration-150 touch-manipulation"
+            style={{ borderRadius: '0.25rem', minWidth: '44px', minHeight: '44px' }}
             title="Close Navigation Menu"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
           
           {/* Logo aligned with navigation items */}
           <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
             <Link href="/admin/dashboard" className="flex items-center px-3">
               <Image
-                src="/images/logos/COSMT.png"
+                src="http://localhost:3000/images/logos/COSMT.png"
                 alt="COSMT Logo"
                 width={80}
                 height={24}

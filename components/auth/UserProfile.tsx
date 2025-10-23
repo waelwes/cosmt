@@ -40,8 +40,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
   if (!user || !userProfile) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+    <div className="fixed right-4 top-20 bg-white rounded-lg p-6 w-full max-w-md shadow-xl border border-gray-300 z-[9999]">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">My Profile</h2>
           <button
@@ -179,7 +178,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
             </Button>
           </div>
         </div>
-      </div>
     </div>
   );
 };

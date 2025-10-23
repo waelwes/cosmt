@@ -130,7 +130,7 @@ export default function InventoryPage() {
   };
 
   return (
-    <div className="space-y-6" style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <div className="space-y-6" style={{ backgroundColor: '#f1f5f9', minHeight: '100vh' }}>
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>

@@ -39,13 +39,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       })) || []
     )
 
-  // Product pages (mock - in real app, this would come from your database)
-  const productPages = Array.from({ length: 50 }, (_, i) => ({
-    url: `${baseUrl}/product/${i + 1}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
+  // Product pages - using hierarchical URLs
+  const productPages: any[] = [] // Will be populated with real product data
 
   return [...staticPages, ...categoryPages, ...subCategoryPages, ...productPages]
 }

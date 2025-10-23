@@ -1,15 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '../ui/Button';
 import { Breadcrumbs } from '../ui/Breadcrumbs';
 import { CategoryFilters } from '../ui/CategoryFilters';
 import { ProductGrid } from '../ui/ProductGrid';
-import { getProductsByType, getCategoryBySlug, Product } from '../../data/products';
-import { getCategoryBySlug as getCategoryBySlugFromCategories } from '../../data/categories';
+import { Product } from '../../lib/types';
 import { PageLayout } from '../layout/PageLayout';
+
+// Mock function to get products by type
+const getMockProductsByType = (_categorySlug: string, _subCategorySlug: string, _productTypeSlug: string): Product[] => {
+  // Return empty array for now - this would be replaced with actual API call
+  return [];
+};
 
 interface ProductListingPageProps {
   categorySlug: string;
@@ -32,6 +34,11 @@ export const ProductListingPage: React.FC<ProductListingPageProps> = ({
   const [filters, setFilters] = useState({
     priceRange: [0, 1000],
     brands: [] as string[],
+    productTypes: [] as string[],
+    skinConcerns: [] as string[],
+    skinTypes: [] as string[],
+    usageAreas: [] as string[],
+    genders: [] as string[],
     inStock: false,
   });
 
@@ -40,11 +47,21 @@ export const ProductListingPage: React.FC<ProductListingPageProps> = ({
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        // Get products by type
-        const fetchedProducts = getProductsByType(categorySlug, subCategorySlug, productTypeSlug);
+        console.log('🔍 ProductListingPage: Fetching products for:', { categorySlug, subCategorySlug, productTypeSlug });
+        
+        // Get products by type - using mock data for now
+        const fetchedProducts = getMockProductsByType(categorySlug, subCategorySlug, productTypeSlug);
+        console.log('🔍 ProductListingPage: Fetched products:', fetchedProducts.length);
         setProducts(fetchedProducts);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('❌ ProductListingPage: Error fetching products:', {
+          categorySlug,
+          subCategorySlug,
+          productTypeSlug,
+          error: error,
+          errorMessage: error instanceof Error ? error.message : 'Unknown error',
+          errorStack: error instanceof Error ? error.stack : undefined
+        });
         setProducts([]);
       } finally {
         setLoading(false);
@@ -59,7 +76,7 @@ export const ProductListingPage: React.FC<ProductListingPageProps> = ({
     // Implement sorting logic here
   };
 
-  const handleFilterChange = (newFilters: any) => {
+  const handleFilterChange = (newFilters: typeof filters) => {
     setFilters(newFilters);
     // Implement filtering logic here
   };
@@ -76,7 +93,7 @@ export const ProductListingPage: React.FC<ProductListingPageProps> = ({
     return (
       <div className="min-h-screen bg-white">
         <div className="cosmt-container py-8">
-          <div className="animate-pulse">
+          <div>
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
             <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

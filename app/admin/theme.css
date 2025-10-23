@@ -2,11 +2,11 @@
 
 /* Root theme variables */
 :root {
-  --admin-primary: #059669;
-  --admin-primary-dark: #047857;
-  --admin-primary-light: #d1fae5;
+  --admin-primary: #00514B;
+  --admin-primary-dark: #003A35;
+  --admin-primary-light: #E6F7F5;
   --admin-secondary: #6b7280;
-  --admin-background: #f8fafc;
+  --admin-background: #f1f5f9;
   --admin-surface: #ffffff;
   --admin-text-primary: #111827;
   --admin-text-secondary: #374151;
@@ -21,8 +21,8 @@
 
 /* Dark theme variables */
 [data-theme="dark"] {
-  --admin-primary: #10b981;
-  --admin-primary-dark: #059669;
+  --admin-primary: #00514B;
+  --admin-primary-dark: #003A35;
   --admin-primary-light: #064e3b;
   --admin-secondary: #9ca3af;
   --admin-background: #111827;
@@ -158,7 +158,84 @@
 [data-admin="true"] textarea:focus {
   border-color: var(--admin-primary) !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+  box-shadow: 0 0 0 3px rgba(0, 81, 75, 0.1) !important;
+  background-color: var(--admin-surface) !important;
+  background: var(--admin-surface) !important;
+}
+
+[data-admin="true"] input:hover,
+[data-admin="true"] input[type="text"]:hover,
+[data-admin="true"] input[type="email"]:hover,
+[data-admin="true"] input[type="password"]:hover,
+[data-admin="true"] input[type="number"]:hover,
+[data-admin="true"] input[type="tel"]:hover,
+[data-admin="true"] input[type="url"]:hover,
+[data-admin="true"] input[type="search"]:hover,
+[data-admin="true"] input[type="date"]:hover,
+[data-admin="true"] input[type="time"]:hover,
+[data-admin="true"] input[type="datetime-local"]:hover,
+[data-admin="true"] select:hover,
+[data-admin="true"] textarea:hover {
+  background-color: var(--admin-surface) !important;
+  background: var(--admin-surface) !important;
+  border-color: var(--admin-border) !important;
+}
+
+[data-admin="true"] input::placeholder,
+[data-admin="true"] input[type="text"]::placeholder,
+[data-admin="true"] input[type="email"]::placeholder,
+[data-admin="true"] input[type="password"]::placeholder,
+[data-admin="true"] input[type="number"]::placeholder,
+[data-admin="true"] input[type="tel"]::placeholder,
+[data-admin="true"] input[type="url"]::placeholder,
+[data-admin="true"] input[type="search"]::placeholder,
+[data-admin="true"] textarea::placeholder {
+  color: var(--admin-text-muted) !important;
+}
+
+/* Force admin input styling - Override any conflicting styles */
+[data-admin="true"] input,
+[data-admin="true"] input[type="text"],
+[data-admin="true"] input[type="email"],
+[data-admin="true"] input[type="password"],
+[data-admin="true"] input[type="number"],
+[data-admin="true"] input[type="tel"],
+[data-admin="true"] input[type="url"],
+[data-admin="true"] input[type="search"],
+[data-admin="true"] input[type="date"],
+[data-admin="true"] input[type="time"],
+[data-admin="true"] input[type="datetime-local"],
+[data-admin="true"] select,
+[data-admin="true"] textarea {
+  background-color: var(--admin-surface) !important;
+  background: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border) !important;
+  border-color: var(--admin-border) !important;
+  border-radius: var(--admin-radius) !important;
+  color: var(--admin-text-primary) !important;
+  padding: 0.5rem 0.75rem !important;
+  transition: all 0.2s ease !important;
+  box-shadow: none !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+[data-admin="true"] input:focus,
+[data-admin="true"] input[type="text"]:focus,
+[data-admin="true"] input[type="email"]:focus,
+[data-admin="true"] input[type="password"]:focus,
+[data-admin="true"] input[type="number"]:focus,
+[data-admin="true"] input[type="tel"]:focus,
+[data-admin="true"] input[type="url"]:focus,
+[data-admin="true"] input[type="search"]:focus,
+[data-admin="true"] input[type="date"]:focus,
+[data-admin="true"] input[type="time"]:focus,
+[data-admin="true"] input[type="datetime-local"]:focus,
+[data-admin="true"] select:focus,
+[data-admin="true"] textarea:focus {
+  border-color: var(--admin-primary) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(0, 81, 75, 0.1) !important;
   background-color: var(--admin-surface) !important;
   background: var(--admin-surface) !important;
 }
@@ -207,6 +284,23 @@
   border-color: var(--admin-border) !important;
 }
 
+/* Nuclear option - Override everything for inputs */
+[data-admin="true"] input,
+[data-admin="true"] select,
+[data-admin="true"] textarea {
+  background-color: var(--admin-surface) !important;
+  background: var(--admin-surface) !important;
+  border-color: var(--admin-border) !important;
+  color: var(--admin-text-primary) !important;
+}
+
+[data-admin="true"] input:focus,
+[data-admin="true"] select:focus,
+[data-admin="true"] textarea:focus {
+  border-color: var(--admin-primary) !important;
+  box-shadow: 0 0 0 3px rgba(0, 81, 75, 0.1) !important;
+}
+
 /* Table Theme */
 [data-admin="true"] table {
   background-color: var(--admin-surface) !important;
@@ -240,9 +334,31 @@
   border-color: var(--admin-border) !important;
 }
 
-/* Sidebar Theme - Black Design */
+/* Sidebar Theme - Darker Green Design */
 [data-admin="true"] .admin-sidebar {
-  background-color: #000000 !important;
+  background-color: #002A25 !important;
+  overflow-y: auto; /* Enable scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbar for admin sidebar */
+[data-admin="true"] .admin-sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ultimate sidebar darker green override - nuclear option */
+[data-admin="true"] .admin-sidebar,
+[data-admin="true"] .admin-sidebar *,
+[data-admin="true"] .admin-sidebar > *,
+[data-admin="true"] .admin-sidebar > * > *,
+[data-admin="true"] .admin-sidebar nav,
+[data-admin="true"] .admin-sidebar ul,
+[data-admin="true"] .admin-sidebar li,
+[data-admin="true"] .admin-sidebar div,
+[data-admin="true"] .admin-sidebar section {
+  background-color: #002A25 !important;
+  background: #002A25 !important;
 }
 
 [data-admin="true"] .admin-sidebar a,
@@ -254,13 +370,13 @@
 
 [data-admin="true"] .admin-sidebar a:hover,
 [data-admin="true"] .admin-sidebar button:hover {
-  background-color: #2e2e33 !important;
+  background-color: #003A35 !important;
   color: #ffffff !important;
 }
 
 [data-admin="true"] .admin-sidebar a.active,
 [data-admin="true"] .admin-sidebar button.active {
-  background-color: #2e2e33 !important;
+  background-color: #003A35 !important;
   color: #ffffff !important;
 }
 
@@ -337,7 +453,7 @@
 [data-admin="true"] select:focus,
 [data-admin="true"] textarea:focus {
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+  box-shadow: 0 0 0 3px rgba(0, 81, 75, 0.1) !important;
 }
 
 /* Responsive Design */
@@ -360,7 +476,7 @@
 /* Ultra specific sidebar hover override - highest priority */
 html body [data-admin="true"] .admin-sidebar button:hover,
 html body [data-admin="true"] .admin-sidebar a:hover {
-  background-color: #2e2e33 !important;
+  background-color: #003A35 !important;
 }
 
 /* Nuclear option - override everything */
@@ -368,26 +484,26 @@ html body [data-admin="true"] .admin-sidebar a:hover {
 [data-admin="true"] .admin-sidebar a:hover,
 [data-admin="true"] .admin-sidebar button:hover *,
 [data-admin="true"] .admin-sidebar a:hover * {
-  background-color: #2e2e33 !important;
-  background: #2e2e33 !important;
+  background-color: #003A35 !important;
+  background: #003A35 !important;
 }
 
 /* Force override with maximum specificity */
 html body div[data-admin="true"] .admin-sidebar button:hover,
 html body div[data-admin="true"] .admin-sidebar a:hover {
-  background-color: #2e2e33 !important;
-  background: #2e2e33 !important;
+  background-color: #003A35 !important;
+  background: #003A35 !important;
 }
 
 /* Final override - target the exact structure */
 [data-admin="true"] .admin-sidebar button:hover {
-  background-color: #2e2e33 !important;
-  background: #2e2e33 !important;
+  background-color: #003A35 !important;
+  background: #003A35 !important;
 }
 
 [data-admin="true"] .admin-sidebar a:hover {
-  background-color: #2e2e33 !important;
-  background: #2e2e33 !important;
+  background-color: #003A35 !important;
+  background: #003A35 !important;
 }
 
 /* Analytics page border fixes - Remove vertical lines */
@@ -448,4 +564,176 @@ html body div[data-admin="true"] .admin-sidebar a:hover {
 [data-admin="true"] .flex > div:not(:last-child) {
   border-right: none !important;
   border-left: none !important;
+}
+
+/* Shipping Components Theme */
+[data-admin="true"] .shipping-form {
+  background-color: var(--admin-surface) !important;
+  color: var(--admin-text-primary) !important;
+}
+
+[data-admin="true"] .shipping-form .form-label {
+  color: var(--admin-text-primary) !important;
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+[data-admin="true"] .shipping-form .form-input {
+  background-color: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border) !important;
+  border-radius: var(--admin-radius) !important;
+  color: var(--admin-text-primary) !important;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+}
+
+[data-admin="true"] .shipping-form .form-input:focus {
+  border-color: var(--admin-primary) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(0, 81, 75, 0.1) !important;
+}
+
+[data-admin="true"] .shipping-form .form-input::placeholder {
+  color: var(--admin-text-muted) !important;
+}
+
+[data-admin="true"] .shipping-form .form-select {
+  background-color: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border) !important;
+  border-radius: var(--admin-radius) !important;
+  color: var(--admin-text-primary) !important;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+}
+
+[data-admin="true"] .shipping-form .form-select:focus {
+  border-color: var(--admin-primary) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(0, 81, 75, 0.1) !important;
+}
+
+[data-admin="true"] .shipping-form .form-textarea {
+  background-color: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border) !important;
+  border-radius: var(--admin-radius) !important;
+  color: var(--admin-text-primary) !important;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+  min-height: 80px;
+}
+
+[data-admin="true"] .shipping-form .form-textarea:focus {
+  border-color: var(--admin-primary) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(0, 81, 75, 0.1) !important;
+}
+
+[data-admin="true"] .shipping-form .form-textarea::placeholder {
+  color: var(--admin-text-muted) !important;
+}
+
+/* Tabs Theme - Enhanced */
+[data-admin="true"] .tabs-list {
+  background-color: var(--admin-accent) !important;
+  border-radius: var(--admin-radius) !important;
+  padding: 0.25rem !important;
+  border: 1px solid var(--admin-border) !important;
+}
+
+[data-admin="true"] .tabs-trigger {
+  background-color: transparent !important;
+  color: var(--admin-text-muted) !important;
+  border-radius: var(--admin-radius) !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+[data-admin="true"] .tabs-trigger:hover {
+  color: var(--admin-text-primary) !important;
+  background-color: var(--admin-border) !important;
+}
+
+[data-admin="true"] .tabs-trigger[data-state="active"] {
+  background-color: var(--admin-surface) !important;
+  color: var(--admin-text-primary) !important;
+  box-shadow: var(--admin-shadow) !important;
+  border: 1px solid var(--admin-border) !important;
+}
+
+/* Force active state styling */
+[data-admin="true"] .tabs-trigger.active {
+  background-color: var(--admin-surface) !important;
+  color: var(--admin-text-primary) !important;
+  box-shadow: var(--admin-shadow) !important;
+  border: 1px solid var(--admin-border) !important;
+}
+
+/* Nuclear option for tabs */
+[data-admin="true"] .tabs-trigger {
+  background-color: transparent !important;
+  color: var(--admin-text-muted) !important;
+}
+
+[data-admin="true"] .tabs-trigger:hover {
+  background-color: var(--admin-border) !important;
+  color: var(--admin-text-primary) !important;
+}
+
+[data-admin="true"] .tabs-trigger.active,
+[data-admin="true"] .tabs-trigger[data-state="active"] {
+  background-color: var(--admin-surface) !important;
+  color: var(--admin-text-primary) !important;
+  box-shadow: var(--admin-shadow) !important;
+}
+
+/* Switch Theme */
+[data-admin="true"] .switch {
+  background-color: var(--admin-border) !important;
+  border: 1px solid var(--admin-border) !important;
+}
+
+[data-admin="true"] .switch[data-state="checked"] {
+  background-color: var(--admin-primary) !important;
+  border-color: var(--admin-primary) !important;
+}
+
+[data-admin="true"] .switch-thumb {
+  background-color: var(--admin-surface) !important;
+  box-shadow: var(--admin-shadow) !important;
+}
+
+/* Alert Theme */
+[data-admin="true"] .alert {
+  background-color: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border) !important;
+  border-radius: var(--admin-radius) !important;
+  color: var(--admin-text-primary) !important;
+}
+
+[data-admin="true"] .alert-success {
+  background-color: var(--admin-primary-light) !important;
+  border-color: var(--admin-primary) !important;
+  color: var(--admin-primary) !important;
+}
+
+[data-admin="true"] .alert-error {
+  background-color: #fef2f2 !important;
+  border-color: #fecaca !important;
+  color: #dc2626 !important;
+}
+
+[data-admin="true"] .alert-warning {
+  background-color: #fffbeb !important;
+  border-color: #fed7aa !important;
+  color: #d97706 !important;
+}
+
+[data-admin="true"] .alert-info {
+  background-color: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  color: #2563eb !important;
 }

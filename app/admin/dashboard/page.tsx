@@ -178,7 +178,7 @@ const DataStatus = memo(() => {
       <div className="px-4 pt-4 pb-3 border-b">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className={`w-2 h-2 rounded-full ${isUpdating ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`}></div>
+            <div className={`w-2 h-2 rounded-full ${isUpdating ? 'bg-yellow-500' : 'bg-green-500'}`}></div>
             <span className="text-sm text-gray-600 dark:text-gray-300">Data Status</span>
           </div>
           <div className="text-right">
@@ -231,7 +231,7 @@ const LiveVisitorCount = memo(() => {
       <div className="px-4 pt-4 pb-3 border-b flex items-center justify-between">
         <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{getTranslation('liveVisitors')}</h3>
         <div className="flex items-center">
-          <div className={`w-2 h-2 rounded-full mr-2 ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
+          <div className={`w-2 h-2 rounded-full mr-2 ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></div>
           <span className="text-xs text-gray-500 dark:text-gray-400">Live</span>
         </div>
       </div>
@@ -310,7 +310,7 @@ const TrafficSources = () => {
   return (
     <div className="analytics-card p-0">
       {/* Card Header with full-width border line */}
-      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+      <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('trafficSources')}</h3>
         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
           <Activity className="w-3 h-3 me-1" />
@@ -319,7 +319,7 @@ const TrafficSources = () => {
       </div>
 
       {/* Card Content */}
-      <div className="px-6 py-6">
+      <div className="px-4 py-4">
       
       <div className="space-y-3">
         {trafficData.map((source, index) => (
@@ -400,12 +400,12 @@ const DeviceAnalytics = () => {
   return (
     <div className="analytics-card p-0">
       {/* Card Header with full-width border line */}
-      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+      <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('deviceAnalytics')}</h3>
       </div>
 
       {/* Card Content */}
-      <div className="px-6 py-6">
+      <div className="px-4 py-4">
         <div className="space-y-3">
         {deviceData.map((device, index) => (
           <div key={index} className="flex items-center justify-between">
@@ -497,7 +497,7 @@ const ConversionFunnel = () => {
   return (
     <div className="analytics-card p-0">
       {/* Card Header with full-width border line */}
-      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+      <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('conversionFunnel')}</h3>
         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
           <Zap className="w-3 h-3 me-1" />
@@ -506,7 +506,7 @@ const ConversionFunnel = () => {
       </div>
 
       {/* Card Content */}
-      <div className="px-6 py-6">
+      <div className="px-4 py-4">
         <div className="space-y-2">
         {funnelData.map((step, index) => (
           <div key={index}>
@@ -1040,7 +1040,7 @@ function AdminDashboard() {
       style={{
         direction: direction,
         textAlign: direction === 'rtl' ? 'right' : 'left',
-        backgroundColor: '#f8fafc',
+        backgroundColor: '#f1f5f9',
         minHeight: '100vh'
       }}
     >
@@ -1051,62 +1051,70 @@ function AdminDashboard() {
         <div className={`flex justify-between items-center px-4 pt-4 pb-3 border-b ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
           <h1 className={`text-lg font-semibold text-gray-900 dark:text-white ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>Dashboard</h1>
           <div className={`flex items-center text-sm ${direction === 'rtl' ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
-            {/* Time Period Filter */}
-            <div className={`flex items-center rounded-lg overflow-hidden border ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
+            {/* Time Period Filter - Segmented Control */}
+            <div className={`inline-flex rounded-lg shadow-sm border border-gray-300 dark:border-gray-600 divide-x divide-gray-300 dark:divide-gray-600 text-sm ${direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'}`}>
             <button 
               onClick={() => setSelectedTimeRange('All')}
-              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 font-medium transition duration-150 whitespace-nowrap ${
                 selectedTimeRange === 'All' 
-                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'bg-cosmt-primary text-white relative z-10 shadow-inner' 
+                  : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
+              style={{ borderRadius: 0 }}
             >
               {getTranslation('all')}
             </button>
             <button 
               onClick={() => setSelectedTimeRange('Today')}
-              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 font-medium transition duration-150 whitespace-nowrap ${
                 selectedTimeRange === 'Today' 
-                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'bg-cosmt-primary text-white relative z-10 shadow-inner' 
+                  : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
+              style={{ borderRadius: 0 }}
             >
               {getTranslation('today')}
             </button>
             <button 
               onClick={() => setSelectedTimeRange('This Week')}
-              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 font-medium transition duration-150 whitespace-nowrap ${
                 selectedTimeRange === 'This Week' 
-                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'bg-cosmt-primary text-white relative z-10 shadow-inner' 
+                  : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
+              style={{ borderRadius: 0 }}
             >
               {getTranslation('thisWeek')}
             </button>
             <button 
               onClick={() => setSelectedTimeRange('This Month')}
-              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 font-medium transition duration-150 whitespace-nowrap ${
                 selectedTimeRange === 'This Month' 
-                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'bg-cosmt-primary text-white relative z-10 shadow-inner' 
+                  : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
+              style={{ borderRadius: 0 }}
             >
               {getTranslation('thisMonth')}
             </button>
             <button 
               onClick={() => setSelectedTimeRange('This Year')}
-              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 font-medium transition duration-150 whitespace-nowrap ${
                 selectedTimeRange === 'This Year' 
-                  ? 'text-cosmt-primary bg-cosmt-primary-light dark:bg-cosmt-primary/20' 
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'bg-cosmt-primary text-white relative z-10 shadow-inner' 
+                  : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
+              style={{ borderRadius: 0 }}
             >
               {getTranslation('thisYear')}
             </button>
+            </div>
+            
+            {/* Date Picker - Separate from segmented control */}
             <div className="relative date-picker-container">
               <button 
                 onClick={() => setShowDatePicker(!showDatePicker)}
-                className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm"
               >
                 {selectedDate ? formatDate(selectedDate) : getTranslation('selectDate')}
               </button>
@@ -1198,67 +1206,59 @@ function AdminDashboard() {
             </div>
           </div>
         </div>
-        </div>
 
         {/* Card Content */}
         <div className="px-4 py-4">
-          {/* Stats Grid */}
-        <div className="flex flex-row">
-          {stats.map((stat, index) => (
-            <div key={index} className="flex-1 py-4 px-4">
-              <div className="flex items-center justify-between mb-1">
-                <h3 className="text-xs font-medium text-gray-600 dark:text-gray-300">{stat.title}</h3>
-                {stat.icon}
-              </div>
-              <div>
-                <p className="text-lg font-bold text-gray-900 dark:text-white">{stat.value}</p>
-                <div className="flex items-center text-xs mt-1 text-gray-500 dark:text-gray-400">
-                  <span className={`flex items-center font-medium ${stat.changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`}>
-                    {stat.changeType === 'positive' ? 
-                      <ArrowUpRight className="w-3 h-3 me-1" /> : 
-                      <ArrowUpRight className="w-3 h-3 me-1 transform rotate-90" />
-                    }
-                    {stat.change}
-                  </span>
+          {/* Stats Grid - One Unified Card */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                {stats.map((stat, index) => (
+                  <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                    <div className="flex-shrink-0">
+                      {stat.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-xs font-medium text-gray-600 dark:text-gray-300 truncate">{stat.title}</h4>
+                      <p className="text-lg font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                      <div className="flex items-center">
+                        <span className={`flex items-center text-xs font-medium ${stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'}`}>
+                          {stat.changeType === 'positive' ? 
+                            <ArrowUpRight className="w-3 h-3 me-1" /> : 
+                            <ArrowUpRight className="w-3 h-3 me-1 transform rotate-90" />
+                          }
+                          {stat.change}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {/* Live Visitors */}
+                <div className="flex items-center space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center">
+                      <div className={`w-2 h-2 rounded-full me-2 ${true ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                      <Eye className="w-4 h-4 text-green-600 dark:text-green-400" />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs font-medium text-gray-600 dark:text-gray-300 truncate">{getTranslation('liveVisitors')}</h4>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">125</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Currently online</p>
+                  </div>
+                  
+                  {/* Refresh Button */}
+                  <button 
+                    onClick={() => {
+                      setRefreshKey(prev => prev + 1);
+                      setForceUpdate(prev => prev + 1);
+                    }}
+                    className="flex-shrink-0 p-1 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+                    title="Refresh Data"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                  </button>
                 </div>
-              </div>
-            </div>
-          ))}
-          
-          {/* Live Visitors */}
-          <div className="flex-1 py-4 px-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300">{getTranslation('liveVisitors')}</h3>
-              <div className="flex items-center">
-                <div className={`w-2 h-2 rounded-full me-2 ${true ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">Live</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">125</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Currently online</p>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Eye className="w-4 h-4 text-gray-400" />
-                <Globe className="w-4 h-4 text-gray-400" />
-              </div>
-            </div>
-            
-            {/* Refresh Button */}
-            <button 
-              onClick={() => {
-                setRefreshKey(prev => prev + 1);
-                setForceUpdate(prev => prev + 1);
-              }}
-              className="flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors ml-2"
-              title="Refresh Data"
-            >
-              <RefreshCw className="w-4 h-4 mr-1" />
-              Refresh
-            </button>
           </div>
-        </div>
         </div>
       </div>
 
@@ -1268,7 +1268,7 @@ function AdminDashboard() {
         <div className="lg:col-span-2">
           <div className="analytics-card p-0">
             {/* Chart Header with full-width border line */}
-            <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+            <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('overview')}</h3>
               <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                 <Activity className="w-3 h-3 mr-1" />
@@ -1288,12 +1288,12 @@ function AdminDashboard() {
           {/* Top Pages */}
           <div className="analytics-card p-0">
           {/* Card Header with full-width border line */}
-          <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b">
+          <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTranslation('topPages')}</h3>
           </div>
 
           {/* Card Content */}
-          <div className="px-6 py-6">
+          <div className="px-4 py-4">
             <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -1336,7 +1336,7 @@ function AdminDashboard() {
           <div className="flex justify-between items-center px-4 pt-4 pb-3 border-b">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{getTranslation('liveVisitors')}</h3>
               <div className="flex items-center">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">Live</span>
               </div>
             </div>

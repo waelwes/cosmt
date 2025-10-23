@@ -34,6 +34,11 @@ interface PaymentGateway {
   secret_key?: string;
   merchant_id?: string;
   webhook_secret?: string;
+  // Turkish payment providers specific fields
+  terminal_id?: string;
+  password?: string;
+  store_key?: string;
+  merchant_salt?: string;
   supported_currencies: string[];
   supported_countries: string[];
   fees_percentage: number;
@@ -70,7 +75,12 @@ export default function PaymentSettingsPage() {
     fees_fixed: 0.30,
     api_url: '',
     webhook_url: '',
-    description: ''
+    description: '',
+    // Turkish payment providers specific fields
+    terminal_id: '',
+    password: '',
+    store_key: '',
+    merchant_salt: ''
   });
 
   useEffect(() => {
@@ -126,7 +136,12 @@ export default function PaymentSettingsPage() {
       fees_fixed: gateway.fees_fixed,
       api_url: gateway.api_url || '',
       webhook_url: gateway.webhook_url || '',
-      description: gateway.description || ''
+      description: gateway.description || '',
+      // Turkish payment providers specific fields
+      terminal_id: gateway.terminal_id || '',
+      password: gateway.password || '',
+      store_key: gateway.store_key || '',
+      merchant_salt: gateway.merchant_salt || ''
     });
   };
 
@@ -200,7 +215,7 @@ export default function PaymentSettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin" />
+        <span className="text-gray-600">Settings not available</span>
       </div>
     );
   }
@@ -212,7 +227,7 @@ export default function PaymentSettingsPage() {
         '--tw-divide-y-reverse': '0',
         '--tw-divide-x-reverse': '0',
         '--tw-border-opacity': '0',
-        backgroundColor: '#f8fafc',
+        backgroundColor: '#f1f5f9',
         minHeight: '100vh'
       }}
     >
@@ -316,7 +331,7 @@ export default function PaymentSettingsPage() {
             disabled={saving || !selectedGateway}
             className="cosmt-btn-primary flex items-center gap-2"
           >
-            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            <Save className="w-4 h-4" />
             Save Settings
           </button>
         </div>
@@ -415,7 +430,7 @@ export default function PaymentSettingsPage() {
                     disabled={testing}
                     className="cosmt-btn-secondary flex items-center gap-2"
                   >
-                    {testing ? <Loader2 className="w-4 h-4 animate-spin" /> : <TestTube className="w-4 h-4" />}
+                    <TestTube className="w-4 h-4" />
                     Test Connection
                   </button>
                 </div>
@@ -488,6 +503,9 @@ export default function PaymentSettingsPage() {
                        selectedGateway.provider === 'paypal' ? 'Merchant ID' :
                        selectedGateway.provider === 'razorpay' ? 'Merchant ID' :
                        selectedGateway.provider === 'paystack' ? 'Merchant Email' :
+                       selectedGateway.provider === 'paytr' ? 'Merchant ID' :
+                       selectedGateway.provider === 'vakifbank' ? 'Merchant ID' :
+                       selectedGateway.provider === 'kuveytturk' ? 'Merchant ID' :
                        'Merchant ID'}
                     </label>
                     <input
@@ -500,6 +518,9 @@ export default function PaymentSettingsPage() {
                         selectedGateway.provider === 'paypal' ? 'Merchant ID from PayPal' :
                         selectedGateway.provider === 'razorpay' ? 'Merchant ID from Razorpay' :
                         selectedGateway.provider === 'paystack' ? 'merchant@example.com' :
+                        selectedGateway.provider === 'paytr' ? 'PayTR Merchant ID' :
+                        selectedGateway.provider === 'vakifbank' ? 'VakıfBank Merchant ID' :
+                        selectedGateway.provider === 'kuveytturk' ? 'Kuveyt Türk Merchant ID' :
                         'Enter merchant ID'
                       }
                     />
@@ -535,6 +556,114 @@ export default function PaymentSettingsPage() {
                     </div>
                   </div>
           </div>
+
+                {/* Turkish Payment Providers Specific Fields */}
+                {(selectedGateway.provider === 'paytr' || selectedGateway.provider === 'vakifbank' || selectedGateway.provider === 'kuveytturk') && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Terminal ID for VakıfBank and Kuveyt Türk */}
+                    {(selectedGateway.provider === 'vakifbank' || selectedGateway.provider === 'kuveytturk') && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Terminal ID
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.terminal_id}
+                          onChange={(e) => setFormData(prev => ({ ...prev, terminal_id: e.target.value }))}
+                          className="cosmt-input-base w-full"
+                          placeholder={`${selectedGateway.provider === 'vakifbank' ? 'VakıfBank' : 'Kuveyt Türk'} Terminal ID`}
+                        />
+                      </div>
+                    )}
+
+                    {/* Password for VakıfBank and Kuveyt Türk */}
+                    {(selectedGateway.provider === 'vakifbank' || selectedGateway.provider === 'kuveytturk') && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Password
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showSecrets[selectedGateway.id] ? "text" : "password"}
+                            value={formData.password}
+                            onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                            className="cosmt-input-base w-full pr-10"
+                            placeholder={`${selectedGateway.provider === 'vakifbank' ? 'VakıfBank' : 'Kuveyt Türk'} Password`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => toggleSecretVisibility(selectedGateway.id)}
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                          >
+                            {showSecrets[selectedGateway.id] ? (
+                              <EyeOff className="w-4 h-4 text-gray-400" />
+                            ) : (
+                              <Eye className="w-4 h-4 text-gray-400" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Store Key for Kuveyt Türk */}
+                    {selectedGateway.provider === 'kuveytturk' && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Store Key
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showSecrets[selectedGateway.id] ? "text" : "password"}
+                            value={formData.store_key}
+                            onChange={(e) => setFormData(prev => ({ ...prev, store_key: e.target.value }))}
+                            className="cosmt-input-base w-full pr-10"
+                            placeholder="Kuveyt Türk Store Key"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => toggleSecretVisibility(selectedGateway.id)}
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                          >
+                            {showSecrets[selectedGateway.id] ? (
+                              <EyeOff className="w-4 h-4 text-gray-400" />
+                            ) : (
+                              <Eye className="w-4 h-4 text-gray-400" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Merchant Salt for PayTR */}
+                    {selectedGateway.provider === 'paytr' && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Merchant Salt
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showSecrets[selectedGateway.id] ? "text" : "password"}
+                            value={formData.merchant_salt}
+                            onChange={(e) => setFormData(prev => ({ ...prev, merchant_salt: e.target.value }))}
+                            className="cosmt-input-base w-full pr-10"
+                            placeholder="PayTR Merchant Salt"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => toggleSecretVisibility(selectedGateway.id)}
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                          >
+                            {showSecrets[selectedGateway.id] ? (
+                              <EyeOff className="w-4 h-4 text-gray-400" />
+                            ) : (
+                              <Eye className="w-4 h-4 text-gray-400" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Mode and Status */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

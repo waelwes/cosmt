@@ -7,6 +7,7 @@ import { Globe, ChevronDown } from 'lucide-react';
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸', direction: 'ltr' },
   { code: 'ar', name: 'العربية', flag: '🇸🇦', direction: 'rtl' },
+  { code: 'tr', name: 'Türkçe', flag: '🇹🇷', direction: 'ltr' },
 ] as const;
 
 export function LanguageSwitcher() {
@@ -15,7 +16,7 @@ export function LanguageSwitcher() {
 
   const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
 
-  const handleLanguageChange = (langCode: 'en' | 'ar') => {
+  const handleLanguageChange = (langCode: 'en' | 'ar' | 'tr') => {
     setLanguage(langCode);
     setIsOpen(false);
   };

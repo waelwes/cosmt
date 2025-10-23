@@ -225,7 +225,7 @@ export default function PageBuilder({ pageId, onSave, onClose }: PageBuilderProp
               id: 'hero-1',
               type: 'section',
               props: {
-                backgroundColor: '#f8fafc',
+                backgroundColor: '#f1f5f9',
                 padding: 'large'
               },
               children: [
@@ -349,7 +349,7 @@ export default function PageBuilder({ pageId, onSave, onClose }: PageBuilderProp
               id: 'about-hero',
               type: 'section',
               props: {
-                backgroundColor: '#f8fafc',
+                backgroundColor: '#f1f5f9',
                 padding: 'large'
               },
               children: [
@@ -799,8 +799,7 @@ export default function PageBuilder({ pageId, onSave, onClose }: PageBuilderProp
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="text-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">Loading page content...</p>
+                  <p className="text-gray-600">Page content not available</p>
                 </div>
               </div>
             ) : (

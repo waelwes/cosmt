@@ -1,25 +1,11 @@
-'use client';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
-import { PageLayout } from '../components/layout/PageLayout';
-import { HeroSlider } from '../components/sections/HeroSlider';
-import { CategoryShowcase } from '../components/sections/CategoryShowcase';
-import { BrandSections } from '../components/sections/BrandSections';
-import { ProductShowcases } from '../components/sections/ProductShowcases';
-import { ScrollToTop } from '../components/ui/ScrollToTop';
-import { useRTL } from '../contexts/UnifiedLanguageContext';
-
-export default function Home() {
-  const { isRTL } = useRTL();
-
-  return (
-    <PageLayout>
-      <div dir={isRTL ? 'rtl' : 'ltr'}>
-        <HeroSlider />
-        <CategoryShowcase />
-        <BrandSections />
-        <ProductShowcases />
-        <ScrollToTop />
-      </div>
-    </PageLayout>
-  );
+export default function RootPage() {
+  // Get locale from cookies or default to 'en'
+  const cookieStore = cookies();
+  const locale = cookieStore.get('cosmt-locale')?.value || 'en';
+  
+  // Redirect to localized version
+  redirect(`/${locale}`);
 }

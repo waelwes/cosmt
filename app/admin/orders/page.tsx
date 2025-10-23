@@ -442,7 +442,7 @@ export default function OrdersPage() {
       {/* Combined Orders Card */}
       <div className="analytics-card p-0">
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b">
+        <div className="px-4 pt-4 pb-3 border-b">
           <div className="flex items-center justify-between">
           <div>
               <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Orders</h1>
@@ -457,7 +457,7 @@ export default function OrdersPage() {
                 variant="secondary"
                 className="flex items-center"
               >
-                <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                <RefreshCw className="w-4 h-4 mr-2" />
                 Refresh
               </Button>
               
@@ -528,7 +528,7 @@ export default function OrdersPage() {
         </div>
         
         {/* Card Content */}
-        <div className="px-6 py-6">
+        <div className="px-4 py-4">
         
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
@@ -659,25 +659,25 @@ export default function OrdersPage() {
             <table id="orders-table" className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-800">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Order
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Customer
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Payment
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Total
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Date
                 </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -685,7 +685,7 @@ export default function OrdersPage() {
               <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
               {filteredOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center">
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">{order.id}</div>
@@ -693,13 +693,13 @@ export default function OrdersPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div>
                         <div className="text-sm font-medium text-gray-900 dark:text-white">{order.customer}</div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">{order.email}</div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
                       {getStatusIcon(order.status)}
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
@@ -707,7 +707,7 @@ export default function OrdersPage() {
                     </span>
                       </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                         order.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 
                         order.paymentStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
@@ -716,13 +716,13 @@ export default function OrdersPage() {
                       {order.paymentStatus}
                     </span>
                   </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       ${order.total.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {new Date(order.date).toLocaleDateString()}
                   </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
                         <Button
                         onClick={() => handleView(order)}

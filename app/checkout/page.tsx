@@ -141,17 +141,19 @@ export default function CheckoutPage() {
 
   return (
     <PageLayout>
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <Link href="/cart">
-            <Button variant="secondary" className="mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Cart
-            </Button>
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
-        </div>
+      <div className="min-h-screen" style={{backgroundColor: '#fbfbfb'}}>
+        <div className="cosmt-container py-8">
+          {/* Header */}
+          <div className="mb-8">
+            <Link href="/cart">
+              <Button variant="secondary" className="mb-4 hover:text-green-600 transition-colors duration-200">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Cart
+              </Button>
+            </Link>
+            <h1 className="text-4xl font-bold text-gray-900">Checkout</h1>
+            <p className="text-lg text-gray-600 mt-2">Complete your order securely</p>
+          </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Checkout Form */}
@@ -283,8 +285,7 @@ export default function CheckoutPage() {
 
                 <Button
                   type="submit"
-                  variant="primary"
-                  className="w-full"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200"
                   disabled={loading}
                 >
                   {loading ? 'Processing...' : 'Place Order'}
@@ -318,9 +319,9 @@ export default function CheckoutPage() {
               </div>
 
               <div className="border-t border-gray-200 pt-4 mt-4">
-                <div className="flex justify-between items-center text-lg font-semibold text-gray-900">
+                <div className="flex justify-between items-center text-xl font-bold text-gray-900">
                   <span>Total</span>
-                  <span>₺{getTotalPrice().toFixed(2)}</span>
+                  <span className="text-green-600">${getTotalPrice().toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -338,6 +339,7 @@ export default function CheckoutPage() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </PageLayout>

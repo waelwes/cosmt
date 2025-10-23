@@ -4,10 +4,11 @@ import { supabaseDb } from '@/lib/supabase-database';
 // GET /api/admin/customers/[id] - Get single customer
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idString } = await params;
+    const id = parseInt(idString);
     if (isNaN(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid customer ID' },
@@ -39,10 +40,11 @@ export async function GET(
 // PUT /api/admin/customers/[id] - Update customer
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idString } = await params;
+    const id = parseInt(idString);
     if (isNaN(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid customer ID' },
@@ -99,10 +101,11 @@ export async function PUT(
 // DELETE /api/admin/customers/[id] - Delete customer
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idString } = await params;
+    const id = parseInt(idString);
     if (isNaN(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid customer ID' },

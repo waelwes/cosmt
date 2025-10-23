@@ -3,13 +3,14 @@ import { supabase } from '@/lib/supabase';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { data, error } = await supabase
       .from('payment_gateways')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .single();
 
     if (error) {
@@ -32,18 +33,19 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     
     // For demo purposes, just return the updated data
     // In production, this would update the database
-    console.log('Demo: Updating payment gateway', params.id, 'with data:', body);
+    console.log('Demo: Updating payment gateway', id, 'with data:', body);
     
     return NextResponse.json({
       ...body,
-      id: parseInt(params.id),
+      id: parseInt(id),
       updated_at: new Date().toISOString(),
       demo: true
     });
@@ -58,13 +60,14 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { error } = await supabase
       .from('payment_gateways')
       .delete()
-      .eq('id', params.id);
+      .eq('id', id);
 
     if (error) {
       console.error('Error deleting payment gateway:', error);

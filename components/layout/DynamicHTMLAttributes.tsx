@@ -23,12 +23,12 @@ export default function DynamicHTMLAttributes() {
       
       // Update HTML attributes
       document.documentElement.lang = currentLanguage;
-      document.documentElement.dir = direction;
+      document.documentElement.dir = 'ltr'; // Always use LTR for layout
       
       // Update body attributes with delay to ensure CSS applies
       setTimeout(() => {
-        document.body.dir = direction;
-        document.body.className = document.body.className.replace(/rtl|ltr/g, '') + ` ${direction}`;
+        document.body.dir = 'ltr'; // Always use LTR for layout
+        document.body.className = document.body.className.replace(/rtl|ltr/g, '') + ` ltr`;
         
         console.log('DynamicHTMLAttributes: HTML attributes updated successfully', {
           htmlDir: document.documentElement.dir,

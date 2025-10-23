@@ -13,6 +13,9 @@ if (!supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// Export createClient for use in API routes
+export { createClient };
+
 // Database types
 export interface Database {
   public: {

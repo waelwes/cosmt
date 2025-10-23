@@ -2,350 +2,329 @@
 
 import React, { useState } from 'react';
 import { 
-  Truck, 
   Save, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  MapPin,
-  Clock,
-  DollarSign,
+  Truck, 
+  Settings, 
+  Globe, 
   Package,
-  Globe,
-  Settings
+  MapPin,
+  CreditCard,
+  Bell,
+  Shield
 } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import DHLSettingsForm from '@/components/admin/DHLSettingsForm';
+import YurticiSettingsForm from '@/components/admin/YurticiSettingsForm';
+import PTTSettingsForm from '@/components/admin/PTTSettingsForm';
 
 export default function ShippingSettingsPage() {
-  const [shippingZones, setShippingZones] = useState([
-    {
-      id: 1,
-      name: 'United States',
-      countries: ['US'],
-      methods: [
-        {
-          id: 1,
-          name: 'Standard Shipping',
-          cost: 5.99,
-          freeThreshold: 50,
-          estimatedDays: '3-5',
-          enabled: true
-        },
-        {
-          id: 2,
-          name: 'Express Shipping',
-          cost: 12.99,
-          freeThreshold: 100,
-          estimatedDays: '1-2',
-          enabled: true
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Europe',
-      countries: ['GB', 'DE', 'FR', 'IT', 'ES'],
-      methods: [
-        {
-          id: 3,
-          name: 'Standard International',
-          cost: 15.99,
-          freeThreshold: 100,
-          estimatedDays: '7-14',
-          enabled: true
-        }
-      ]
-    },
-    {
-      id: 3,
-      name: 'Rest of World',
-      countries: ['*'],
-      methods: [
-        {
-          id: 4,
-          name: 'International Shipping',
-          cost: 25.99,
-          freeThreshold: 200,
-          estimatedDays: '10-21',
-          enabled: true
-        }
-      ]
-    }
-  ]);
+  const [activeTab, setActiveTab] = useState('dhl');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [settings, setSettings] = useState({
-    enableShipping: true,
-    freeShippingThreshold: 50,
-    enableTracking: true,
-    enableInsurance: true,
-    insuranceCost: 2.99,
-    enableSignature: false,
-    signatureCost: 5.99,
-    enableSaturdayDelivery: false,
-    saturdayCost: 8.99,
-    enableHolidayDelivery: false,
-    holidayCost: 12.99,
-    defaultWeight: 1.0,
-    maxWeight: 50.0,
-    enableDimensionalWeight: true,
-    enableRealTimeRates: true
-  });
-
-  const countries = [
-    { code: 'US', name: 'United States' },
-    { code: 'CA', name: 'Canada' },
-    { code: 'GB', name: 'United Kingdom' },
-    { code: 'DE', name: 'Germany' },
-    { code: 'FR', name: 'France' },
-    { code: 'IT', name: 'Italy' },
-    { code: 'ES', name: 'Spain' },
-    { code: 'AU', name: 'Australia' },
-    { code: 'JP', name: 'Japan' },
-    { code: 'CN', name: 'China' }
+  const tabs = [
+    { id: 'dhl', name: 'DHL eCommerce', icon: Truck },
+    { id: 'yurtici', name: 'Yurtiçi Kargo', icon: Truck },
+    { id: 'ptt', name: 'PTT Kargo', icon: Truck },
+    { id: 'general', name: 'General', icon: Settings },
+    { id: 'zones', name: 'Shipping Zones', icon: Globe },
+    { id: 'rates', name: 'Rates', icon: Package },
+    { id: 'notifications', name: 'Notifications', icon: Bell }
   ];
 
-  const handleSave = () => {
-    console.log('Shipping settings saved:', settings);
+  const handleSave = async () => {
+    setIsLoading(true);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setIsLoading(false);
+    alert('Shipping settings saved successfully!');
   };
 
-  const getCountryName = (code: string) => {
-    const country = countries.find(c => c.code === code);
-    return country ? country.name : code;
+  const renderDHLSettings = () => (
+    <DHLSettingsForm />
+  );
+
+  const renderGeneralSettings = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Free Shipping Threshold ($)</label>
+          <input
+            type="number"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="50.00"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Standard Shipping Cost ($)</label>
+          <input
+            type="number"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="9.99"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Handling Fee ($)</label>
+          <input
+            type="number"
+            step="0.01"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="0.00"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Processing Time (days)</label>
+          <input
+            type="number"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="1"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="realTimeRates"
+            className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+          />
+          <label htmlFor="realTimeRates" className="ml-2 text-sm text-gray-700">
+            Enable Real-time Rate Calculation
+          </label>
+        </div>
+
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="signatureRequired"
+            className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+          />
+          <label htmlFor="signatureRequired" className="ml-2 text-sm text-gray-700">
+            Require Signature for Delivery
+          </label>
+        </div>
+
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="insurance"
+            className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+          />
+          <label htmlFor="insurance" className="ml-2 text-sm text-gray-700">
+            Include Shipping Insurance
+          </label>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderShippingZones = () => (
+    <div className="space-y-6">
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-medium text-gray-800">Domestic Shipping</h3>
+            <p className="text-sm text-gray-600">Turkey - Free shipping over $50</p>
+          </div>
+          <button className="text-green-600 hover:text-green-700 text-sm font-medium">
+            Edit Zone
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-medium text-gray-800">Europe</h3>
+            <p className="text-sm text-gray-600">EU Countries - $15.99 shipping</p>
+          </div>
+          <button className="text-green-600 hover:text-green-700 text-sm font-medium">
+            Edit Zone
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-medium text-gray-800">Rest of World</h3>
+            <p className="text-sm text-gray-600">International - $25.99 shipping</p>
+          </div>
+          <button className="text-green-600 hover:text-green-700 text-sm font-medium">
+            Edit Zone
+          </button>
+        </div>
+      </div>
+
+      <button className="w-full border-2 border-dashed border-gray-300 rounded-lg p-4 text-gray-600 hover:text-gray-700 hover:border-gray-400">
+        + Add New Shipping Zone
+      </button>
+    </div>
+  );
+
+  const renderRates = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white border border-gray-200 rounded-lg p-4">
+          <h3 className="text-sm font-medium text-gray-800 mb-2">Express Shipping</h3>
+          <p className="text-2xl font-bold text-green-600">$19.99</p>
+          <p className="text-sm text-gray-600">1-2 business days</p>
+        </div>
+        <div className="bg-white border border-gray-200 rounded-lg p-4">
+          <h3 className="text-sm font-medium text-gray-800 mb-2">Standard Shipping</h3>
+          <p className="text-2xl font-bold text-green-600">$9.99</p>
+          <p className="text-sm text-gray-600">3-5 business days</p>
+        </div>
+        <div className="bg-white border border-gray-200 rounded-lg p-4">
+          <h3 className="text-sm font-medium text-gray-800 mb-2">Economy Shipping</h3>
+          <p className="text-2xl font-bold text-green-600">$4.99</p>
+          <p className="text-sm text-gray-600">5-7 business days</p>
+        </div>
+      </div>
+
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <Package className="h-5 w-5 text-yellow-400" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-yellow-800">Rate Configuration</h3>
+            <div className="mt-2 text-sm text-yellow-700">
+              <p>Shipping rates are calculated based on weight, dimensions, and destination.</p>
+              <p className="mt-1">Configure rate rules in the shipping zones section.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderNotifications = () => (
+    <div className="space-y-6">
+      <div className="space-y-4">
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="shippingNotifications"
+            className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+          />
+          <label htmlFor="shippingNotifications" className="ml-2 text-sm text-gray-700">
+            Send shipping notifications to customers
+          </label>
+        </div>
+
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="adminNotifications"
+            className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+          />
+          <label htmlFor="adminNotifications" className="ml-2 text-sm text-gray-700">
+            Notify admin of shipping updates
+          </label>
+        </div>
+
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            id="trackingEmails"
+            className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+          />
+          <label htmlFor="trackingEmails" className="ml-2 text-sm text-gray-700">
+            Send tracking information via email
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Notification Email</label>
+        <input
+          type="email"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          placeholder="shipping@cosmat.com"
+        />
+      </div>
+    </div>
+  );
+
+  const renderYurticiSettings = () => (
+    <YurticiSettingsForm />
+  );
+
+  const renderPTTSettings = () => (
+    <PTTSettingsForm />
+  );
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'dhl':
+        return renderDHLSettings();
+      case 'yurtici':
+        return renderYurticiSettings();
+      case 'ptt':
+        return renderPTTSettings();
+      case 'general':
+        return renderGeneralSettings();
+      case 'zones':
+        return renderShippingZones();
+      case 'rates':
+        return renderRates();
+      case 'notifications':
+        return renderNotifications();
+      default:
+        return renderDHLSettings();
+    }
   };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center justify-between">
+      {/* Main Settings Card */}
+      <div className="analytics-card p-0">
+        {/* Header */}
+        <div className="px-4 pt-4 pb-3 border-b">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Shipping Settings</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Configure shipping zones, rates, and delivery options</p>
+            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Shipping Settings</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Configure shipping providers and manage delivery options</p>
           </div>
-          <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
-            <Save className="w-4 h-4 mr-2" />
-            Save Settings
-          </Button>
-        </div>
-      </div>
-
-      {/* General Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-          <Settings className="w-5 h-5 mr-2" />
-          General Settings
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Free Shipping Threshold ($)
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              value={settings.freeShippingThreshold}
-              onChange={(e) => setSettings(prev => ({ ...prev, freeShippingThreshold: parseFloat(e.target.value) }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Default Package Weight (lbs)
-            </label>
-            <input
-              type="number"
-              step="0.1"
-              value={settings.defaultWeight}
-              onChange={(e) => setSettings(prev => ({ ...prev, defaultWeight: parseFloat(e.target.value) }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Maximum Package Weight (lbs)
-            </label>
-            <input
-              type="number"
-              step="0.1"
-              value={settings.maxWeight}
-              onChange={(e) => setSettings(prev => ({ ...prev, maxWeight: parseFloat(e.target.value) }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Insurance Cost ($)
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              value={settings.insuranceCost}
-              onChange={(e) => setSettings(prev => ({ ...prev, insuranceCost: parseFloat(e.target.value) }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Shipping Zones */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-            <Globe className="w-5 h-5 mr-2" />
-            Shipping Zones
-          </h2>
-          <Button className="bg-blue-600 hover:bg-blue-700">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Zone
-          </Button>
         </div>
         
-        <div className="space-y-6">
-          {shippingZones.map((zone) => (
-            <div key={zone.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">{zone.name}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {zone.countries.includes('*') ? 'All other countries' : zone.countries.map(getCountryName).join(', ')}
-                  </p>
-                </div>
-                <div className="flex space-x-2">
-                  <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                    <Edit className="w-4 h-4" />
-                  </button>
-                  <button className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-              
-              <div className="space-y-3">
-                {zone.methods.map((method) => (
-                  <div key={method.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <div className="flex items-center">
-                      <div className="p-2 bg-gray-100 dark:bg-gray-600 rounded-lg">
-                        <Truck className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                      </div>
-                      <div className="ml-4">
-                        <h4 className="text-sm font-medium text-gray-900 dark:text-white">{method.name}</h4>
-                        <div className="flex items-center space-x-4 mt-1">
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
-                            <DollarSign className="w-4 h-4 inline mr-1" />
-                            ${method.cost}
-                          </span>
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
-                            <Clock className="w-4 h-4 inline mr-1" />
-                            {method.estimatedDays} days
-                          </span>
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
-                            Free over ${method.freeThreshold}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        method.enabled 
-                          ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
-                          : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
-                      }`}>
-                        {method.enabled ? 'Enabled' : 'Disabled'}
-                      </span>
-                      <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                        <Edit className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+        {/* Tabs */}
+        <div className="px-4 pt-3 pb-0">
+          <nav className="flex space-x-8 tab-navigation">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center ${
+                  activeTab === tab.id
+                    ? 'border-[#00514B] text-[#00514B]'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'
+                }`}
+              >
+                <tab.icon className="w-4 h-4 mr-2" />
+                {tab.name}
+              </button>
+            ))}
+          </nav>
         </div>
-      </div>
 
-      {/* Delivery Options */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg  border border-gray-200 dark:border-gray-700 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-          <Package className="w-5 h-5 mr-2" />
-          Delivery Options
-        </h2>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div>
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Enable Tracking</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Provide tracking numbers for shipments</p>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={settings.enableTracking}
-                onChange={(e) => setSettings(prev => ({ ...prev, enableTracking: e.target.checked }))}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
-          </div>
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div>
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Enable Insurance</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Add insurance to shipments for protection</p>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={settings.enableInsurance}
-                onChange={(e) => setSettings(prev => ({ ...prev, enableInsurance: e.target.checked }))}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
-          </div>
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div>
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Enable Signature Required</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Require signature for delivery confirmation</p>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={settings.enableSignature}
-                onChange={(e) => setSettings(prev => ({ ...prev, enableSignature: e.target.checked }))}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
-          </div>
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div>
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Enable Saturday Delivery</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Offer Saturday delivery option</p>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={settings.enableSaturdayDelivery}
-                onChange={(e) => setSettings(prev => ({ ...prev, enableSaturdayDelivery: e.target.checked }))}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
-          </div>
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div>
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Enable Real-time Rates</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Get live shipping rates from carriers</p>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={settings.enableRealTimeRates}
-                onChange={(e) => setSettings(prev => ({ ...prev, enableRealTimeRates: e.target.checked }))}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
-          </div>
+        {/* Tab Content */}
+        <div className="px-4 py-4">
+          {renderTabContent()}
+        </div>
+
+        {/* Save Button */}
+        <div className="px-4 py-3 bg-gray-50 border-t flex justify-end" style={{ borderTopColor: '#eef2f6' }}>
+          <button
+            onClick={handleSave}
+            disabled={isLoading}
+            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center"
+          >
+            <Save className="w-4 h-4 mr-2" />
+            {isLoading ? 'Saving...' : 'Save Settings'}
+          </button>
         </div>
       </div>
     </div>

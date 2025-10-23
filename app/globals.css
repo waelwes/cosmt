@@ -4,12 +4,47 @@
 @import '../styles/rtl.css';
 @import './admin/theme.css';
 
+/* Custom checkbox styling for brand green color */
+input[type="checkbox"] {
+  accent-color: #00514B !important;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #00514B !important;
+  border-color: #00514B !important;
+}
+
+/* For older browsers that don't support accent-color */
+input[type="checkbox"]:checked::before {
+  background-color: #00514B !important;
+}
+
+/* Hide scrollbar for tab navigation */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
 /* RTL Base Styles - Moved to styles/rtl.css */
 
 :root {
-  --cosmt-primary: #059669;
-  --cosmt-primary-dark: #047857;
-  --cosmt-primary-light: #ecfdf5;
+  --cosmt-primary: #00514B;
+  --cosmt-primary-dark: #003A35;
+  --cosmt-primary-darker: #002A25;
+  --cosmt-primary-light: #E6F7F5;
+  --cosmt-primary-soft: #00514B;
+  --cosmt-primary-soft-dark: #003A35;
   --cosmt-background: #ffffff;
   --cosmt-text: #111827;
   --cosmt-text-light: #4b5563;
@@ -18,11 +53,12 @@
   --cosmt-gray-50: #f9fafb;
   --cosmt-gray-100: #f3f4f6;
   --cosmt-gray-200: #e5e7eb;
+  --cosmt-border: #eef2f6;
   --main-bg: #f8fafc;
   
   /* Customizable section variables */
   --hero-bg-color: #ffffff;
-  --hero-height: 500px;
+  --hero-height: 350px;
   --category-bg-color: #f8fafc;
   --category-columns: 4;
   --brand-bg-color: #ffffff;
@@ -37,8 +73,8 @@
   --font-mono: var(--font-geist-mono);
   
   /* Brand Colors */
-  --color-cosmt-primary: var(--cosmt-primary);
-  --color-cosmt-primary-dark: var(--cosmt-primary-dark);
+  --color-cosmt-primary: var(--cosmt-primary-soft);
+  --color-cosmt-primary-dark: var(--cosmt-primary-soft-dark);
   --color-cosmt-primary-light: var(--cosmt-primary-light);
   
   /* Dark Mode Configuration */
@@ -238,7 +274,6 @@ input[type="reset"],
 input[type="checkbox"],
 input[type="radio"],
 select,
-textarea,
 [tabindex]:not([tabindex="-1"]),
 [onclick],
 [onmousedown],
@@ -246,6 +281,18 @@ textarea,
 [onkeydown],
 [onkeyup] {
   cursor: pointer !important;
+}
+
+/* Text inputs and textareas should have text cursor */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+textarea {
+  cursor: text !important;
 }
 
 /* Admin Layout Styles */
@@ -384,6 +431,167 @@ div[data-admin="true"] .admin-header {
   background-color: #ffffff !important;
   background: #ffffff !important;
   background-image: none !important;
+}
+
+/* Custom scrollbar styles for admin tables */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Hide scrollbars when not needed */
+.overflow-x-auto {
+  scrollbar-width: thin;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 2px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* Hide scrollbars on mobile */
+@media (max-width: 768px) {
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+  }
+  .overflow-x-auto {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Mobile sidebar fixes */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    z-index: 70 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease-in-out !important;
+  }
+  
+  .admin-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* RTL mobile sidebar */
+  [dir="rtl"] .admin-sidebar {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateX(100%) !important;
+  }
+  
+  [dir="rtl"] .admin-sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Ensure mobile overlay is above everything */
+  .mobile-sidebar-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 60 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+  
+  /* Prevent body scroll when sidebar is open */
+  body.sidebar-open {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+  }
+  
+  /* Ensure mobile menu button is visible and touchable */
+  .admin-header-button {
+    z-index: 80 !important;
+    position: relative !important;
+  }
+  
+  /* Make sure sidebar is above all other content */
+  .admin-sidebar {
+    z-index: 70 !important;
+  }
+  
+  /* Ensure proper touch targets */
+  .admin-sidebar button,
+  .admin-sidebar a {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* Admin table specific styles */
+#products-table {
+  table-layout: auto;
+  width: 100%;
+}
+
+#products-table th,
+#products-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Only show horizontal scroll when absolutely necessary */
+.overflow-x-auto {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 1px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* Force white background with maximum specificity and !important */
@@ -841,31 +1049,58 @@ html body [data-admin="true"] .admin-sidebar a:active {
 .admin-sidebar {
   flex-shrink: 0;
   width: 16rem; /* 256px */
-  background: #000000 !important; /* Black background */
+  background: #002A25 !important; /* Darker green background */
   will-change: transform;
   min-height: 100vh; /* Full height */
+  overflow-y: auto; /* Enable scrolling */
+  /* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
-/* Force admin sidebar background to be black */
+/* Hide scrollbar for WebKit browsers */
+.admin-sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Force admin sidebar background to be darker green */
 [data-admin="true"] .admin-sidebar {
-  background: #000000 !important;
-  background-color: #000000 !important;
+  background: #002A25 !important;
+  background-color: #002A25 !important;
+  overflow-y: auto; /* Enable scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbar for admin sidebar */
+[data-admin="true"] .admin-sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for all sidebar elements */
+[data-admin="true"] .admin-sidebar *::-webkit-scrollbar {
+  display: none;
+}
+
+[data-admin="true"] .admin-sidebar * {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
 /* Exclude sidebar from admin cards gray background rules */
 [data-admin="true"] .admin-sidebar.bg-white,
 [data-admin="true"] .admin-sidebar[class*="bg-white"] {
-  background-color: #000000 !important;
+  background-color: #002A25 !important;
 }
 
-/* Force admin sidebar container to be black */
+/* Force admin sidebar container to be darker green */
 [data-admin="true"] .admin-sidebar {
-  background-color: #000000 !important;
+  background-color: #002A25 !important;
 }
 
-/* Force admin sidebar main container to be black */
+/* Force admin sidebar main container to be darker green */
 [data-admin="true"] .admin-sidebar > div {
-  background-color: #000000 !important;
+  background-color: #002A25 !important;
 }
 
 /* Override any gray background on admin sidebar */
@@ -875,12 +1110,33 @@ html body [data-admin="true"] .admin-sidebar a:active {
   background: transparent !important;
 }
 
-/* Force sidebar to stay black - highest priority */
+/* Force sidebar to stay darker green - highest priority */
 [data-admin="true"] .admin-sidebar,
 [data-admin="true"] .admin-sidebar > div,
 [data-admin="true"] .admin-sidebar > div > div {
-  background-color: #000000 !important;
-  background: #000000 !important;
+  background-color: #002A25 !important;
+  background: #002A25 !important;
+}
+
+/* Ultimate sidebar darker green override - force all possible selectors */
+[data-admin="true"] .admin-sidebar,
+[data-admin="true"] .admin-sidebar *,
+[data-admin="true"] .admin-sidebar > *,
+[data-admin="true"] .admin-sidebar > * > *,
+[data-admin="true"] .admin-sidebar nav,
+[data-admin="true"] .admin-sidebar ul,
+[data-admin="true"] .admin-sidebar li {
+  background-color: #002A25 !important;
+  background: #002A25 !important;
+}
+
+/* Override any remaining black backgrounds */
+[data-admin="true"] .admin-sidebar[style*="background-color: #000000"],
+[data-admin="true"] .admin-sidebar[style*="background: #000000"],
+[data-admin="true"] .admin-sidebar[style*="background-color: black"],
+[data-admin="true"] .admin-sidebar[style*="background: black"] {
+  background-color: #002A25 !important;
+  background: #002A25 !important;
 }
 
 /* Ensure hover text color works properly - highest specificity */
@@ -944,8 +1200,8 @@ html body [data-admin="true"] .admin-sidebar a:active {
 /* Override any dynamic changes */
 [data-admin="true"] .admin-sidebar[class*="bg-"],
 [data-admin="true"] .admin-sidebar[style*="background"] {
-  background-color: #000000 !important;
-  background: #000000 !important;
+  background-color: #002A25 !important;
+  background: #002A25 !important;
 }
 
 .admin-main {
@@ -1016,7 +1272,7 @@ html body [data-admin="true"] .admin-sidebar a:active {
 }
 
 [data-admin="true"] .admin-sidebar button:hover {
-  background-color: #2e2e33 !important;
+  background-color: #003A35 !important;
   border-radius: 0.25rem !important;
   outline: none !important;
   box-shadow: none !important;
@@ -1024,7 +1280,7 @@ html body [data-admin="true"] .admin-sidebar a:active {
 }
 
 [data-admin="true"] .admin-sidebar a:hover {
-  background-color: #2e2e33 !important;
+  background-color: #003A35 !important;
   border-radius: 0.25rem !important;
   outline: none !important;
   box-shadow: none !important;
@@ -1034,13 +1290,13 @@ html body [data-admin="true"] .admin-sidebar a:active {
 /* Ultra specific hover override for admin sidebar */
 html body [data-admin="true"] .admin-sidebar button:hover,
 html body [data-admin="true"] .admin-sidebar a:hover {
-  background-color: #2e2e33 !important;
+  background-color: #003A35 !important;
 }
 
 /* Active state for admin sidebar */
 [data-admin="true"] .admin-sidebar button.active,
 [data-admin="true"] .admin-sidebar a.active {
-  background-color: #2e2e33 !important;
+  background-color: #003A35 !important;
 }
 
 /* Analytics page border fixes - Remove vertical lines */
@@ -1164,7 +1420,7 @@ input[type="time"]:hover,
 input[type="datetime-local"]:hover,
 select:hover,
 textarea:hover {
-  border-color: #059669 !important;
+  border-color: #00514B !important;
   transition: border-color 0.2s ease !important;
 }
 
@@ -1182,7 +1438,7 @@ input[type="time"]:active,
 input[type="datetime-local"]:active,
 select:active,
 textarea:active {
-  border-color: #059669 !important;
+  border-color: #00514B !important;
   transition: border-color 0.2s ease !important;
 }
 
@@ -1200,7 +1456,7 @@ input[type="time"]:focus,
 input[type="datetime-local"]:focus,
 select:focus,
 textarea:focus {
-  border-color: #059669 !important;
+  border-color: #00514B !important;
   outline: none !important;
   box-shadow: none !important;
   transition: border-color 0.2s ease !important;
@@ -1242,7 +1498,7 @@ textarea:focus {
 .dark input[type="datetime-local"]:hover,
 .dark select:hover,
 .dark textarea:hover {
-  border-color: #059669 !important;
+  border-color: #00514B !important;
   transition: border-color 0.2s ease !important;
 }
 
@@ -1260,7 +1516,7 @@ textarea:focus {
 .dark input[type="datetime-local"]:active,
 .dark select:active,
 .dark textarea:active {
-  border-color: #059669 !important;
+  border-color: #00514B !important;
   transition: border-color 0.2s ease !important;
 }
 
@@ -1278,7 +1534,7 @@ textarea:focus {
 .dark input[type="datetime-local"]:focus,
 .dark select:focus,
 .dark textarea:focus {
-  border-color: #059669 !important;
+  border-color: #00514B !important;
   outline: none !important;
   box-shadow: none !important;
   transition: border-color 0.2s ease !important;
@@ -1303,9 +1559,20 @@ input[type="submit"]:hover,
 input[type="reset"]:hover,
 input[type="checkbox"]:hover,
 input[type="radio"]:hover,
-select:hover,
-textarea:hover {
+select:hover {
   cursor: pointer !important;
+}
+
+/* Text inputs and textareas should keep text cursor even on hover */
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="number"]:hover,
+input[type="url"]:hover,
+input[type="search"]:hover,
+input[type="tel"]:hover,
+textarea:hover {
+  cursor: text !important;
 }
 
 /* Mobile-specific improvements */
@@ -1364,7 +1631,7 @@ textarea:hover {
 }
 
 .cosmt-hero-slider {
-  @apply relative h-96 md:h-[500px] overflow-hidden;
+  @apply relative h-64 md:h-[350px] overflow-hidden;
 }
 
 .cosmt-product-card {
@@ -1392,42 +1659,112 @@ body:not([data-admin="true"]) .rounded-lg {
   border-radius: 6px !important;
 }
 
-/* Admin Cards Background Color - #f9f9f9 (exclude dashboard cards, sidebar, and categories page) */
-[data-admin="true"] .bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] [class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] .bg-white.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] .border.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] .border-gray-200.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] .border-gray-700.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] div.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] div.bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] div[class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *) {
+/* Admin Cards Background Color - #f9f9f9 (exclude dashboard cards, sidebar, categories page, and buttons) */
+[data-admin="true"] .bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] [class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .bg-white.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .border.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .border-gray-200.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .border-gray-700.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] div.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] div.bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] div[class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *) {
   background-color: #f9f9f9 !important;
 }
 
-/* More specific admin card background override (exclude dashboard cards, sidebar, and categories page) */
-[data-admin="true"] div[class*="bg-white"][class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] div[class*="bg-white"][class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] .bg-white[class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *),
-[data-admin="true"] .bg-white[class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *) {
+/* More specific admin card background override (exclude dashboard cards, sidebar, categories page, and buttons) */
+[data-admin="true"] div[class*="bg-white"][class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] div[class*="bg-white"][class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .bg-white[class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .bg-white[class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *) {
   background-color: #f9f9f9 !important;
 }
 
-/* Force admin cards background - highest specificity (exclude dashboard cards and categories page) */
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700:not(.rounded-md):not(.categories-page *) {
+/* Force admin cards background - highest specificity (exclude dashboard cards, categories page, and buttons) */
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700:not(.rounded-md):not(.categories-page *):not(button):not(button *) {
   background-color: #f9f9f9 !important;
 }
 
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-4:not(.rounded-md):not(.categories-page *),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-6:not(.rounded-md):not(.categories-page *) {
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-4:not(.rounded-md):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-6:not(.rounded-md):not(.categories-page *):not(button):not(button *) {
   background-color: #f9f9f9 !important;
 }
 
 /* Keep rounded-full and rounded-sm as they are for specific UI elements */
 [data-admin="true"] .rounded-full {
   border-radius: 9999px !important; /* Keep full rounded for pills/badges */
+}
+
+/* Ensure button borders use the correct color - HIGHEST SPECIFICITY */
+[data-admin="true"] button[class*="secondary"] {
+  border: 1px solid #eef2f6 !important;
+  background-color: #fff !important;
+}
+
+/* Target all buttons in admin pages */
+[data-admin="true"] button {
+  border: 1px solid #eef2f6 !important;
+  background-color: #fff !important;
+}
+
+/* Hover states for secondary buttons */
+[data-admin="true"] button:hover {
+  border: 1px solid #d1d5db !important;
+  background-color: #f9fafb !important;
+}
+
+/* Active and focus states for secondary buttons */
+[data-admin="true"] button:active,
+[data-admin="true"] button:focus {
+  border: 1px solid #d1d5db !important;
+  background-color: #f9fafb !important;
+  outline: none !important;
+}
+
+/* Focus-visible state */
+[data-admin="true"] button:focus-visible {
+  border: 1px solid #d1d5db !important;
+  background-color: #f9fafb !important;
+  outline: 2px solid #00514B !important;
+  outline-offset: 2px !important;
+}
+
+/* Override for primary buttons */
+[data-admin="true"] button[class*="primary"] {
+  background-color: var(--cosmt-primary-soft) !important;
+  border: none !important;
+  color: white !important;
+}
+
+/* Primary button hover state */
+[data-admin="true"] button[class*="primary"]:hover {
+  background-color: var(--cosmt-primary-soft-dark) !important;
+  border: none !important;
+  color: white !important;
+}
+
+/* Primary button active and focus states */
+[data-admin="true"] button[class*="primary"]:active,
+[data-admin="true"] button[class*="primary"]:focus {
+  background-color: var(--cosmt-primary-dark) !important;
+  border: none !important;
+  color: white !important;
+  outline: none !important;
+}
+
+/* Primary button focus-visible state */
+[data-admin="true"] button[class*="primary"]:focus-visible {
+  background-color: var(--cosmt-primary-dark) !important;
+  border: none !important;
+  color: white !important;
+  outline: 2px solid #00514B !important;
+  outline-offset: 2px !important;
+}
+
+[data-admin="true"] button.border-cosmt-border {
+  border-color: #eef2f6 !important;
 }
 
 /* Admin Dashboard Cards - Pure White with 8px border radius and no shadow */
@@ -1570,8 +1907,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] textarea:focus {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #059669 !important;
-  border: 1px solid #059669 !important;
+  border-color: #00514B !important;
+  border: 1px solid #00514B !important;
   outline: none !important;
   box-shadow: none !important;
   color: #111827 !important;
@@ -1593,8 +1930,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] textarea:hover {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #059669 !important;
-  border: 1px solid #059669 !important;
+  border-color: #00514B !important;
+  border: 1px solid #00514B !important;
   color: #111827 !important;
 }
 
@@ -1614,8 +1951,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] textarea:active {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #059669 !important;
-  border: 1px solid #059669 !important;
+  border-color: #00514B !important;
+  border: 1px solid #00514B !important;
   color: #111827 !important;
 }
 
@@ -1733,8 +2070,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] .filter-select:focus {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #059669 !important;
-  border: 1px solid #059669 !important;
+  border-color: #00514B !important;
+  border: 1px solid #00514B !important;
   outline: none !important;
   box-shadow: none !important;
   color: #111827 !important;
@@ -1744,8 +2081,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] .filter-select:hover {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #059669 !important;
-  border: 1px solid #059669 !important;
+  border-color: #00514B !important;
+  border: 1px solid #00514B !important;
   color: #111827 !important;
 }
 
@@ -1753,8 +2090,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] .filter-select:active {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #059669 !important;
-  border: 1px solid #059669 !important;
+  border-color: #00514B !important;
+  border: 1px solid #00514B !important;
   color: #111827 !important;
 }
 
@@ -1869,7 +2206,7 @@ body:not([data-admin="true"]) .rounded-lg {
 }
 
 .cosmt-promotion-bar {
-  @apply text-white py-1 px-2 md:py-2 md:px-4 relative;
+  @apply text-white py-0.5 px-2 md:py-1 md:px-4 relative;
   background-color: #00833F;
 }
 
@@ -1884,7 +2221,8 @@ body:not([data-admin="true"]) .rounded-lg {
 }
 
 .animate-scroll {
-  animation: scroll 120s linear infinite;
+  animation: scroll 30s linear infinite;
+  will-change: transform;
 }
 
 .animate-scroll:hover {
@@ -1973,6 +2311,45 @@ html {
 button {
   transition: all 0.2s ease;
   border-radius: 0.25rem !important;
+}
+
+/* Softer green button styling */
+button.bg-cosmt-primary,
+button[class*="primary"] {
+  background-color: #00514B !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s ease-in-out !important;
+  filter: brightness(1) !important;
+}
+
+button.bg-cosmt-primary:hover,
+button[class*="primary"]:hover {
+  background-color: #003A35 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  transform: translateY(-1px) !important;
+  filter: brightness(1.05) !important;
+}
+
+button.bg-cosmt-primary:active,
+button[class*="primary"]:active {
+  background-color: #002A25 !important;
+  transform: translateY(0) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  filter: brightness(0.95) !important;
+}
+
+/* Additional smoothness for all buttons */
+button {
+  filter: brightness(1) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+button:hover {
+  filter: brightness(1.02) !important;
+}
+
+button:active {
+  filter: brightness(0.98) !important;
 }
 
 /* Default border radius for all buttons and button-like elements */
@@ -2228,6 +2605,342 @@ input[type="reset"][class*="rounded"] {
 [data-admin="true"] .tab-navigation button:focus,
 [data-admin="true"] .tab-navigation button:active {
   border-radius: 0 !important;
+}
+
+/* Product page tab buttons - Remove border radius and borders */
+.tab-navigation button,
+.tab-navigation button:hover,
+.tab-navigation button:focus,
+.tab-navigation button:active {
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Tab buttons active state - only show bottom border */
+.tab-navigation button[class*="border-green-600"],
+.tab-navigation button[class*="text-green-600"],
+.tab-navigation button[class*="border-[#00514B]"],
+.tab-navigation button[class*="text-[#00514B]"] {
+  border: none !important;
+  border-bottom: 2px solid #00514B !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Admin page tab buttons - Remove all borders except bottom */
+[data-admin="true"] .tab-navigation button,
+[data-admin="true"] .tab-navigation button:hover,
+[data-admin="true"] .tab-navigation button:focus,
+[data-admin="true"] .tab-navigation button:active {
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Admin page tab buttons active state */
+[data-admin="true"] .tab-navigation button[class*="text-green-600"],
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"] {
+  border: none !important;
+  border-bottom: 2px solid #00514B !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ULTIMATE OVERRIDE - Force green border for active tabs */
+.tab-navigation button[class*="text-green-600"],
+.tab-navigation button[class*="text-[#00514B]"],
+[data-admin="true"] .tab-navigation button[class*="text-green-600"],
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"],
+.tab-navigation button.active,
+[data-admin="true"] .tab-navigation button.active {
+  border: none !important;
+  border-bottom: 2px solid #00514B !important;
+  border-color: #00514B !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Override any conflicting admin button rules for tabs */
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:hover,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:focus,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:active,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:hover,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:focus,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:active {
+  border: none !important;
+  border-bottom: 2px solid #00514B !important;
+  border-color: #00514B !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* FINAL OVERRIDE - Force green border with maximum specificity */
+[data-admin="true"] .tab-navigation button[class*="text-green-600"],
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:hover,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:focus,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:active,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:focus-visible,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"],
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:hover,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:focus,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:active,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:focus-visible {
+  border: none !important;
+  border-bottom: 2px solid #00514B !important;
+  border-color: #00514B !important;
+  outline: none !important;
+  box-shadow: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+}
+
+/* NUCLEAR OPTION - Remove ALL grey effects from active tabs */
+[data-admin="true"] .tab-navigation button[class*="text-green-600"],
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:hover,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:focus,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:active,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:focus-visible,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:before,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:after,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"],
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:hover,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:focus,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:active,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:focus-visible,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:before,
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:after {
+  border: none !important;
+  border-bottom: 2px solid #00514B !important;
+  border-color: #00514B !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Product page tabs - Force green border */
+.tab-navigation button[class*="text-green-600"],
+.tab-navigation button[class*="text-green-600"]:hover,
+.tab-navigation button[class*="text-green-600"]:focus,
+.tab-navigation button[class*="text-green-600"]:active,
+.tab-navigation button[class*="text-green-600"]:focus-visible,
+.tab-navigation button[class*="text-[#00514B]"],
+.tab-navigation button[class*="text-[#00514B]"]:hover,
+.tab-navigation button[class*="text-[#00514B]"]:focus,
+.tab-navigation button[class*="text-[#00514B]"]:active,
+.tab-navigation button[class*="text-[#00514B]"]:focus-visible {
+  border: none !important;
+  border-bottom: 2px solid #00514B !important;
+  border-color: #00514B !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* NUCLEAR OPTION - Remove ALL grey effects from product page active tabs */
+.tab-navigation button[class*="text-green-600"],
+.tab-navigation button[class*="text-green-600"]:hover,
+.tab-navigation button[class*="text-green-600"]:focus,
+.tab-navigation button[class*="text-green-600"]:active,
+.tab-navigation button[class*="text-green-600"]:focus-visible,
+.tab-navigation button[class*="text-green-600"]:before,
+.tab-navigation button[class*="text-green-600"]:after,
+.tab-navigation button[class*="text-[#00514B]"],
+.tab-navigation button[class*="text-[#00514B]"]:hover,
+.tab-navigation button[class*="text-[#00514B]"]:focus,
+.tab-navigation button[class*="text-[#00514B]"]:active,
+.tab-navigation button[class*="text-[#00514B]"]:focus-visible,
+.tab-navigation button[class*="text-[#00514B]"]:before,
+.tab-navigation button[class*="text-[#00514B]"]:after {
+  border: none !important;
+  border-bottom: 2px solid #00514B !important;
+  border-color: #00514B !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* ULTIMATE GREY REMOVAL - Target any possible grey effects */
+[data-admin="true"] .tab-navigation button[class*="text-green-600"] *,
+.tab-navigation button[class*="text-green-600"] *,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]::before,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]::after,
+.tab-navigation button[class*="text-green-600"]::before,
+.tab-navigation button[class*="text-green-600"]::after {
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* FINAL NUCLEAR OPTION - Override ALL possible grey effects */
+button.tab-navigation[class*="text-green-600"],
+button[class*="text-green-600"].tab-navigation,
+[data-admin="true"] button.tab-navigation[class*="text-green-600"],
+[data-admin="true"] button[class*="text-green-600"].tab-navigation,
+button.tab-navigation[class*="text-[#00514B]"],
+button[class*="text-[#00514B]"].tab-navigation,
+[data-admin="true"] button.tab-navigation[class*="text-[#00514B]"],
+[data-admin="true"] button[class*="text-[#00514B]"].tab-navigation {
+  border: none !important;
+  border-bottom: 2px solid #00514B !important;
+  border-color: #00514B !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+}
+
+/* ULTIMATE CLICK SHADOW REMOVAL - Target all click/focus states */
+.tab-navigation button:focus,
+.tab-navigation button:active,
+.tab-navigation button:focus-visible,
+.tab-navigation button:focus-within,
+[data-admin="true"] .tab-navigation button:focus,
+[data-admin="true"] .tab-navigation button:active,
+[data-admin="true"] .tab-navigation button:focus-visible,
+[data-admin="true"] .tab-navigation button:focus-within {
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Active tab click state - only green border */
+.tab-navigation button[class*="text-green-600"]:focus,
+.tab-navigation button[class*="text-green-600"]:active,
+.tab-navigation button[class*="text-green-600"]:focus-visible,
+.tab-navigation button[class*="text-green-600"]:focus-within,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:focus,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:active,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:focus-visible,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"]:focus-within {
+  border: none !important;
+  border-bottom: 2px solid #059669 !important;
+  border-color: #059669 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* BROWSER DEFAULT FOCUS REMOVAL - Override all browser focus styles */
+.tab-navigation button::-moz-focus-inner,
+[data-admin="true"] .tab-navigation button::-moz-focus-inner {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+}
+
+/* REMOVE ALL POSSIBLE FOCUS RINGS AND SHADOWS */
+.tab-navigation button:focus-visible,
+.tab-navigation button:focus,
+.tab-navigation button:active,
+[data-admin="true"] .tab-navigation button:focus-visible,
+[data-admin="true"] .tab-navigation button:focus,
+[data-admin="true"] .tab-navigation button:active {
+  outline: 0 !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  ring: none !important;
+  ring-width: 0 !important;
+  ring-offset: 0 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Tab Active State Colors - Force green color */
+[data-admin="true"] .tab-navigation button.active,
+[data-admin="true"] nav button[class*="border-b-2"].active,
+[data-admin="true"] .tab-navigation button[class*="text-green-600"],
+[data-admin="true"] nav button[class*="text-green-600"] {
+  color: #00514B !important;
+  border-bottom-color: #00514B !important;
+}
+
+/* Product form tabs active state */
+[data-admin="true"] .flex button[class*="text-green-600"] {
+  color: #00514B !important;
 }
 
 /* Override global button border radius for tab buttons */

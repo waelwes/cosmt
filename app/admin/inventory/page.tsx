@@ -273,7 +273,7 @@ export default function InventoryManagement() {
       {/* Main Inventory Card */}
       <div className="analytics-card p-0">
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b">
+        <div className="px-4 pt-4 pb-3 border-b">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Inventory Management</h1>
@@ -293,7 +293,7 @@ export default function InventoryManagement() {
         </div>
         
         {/* Card Content */}
-        <div className="px-6 py-6">
+        <div className="px-4 py-4">
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -335,10 +335,10 @@ export default function InventoryManagement() {
 
       {/* Filters and Search */}
       <div className="analytics-card p-0">
-        <div className="px-6 pt-6 pb-4 border-b">
+        <div className="px-4 pt-4 pb-3 border-b">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters & Search</h2>
         </div>
-        <div className="px-6 py-6">
+        <div className="px-4 py-4">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
           <div className="flex-1">
             <div className="relative">
@@ -388,12 +388,12 @@ export default function InventoryManagement() {
 
       {/* Inventory Items */}
       <div className="analytics-card p-0">
-        <div className="px-6 pt-6 pb-4 border-b">
+        <div className="px-4 pt-4 pb-3 border-b">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Products ({filteredItems.length})
           </h2>
         </div>
-        <div className="px-6 py-6">
+        <div className="px-4 py-4">
           <div className="space-y-4">
             {filteredItems.map((item) => (
               <InventoryItem
@@ -410,7 +410,7 @@ export default function InventoryManagement() {
 
       {/* Recent Stock Movements */}
       <div className="analytics-card p-0">
-        <div className="px-6 pt-6 pb-4 border-b">
+        <div className="px-4 pt-4 pb-3 border-b">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Stock Movements</h2>
             <button className="text-blue-600 hover:text-green-700 text-sm font-medium">
@@ -418,7 +418,7 @@ export default function InventoryManagement() {
             </button>
           </div>
         </div>
-        <div className="px-6 py-6">
+        <div className="px-4 py-4">
         
           <div className="space-y-2">
             {stockMovements.slice(0, 5).map((movement) => (

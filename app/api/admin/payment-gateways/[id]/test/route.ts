@@ -77,11 +77,12 @@ async function testBraintreeConnection(publicKey: string, privateKey: string, mo
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // For demo purposes, simulate a test connection
-    const gatewayId = parseInt(params.id);
+    const { id } = await params;
+    const gatewayId = parseInt(id);
     
     // Simulate different test results based on gateway
     const testResults = {

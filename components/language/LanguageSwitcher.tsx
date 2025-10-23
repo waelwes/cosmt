@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Globe } from 'lucide-react';
+import { Globe, Settings } from 'lucide-react';
 import { useLanguageSwitch } from '../../hooks/useLanguageSwitch';
+import SimpleDropdown from '../layout/SimpleDropdown';
 
 export default function LanguageSwitcher() {
   const { currentLanguage, direction, languages, changeLanguage, mounted } = useLanguageSwitch();
   const [isOpen, setIsOpen] = useState(false);
+  const [showPreferences, setShowPreferences] = useState(false);
 
   if (!mounted) {
     return (
@@ -34,7 +36,7 @@ export default function LanguageSwitcher() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-lg z-50">
+        <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-lg z-50">
           <div className="py-2">
             {languages.map((language) => (
               <button
@@ -59,9 +61,30 @@ export default function LanguageSwitcher() {
                 )}
               </button>
             ))}
+            
+            {/* Divider */}
+            <div className="border-t border-gray-200 dark:border-gray-600 my-2"></div>
+            
+            {/* Site Preferences Button */}
+            <button
+              onClick={() => {
+                setShowPreferences(true);
+                setIsOpen(false);
+              }}
+              className="w-full flex items-center px-4 py-3 text-sm text-left hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors text-gray-700 dark:text-gray-100"
+            >
+              <Settings className="w-4 h-4 mr-3" />
+              <span className="font-medium">Site Preferences</span>
+            </button>
           </div>
         </div>
       )}
+
+      {/* Site Preferences Dropdown */}
+      <SimpleDropdown
+        isOpen={showPreferences}
+        onClose={() => setShowPreferences(false)}
+      />
     </div>
   );
 }

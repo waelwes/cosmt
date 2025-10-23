@@ -10,6 +10,7 @@ const LANGUAGES = [
   { code: 'es', name: 'Español', flag: '🇪🇸', direction: 'ltr' },
   { code: 'de', name: 'Deutsch', flag: '🇩🇪', direction: 'ltr' },
   { code: 'zh', name: '中文', flag: '🇨🇳', direction: 'ltr' },
+  { code: 'tr', name: 'Türkçe', flag: '🇹🇷', direction: 'ltr' },
 ];
 
 export function useLanguageSwitch() {

@@ -84,10 +84,7 @@ const AVAILABLE_SECTIONS: Section[] = [
       showTitle: true,
       columns: 4,
       categories: [
-        { name: 'Hair Care', image: '/api/placeholder/300/200', link: '/categories/hair-care' },
-        { name: 'Skincare', image: '/api/placeholder/300/200', link: '/categories/skincare' },
-        { name: 'Makeup', image: '/api/placeholder/300/200', link: '/categories/makeup' },
-        { name: 'Fragrance', image: '/api/placeholder/300/200', link: '/categories/fragrance' }
+        // Categories cleared - ready for new structure
       ]
     }
   },

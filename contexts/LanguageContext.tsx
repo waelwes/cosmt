@@ -603,6 +603,148 @@ const translations: Record<string, Translations> = {
     signOut: '退出登录',
     switchToLightMode: '切换到浅色模式',
     switchToDarkMode: '切换到深色模式',
+  },
+  tr: {
+    // Common
+    loading: 'Yükleniyor...',
+    save: 'Kaydet',
+    cancel: 'İptal',
+    delete: 'Sil',
+    edit: 'Düzenle',
+    view: 'Görüntüle',
+    search: 'Ara',
+    filter: 'Filtrele',
+    sort: 'Sırala',
+    refresh: 'Yenile',
+    export: 'Dışa Aktar',
+    import: 'İçe Aktar',
+    
+    // Navigation
+    dashboard: 'Kontrol Paneli',
+    products: 'Ürünler',
+    orders: 'Siparişler',
+    customers: 'Müşteriler',
+    analytics: 'Analitik',
+    marketing: 'Pazarlama',
+    content: 'İçerik',
+    settings: 'Ayarlar',
+    support: 'Destek',
+    apps: 'Uygulamalar',
+    
+    // Dashboard
+    adminDashboard: 'Yönetici Paneli',
+    totalSales: 'Toplam Satış',
+    netSales: 'Net Satış',
+    orderCount: 'Sipariş Sayısı',
+    conversionRate: 'Dönüşüm Oranı',
+    salesOverview: 'Satış Genel Bakış',
+    liveVisitors: 'Canlı Ziyaretçiler',
+    topPages: 'En Popüler Sayfalar',
+    trafficSources: 'Trafik Kaynakları',
+    deviceAnalytics: 'Cihaz Analizi',
+    conversionFunnel: 'Dönüşüm Hunisi',
+    
+    // Time periods
+    all: 'Tümü',
+    today: 'Bugün',
+    thisWeek: 'Bu Hafta',
+    thisMonth: 'Bu Ay',
+    thisYear: 'Bu Yıl',
+    selectDate: 'Tarih Seç',
+    
+    // Products
+    productManagement: 'Ürün Yönetimi',
+    addProduct: 'Ürün Ekle',
+    editProduct: 'Ürünü Düzenle',
+    productName: 'Ürün Adı',
+    productDescription: 'Ürün Açıklaması',
+    productPrice: 'Ürün Fiyatı',
+    productCategory: 'Ürün Kategorisi',
+    productStock: 'Ürün Stoku',
+    productImage: 'Ürün Resmi',
+    productStatus: 'Ürün Durumu',
+    active: 'Aktif',
+    inactive: 'Pasif',
+    inStock: 'Stokta',
+    outOfStock: 'Stokta Yok',
+    lowStock: 'Düşük Stok',
+    
+    // Categories
+    skincare: 'Cilt Bakımı',
+    bodyCare: 'Vücut Bakımı',
+    hairCare: 'Saç Bakımı',
+    makeup: 'Makyaj',
+    fragrances: 'Parfümler',
+    menGrooming: 'Erkek Bakımı',
+    momBaby: 'Anne Bebek',
+    naturalOrganic: 'Doğal Organik',
+    supplements: 'Takviyeler',
+    toolsDevices: 'Araçlar ve Cihazlar',
+    
+    // Orders
+    orderManagement: 'Sipariş Yönetimi',
+    orderNumber: 'Sipariş Numarası',
+    orderDate: 'Sipariş Tarihi',
+    customerName: 'Müşteri Adı',
+    orderTotal: 'Sipariş Toplamı',
+    orderStatus: 'Sipariş Durumu',
+    pending: 'Beklemede',
+    processing: 'İşleniyor',
+    shipped: 'Kargoya Verildi',
+    delivered: 'Teslim Edildi',
+    cancelled: 'İptal Edildi',
+    refunded: 'İade Edildi',
+    
+    // Customers
+    customerManagement: 'Müşteri Yönetimi',
+    customerDetails: 'Müşteri Detayları',
+    customerEmail: 'Müşteri E-postası',
+    customerPhone: 'Müşteri Telefonu',
+    customerAddress: 'Müşteri Adresi',
+    customerOrders: 'Müşteri Siparişleri',
+    customerTotalSpent: 'Toplam Harcama',
+    customerLastOrder: 'Son Sipariş',
+    
+    // Analytics
+    salesAnalytics: 'Satış Analizi',
+    revenueAnalytics: 'Gelir Analizi',
+    customerAnalytics: 'Müşteri Analizi',
+    productAnalytics: 'Ürün Analizi',
+    trafficAnalytics: 'Trafik Analizi',
+    conversionAnalytics: 'Dönüşüm Analizi',
+    
+    // Marketing
+    marketingCampaigns: 'Pazarlama Kampanyaları',
+    emailMarketing: 'E-posta Pazarlama',
+    socialMedia: 'Sosyal Medya',
+    promotions: 'Promosyonlar',
+    discounts: 'İndirimler',
+    coupons: 'Kuponlar',
+    
+    // Content
+    contentManagement: 'İçerik Yönetimi',
+    pages: 'Sayfalar',
+    blog: 'Blog',
+    news: 'Haberler',
+    faq: 'Sık Sorulan Sorular',
+    helpCenter: 'Yardım Merkezi',
+    
+    // Settings
+    generalSettings: 'Genel Ayarlar',
+    storeSettings: 'Mağaza Ayarları',
+    paymentSettings: 'Ödeme Ayarları',
+    shippingSettings: 'Kargo Ayarları',
+    taxSettings: 'Vergi Ayarları',
+    currencySettings: 'Para Birimi Ayarları',
+    languageSettings: 'Dil Ayarları',
+    themeSettings: 'Tema Ayarları',
+    
+    // User menu
+    profile: 'Profil',
+    settings: 'Ayarlar',
+    signOut: 'Çıkış Yap',
+    switchToLightMode: 'Açık moda geç',
+    switchToDarkMode: 'Koyu moda geç',
   }
 };
 
@@ -613,6 +755,7 @@ const languages: Language[] = [
   { code: 'es', name: 'Español', flag: '🇪🇸', direction: 'ltr' },
   { code: 'de', name: 'Deutsch', flag: '🇩🇪', direction: 'ltr' },
   { code: 'zh', name: '中文', flag: '🇨🇳', direction: 'ltr' },
+  { code: 'tr', name: 'Türkçe', flag: '🇹🇷', direction: 'ltr' },
 ];
 
 interface LanguageContextType {

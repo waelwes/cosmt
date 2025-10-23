@@ -106,7 +106,7 @@ const ChartCard = memo(({ title, children, className = "" }: {
   className?: string;
 }) => (
   <div className={`analytics-card p-0 ${className}`}>
-    <div className="px-6 pt-6 pb-4">
+    <div className="px-4 pt-4 pb-3">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
     </div>
     <div className="border-t mb-4" style={{ borderTopColor: '#eef2f6' }}></div>
@@ -338,7 +338,7 @@ export default function AnalyticsDashboard() {
     <div 
       className={`space-y-6 ${direction === 'rtl' ? 'rtl' : 'ltr'}`} 
       style={{ 
-        backgroundColor: '#f8fafc', 
+        backgroundColor: '#f1f5f9', 
         minHeight: '100vh',
         direction: direction,
         textAlign: direction === 'rtl' ? 'right' : 'left'
@@ -347,7 +347,7 @@ export default function AnalyticsDashboard() {
       {/* Combined Analytics Card */}
       <div className="analytics-card p-0">
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b">
+        <div className="px-4 pt-4 pb-3 border-b">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Analytics</h1>
@@ -484,7 +484,7 @@ export default function AnalyticsDashboard() {
         </div>
         
         {/* Card Content */}
-        <div className="px-6 py-6">
+        <div className="px-4 py-4">
           {/* Stats Grid */}
           <div className="flex">
             {analyticsStats.map((stat, index) => (
