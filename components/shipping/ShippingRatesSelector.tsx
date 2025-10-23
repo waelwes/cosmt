@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/Button';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from '../ui/label';
+import { Badge } from '../ui/badge';
 import { Loader2, Truck, Clock, Shield, CheckCircle } from 'lucide-react';
 import { useShipping } from '@/hooks/useShipping';
 import { ShippingOrder, ShippingRate } from '@/lib/shipping/interfaces/IShippingProvider';

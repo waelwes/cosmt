@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/Button';
+import { Input } from '../ui/Input';
+import { Label } from '../ui/label';
+import { Badge } from '../ui/badge';
+import { Separator } from '../ui/separator';
 import { Loader2, Package, MapPin, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { useShipping } from '@/hooks/useShipping';
 import { TrackingResponse, TrackingEvent } from '@/lib/shipping/interfaces/IShippingProvider';
