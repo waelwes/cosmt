@@ -5,6 +5,11 @@
 DROP POLICY IF EXISTS "Admins can view all profiles" ON user_profiles;
 DROP POLICY IF EXISTS "Admins can update all profiles" ON user_profiles;
 
+-- Drop existing policies to recreate them
+DROP POLICY IF EXISTS "Users can view own profile" ON user_profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON user_profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON user_profiles;
+
 -- Create new policies that don't cause recursion
 -- For admin operations, we'll use a simpler approach
 -- Note: In production, you might want to use a separate admin table or role-based auth
