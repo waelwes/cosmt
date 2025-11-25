@@ -143,7 +143,4 @@ export function generateStaticParams() {
 }
 
 // Enable ISR for better performance
-// In development, use shorter revalidation for faster updates
-// In production, use longer revalidation for better performance
-export const revalidate = process.env.NODE_ENV === 'development' ? 60 : 3600; // 1 minute in dev, 1 hour in prod
-export const dynamic = process.env.NODE_ENV === 'development' ? 'auto' : 'force-static'; // Auto in dev, static in prod
+export const revalidate = 3600; // 1 hour
