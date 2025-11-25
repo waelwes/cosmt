@@ -93,17 +93,15 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <UnifiedLanguageProvider>
-          <CurrencyProvider>
-            <AuthProvider>
-              <WishlistProvider>
-                <CartProvider>
-                  <SearchProvider>
-                    {children}
-                  </SearchProvider>
-                </CartProvider>
-              </WishlistProvider>
-            </AuthProvider>
-          </CurrencyProvider>
+          <AuthProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <SearchProvider>
+                  {children}
+                </SearchProvider>
+              </CartProvider>
+            </WishlistProvider>
+          </AuthProvider>
         </UnifiedLanguageProvider>
       </body>
     </html>
