@@ -8,7 +8,7 @@ import { Header } from '../../components/layout/Header';
 import { Footer } from '../../components/layout/Footer';
 import { Button } from '../../components/ui/Button';
 import { useWishlist } from '../../contexts/WishlistContext';
-import { useCart } from '../../contexts/CartContext';
+import { useCart } from '../../contexts/CartContextNew';
 import { useAuth } from '../../contexts/AuthContextBypass';
 import { useRouter } from 'next/navigation';
 import { buildProductPath } from '../../utils/slug';
@@ -94,12 +94,12 @@ export default function WishlistPage() {
                   <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group">
                     {/* Product Image */}
                     <div className="relative aspect-square overflow-hidden">
-                      <Link href={buildProductPath({ 
-                        name: item.name, 
-                        categorySlug: item.categories?.slug, 
-                        subcategorySlug: null, 
-                        productSlug: item.slug, 
-                        id: item.id 
+                      <Link href={buildProductPath({
+                        name: item.name,
+                        categorySlug: item.categories?.slug,
+                        subcategorySlug: null,
+                        productSlug: item.slug,
+                        id: item.id
                       })}>
                         <Image
                           src={item.image}
@@ -108,14 +108,14 @@ export default function WishlistPage() {
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </Link>
-                      
+
                       {/* Wishlist Button */}
                       <div className="absolute top-3 right-3">
-        <button
-          onClick={() => handleRemoveItem(item.id)}
-          className="p-2 text-red-600 hover:text-red-700 transition-colors"
-          title="Remove from wishlist"
-        >
+                        <button
+                          onClick={() => handleRemoveItem(item.id)}
+                          className="p-2 text-red-600 hover:text-red-700 transition-colors"
+                          title="Remove from wishlist"
+                        >
                           <Heart className="w-4 h-4 fill-current" />
                         </button>
                       </div>

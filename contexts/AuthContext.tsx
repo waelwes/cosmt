@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      
+
       if (session?.user) {
         await fetchUserProfile(session.user.id);
       } else {
@@ -77,10 +77,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.log('User profile not found, creating one...', error);
-        // Try to create a profile if it doesn't exist
         const created = await createUserProfile(userId);
         if (!created) {
-          // Create a minimal profile as last resort
           const minimalProfile = {
             id: userId,
             email: '',
@@ -98,7 +96,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
-      // Create a minimal profile as fallback
       const minimalProfile = {
         id: userId,
         email: '',
@@ -116,13 +113,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const createUserProfile = async (userId: string): Promise<boolean> => {
     try {
-      // Get user data from auth
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (user) {
         console.log('Creating user profile for:', user.email);
-        
-        // Try direct insert first
+
         const { data, error } = await supabase
           .from('user_profiles')
           .insert({
@@ -138,96 +133,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (error) {
           console.error('Error creating user profile:', error);
-          
-          // If it's a conflict error (409), the user already exists, try to fetch it
-          if (error.code === '23505' || error.message?.includes('duplicate') || error.message?.includes('conflict')) {
-            console.log('User profile already exists, trying to fetch it...');
-            try {
-              const { data: existingData, error: fetchError } = await supabase
-                .from('user_profiles')
-                .select('*')
-                .eq('id', userId)
-                .single();
-              
-              if (fetchError) {
-                console.error('Failed to fetch existing profile:', fetchError);
-                // Create minimal profile as fallback
-                const minimalProfile = {
-                  id: userId,
-                  email: user.email || '',
-                  full_name: user.user_metadata?.full_name || '',
-                  role: 'customer' as const,
-                  status: 'active' as const,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString()
-                };
-                setUserProfile(minimalProfile);
-                return true;
-              } else {
-                console.log('Found existing profile:', existingData);
-                setUserProfile(existingData);
-                return true;
-              }
-            } catch (fetchError) {
-              console.error('Error fetching existing profile:', fetchError);
-              // Create minimal profile as fallback
-              const minimalProfile = {
-                id: userId,
-                email: user.email || '',
-                full_name: user.user_metadata?.full_name || '',
-                role: 'customer' as const,
-                status: 'active' as const,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-              };
-              setUserProfile(minimalProfile);
-              return true;
-            }
-          }
-          
-          // For other errors, try RPC function as fallback
-          try {
-            const { data: fallbackData, error: fallbackError } = await supabase
-              .rpc('create_user_profile', {
-                user_id: userId,
-                user_email: user.email || '',
-                user_full_name: user.user_metadata?.full_name || ''
-              });
-              
-            if (fallbackError) {
-              console.error('RPC fallback also failed:', fallbackError);
-              // Create a minimal profile object for now
-              const minimalProfile = {
-                id: userId,
-                email: user.email || '',
-                full_name: user.user_metadata?.full_name || '',
-                role: 'customer' as const,
-                status: 'active' as const,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-              };
-              setUserProfile(minimalProfile);
-              return true;
-            } else {
-              console.log('RPC profile creation succeeded');
-              setUserProfile(fallbackData);
-              return true;
-            }
-          } catch (rpcError) {
-            console.error('RPC call failed:', rpcError);
-            // Create a minimal profile object for now
-            const minimalProfile = {
-              id: userId,
-              email: user.email || '',
-              full_name: user.user_metadata?.full_name || '',
-              role: 'customer' as const,
-              status: 'active' as const,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            };
-            setUserProfile(minimalProfile);
-            return true;
-          }
+          return false;
         } else {
           console.log('User profile created successfully:', data);
           setUserProfile(data);

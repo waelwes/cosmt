@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { CreditCard, MapPin, Package, Lock, ArrowLeft } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
+import { useCart } from '../../contexts/CartContextNew';
 import { useAuth } from '@/contexts/AuthContextBypass';
 import { useCreateOrder } from '@/hooks/useOrderManagement';
 import { PageLayout } from '@/components/layout/PageLayout';
@@ -40,7 +40,7 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) {
       alert('Please sign in to place an order');
       return;
@@ -69,7 +69,7 @@ export default function CheckoutPage() {
       setOrderId(order.id);
       setOrderComplete(true);
       clearCart();
-      
+
       // Redirect to success page after a short delay
       setTimeout(() => {
         router.push(`/checkout/success?orderId=${order.id}`);
@@ -141,7 +141,7 @@ export default function CheckoutPage() {
 
   return (
     <PageLayout>
-      <div className="min-h-screen" style={{backgroundColor: '#fbfbfb'}}>
+      <div className="min-h-screen" style={{ backgroundColor: '#fbfbfb' }}>
         <div className="cosmt-container py-8">
           {/* Header */}
           <div className="mb-8">
@@ -155,191 +155,191 @@ export default function CheckoutPage() {
             <p className="text-lg text-gray-600 mt-2">Complete your order securely</p>
           </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Checkout Form */}
-          <div className="space-y-6">
-            {/* Shipping Information */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <MapPin className="w-5 h-5 mr-2" />
-                Shipping Information
-              </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Shipping Address *
-                  </label>
-                  <textarea
-                    name="shippingAddress"
-                    value={formData.shippingAddress}
-                    onChange={handleInputChange}
-                    placeholder="Enter your complete shipping address"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cosmt-primary focus:border-transparent"
-                    rows={3}
-                    required
-                  />
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Checkout Form */}
+            <div className="space-y-6">
+              {/* Shipping Information */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                  <MapPin className="w-5 h-5 mr-2" />
+                  Shipping Information
+                </h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Shipping Address *
+                    </label>
+                    <textarea
+                      name="shippingAddress"
+                      value={formData.shippingAddress}
+                      onChange={handleInputChange}
+                      placeholder="Enter your complete shipping address"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cosmt-primary focus:border-transparent"
+                      rows={3}
+                      required
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Billing Address
-                  </label>
-                  <textarea
-                    name="billingAddress"
-                    value={formData.billingAddress}
-                    onChange={handleInputChange}
-                    placeholder="Enter your billing address (optional)"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cosmt-primary focus:border-transparent"
-                    rows={3}
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Billing Address
+                    </label>
+                    <textarea
+                      name="billingAddress"
+                      value={formData.billingAddress}
+                      onChange={handleInputChange}
+                      placeholder="Enter your billing address (optional)"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cosmt-primary focus:border-transparent"
+                      rows={3}
+                    />
+                  </div>
 
-                {/* Payment Information */}
-                <div className="pt-6 border-t border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <CreditCard className="w-5 h-5 mr-2" />
-                    Payment Information
-                  </h3>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Payment Method
-                      </label>
-                      <select
-                        name="paymentMethod"
-                        value={formData.paymentMethod}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cosmt-primary focus:border-transparent"
-                      >
-                        <option value="credit_card">Credit Card</option>
-                        <option value="debit_card">Debit Card</option>
-                        <option value="paypal">PayPal</option>
-                      </select>
-                    </div>
+                  {/* Payment Information */}
+                  <div className="pt-6 border-t border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                      <CreditCard className="w-5 h-5 mr-2" />
+                      Payment Information
+                    </h3>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Card Number *
-                      </label>
-                      <Input
-                        type="text"
-                        name="cardNumber"
-                        value={formData.cardNumber}
-                        onChange={handleInputChange}
-                        placeholder="1234 5678 9012 3456"
-                        required
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Expiry Date *
+                          Payment Method
+                        </label>
+                        <select
+                          name="paymentMethod"
+                          value={formData.paymentMethod}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cosmt-primary focus:border-transparent"
+                        >
+                          <option value="credit_card">Credit Card</option>
+                          <option value="debit_card">Debit Card</option>
+                          <option value="paypal">PayPal</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Card Number *
                         </label>
                         <Input
                           type="text"
-                          name="expiryDate"
-                          value={formData.expiryDate}
+                          name="cardNumber"
+                          value={formData.cardNumber}
                           onChange={handleInputChange}
-                          placeholder="MM/YY"
+                          placeholder="1234 5678 9012 3456"
                           required
                         />
                       </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Expiry Date *
+                          </label>
+                          <Input
+                            type="text"
+                            name="expiryDate"
+                            value={formData.expiryDate}
+                            onChange={handleInputChange}
+                            placeholder="MM/YY"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            CVV *
+                          </label>
+                          <Input
+                            type="text"
+                            name="cvv"
+                            value={formData.cvv}
+                            onChange={handleInputChange}
+                            placeholder="123"
+                            required
+                          />
+                        </div>
+                      </div>
+
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          CVV *
+                          Cardholder Name *
                         </label>
                         <Input
                           type="text"
-                          name="cvv"
-                          value={formData.cvv}
+                          name="cardName"
+                          value={formData.cardName}
                           onChange={handleInputChange}
-                          placeholder="123"
+                          placeholder="John Doe"
                           required
                         />
                       </div>
                     </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Cardholder Name *
-                      </label>
-                      <Input
-                        type="text"
-                        name="cardName"
-                        value={formData.cardName}
-                        onChange={handleInputChange}
-                        placeholder="John Doe"
-                        required
-                      />
-                    </div>
                   </div>
-                </div>
 
-                {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                    {error}
-                  </div>
-                )}
-
-                <Button
-                  type="submit"
-                  className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200"
-                  disabled={loading}
-                >
-                  {loading ? 'Processing...' : 'Place Order'}
-                </Button>
-              </form>
-            </div>
-          </div>
-
-          {/* Order Summary */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h2>
-              
-              <div className="space-y-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-4">
-                    <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <Package className="w-8 h-8 text-gray-400" />
+                  {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                      {error}
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium text-gray-900">{item.name}</h3>
-                      <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-gray-900">
-                        ₺{(item.price * item.quantity).toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  )}
 
-              <div className="border-t border-gray-200 pt-4 mt-4">
-                <div className="flex justify-between items-center text-xl font-bold text-gray-900">
-                  <span>Total</span>
-                  <span className="text-green-600">${getTotalPrice().toFixed(2)}</span>
-                </div>
+                  <Button
+                    type="submit"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200"
+                    disabled={loading}
+                  >
+                    {loading ? 'Processing...' : 'Place Order'}
+                  </Button>
+                </form>
               </div>
             </div>
 
-            {/* Security Notice */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start space-x-3">
-                <Lock className="w-5 h-5 text-blue-600 mt-0.5" />
-                <div>
-                  <h3 className="text-sm font-medium text-blue-900">Secure Checkout</h3>
-                  <p className="text-sm text-blue-700 mt-1">
-                    Your payment information is encrypted and secure. We never store your card details.
-                  </p>
+            {/* Order Summary */}
+            <div className="space-y-6">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h2>
+
+                <div className="space-y-4">
+                  {items.map((item) => (
+                    <div key={item.id} className="flex items-center space-x-4">
+                      <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <Package className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-900">{item.name}</h3>
+                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-gray-900">
+                          ₺{(item.price * item.quantity).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-t border-gray-200 pt-4 mt-4">
+                  <div className="flex justify-between items-center text-xl font-bold text-gray-900">
+                    <span>Total</span>
+                    <span className="text-green-600">${getTotalPrice().toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Security Notice */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start space-x-3">
+                  <Lock className="w-5 h-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <h3 className="text-sm font-medium text-blue-900">Secure Checkout</h3>
+                    <p className="text-sm text-blue-700 mt-1">
+                      Your payment information is encrypted and secure. We never store your card details.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </PageLayout>

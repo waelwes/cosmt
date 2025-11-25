@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "../contexts/CartContext";
+import { CartProvider } from "../contexts/CartContextNew";
 import { SearchProvider } from "../contexts/SearchContext";
 import { AuthProvider } from "../contexts/AuthContextBypass";
 import { WishlistProvider } from "../contexts/WishlistContext";
@@ -92,13 +92,19 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
         suppressHydrationWarning={true}
       >
-        <WishlistProvider>
-          <CartProvider>
-            <SearchProvider>
-              {children}
-            </SearchProvider>
-          </CartProvider>
-        </WishlistProvider>
+        <AuthProvider>
+          <UnifiedLanguageProvider>
+            <CurrencyProvider>
+              <WishlistProvider>
+                <CartProvider>
+                  <SearchProvider>
+                    {children}
+                  </SearchProvider>
+                </CartProvider>
+              </WishlistProvider>
+            </CurrencyProvider>
+          </UnifiedLanguageProvider>
+        </AuthProvider>
       </body>
     </html>
   );

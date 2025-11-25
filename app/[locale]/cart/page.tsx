@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useCart } from '../../../contexts/CartContext';
+import { useCart } from '../../../contexts/CartContextNew';
 import { PageLayout } from '../../../components/layout/PageLayout';
 import { useProductDisplay } from '../../../hooks/useProductDisplay';
 import { Button } from '../../../components/ui/Button';
@@ -171,7 +171,7 @@ export default function CartPage({ params }: CartPageProps) {
 
   return (
     <PageLayout>
-      <div className="min-h-screen" style={{backgroundColor: '#fbfbfb'}}>
+      <div className="min-h-screen" style={{ backgroundColor: '#fbfbfb' }}>
         <div className="cosmt-container py-8">
           {/* Header */}
           <div className="mb-8">
@@ -185,151 +185,151 @@ export default function CartPage({ params }: CartPageProps) {
             </p>
           </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items */}
-          <div className="lg:col-span-2">
-            <div className="space-y-4">
-              {isLoading ? (
-                <div className="flex items-center justify-center py-12">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Translating products...</p>
-                  </div>
-                </div>
-              ) : (
-                displayItems.map((item) => (
-                <div key={item.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
-                  <div className="flex items-start space-x-6">
-                    {/* Product Image */}
-                    <div className="relative w-32 h-32 flex-shrink-0">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="object-cover rounded-lg"
-                      />
-                    </div>
-
-                    {/* Product Details */}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                        {item.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-2">{item.category}</p>
-                      <p className="text-sm text-gray-500 line-clamp-2">{item.description}</p>
-                      
-                      {/* Price */}
-                      <div className="flex items-center space-x-2 mt-4">
-                        <span className="text-xl font-bold text-green-600">{item.price}</span>
-                        {item.originalPrice && (
-                          <span className="text-sm text-gray-500 line-through">
-                            {item.originalPrice}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Quantity Controls */}
-                    <div className="flex flex-col items-end space-y-4">
-                      <div className="flex items-center space-x-3">
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-green-300 transition-colors duration-200"
-                        >
-                          <Minus className="w-4 h-4" />
-                        </button>
-                        <span className="w-16 text-center font-semibold text-lg">{item.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-green-300 transition-colors duration-200"
-                        >
-                          <Plus className="w-4 h-4" />
-                        </button>
-                      </div>
-
-                      {/* Remove Button */}
-                      <button
-                        onClick={() => removeFromCart(item.id)}
-                        className="text-red-600 hover:text-red-800 transition-colors duration-200 flex items-center space-x-2"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        <span className="text-sm font-medium">{t.remove}</span>
-                      </button>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Cart Items */}
+            <div className="lg:col-span-2">
+              <div className="space-y-4">
+                {isLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+                      <p className="text-gray-600">Translating products...</p>
                     </div>
                   </div>
-                </div>
-                ))
-              )}
+                ) : (
+                  displayItems.map((item) => (
+                    <div key={item.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200">
+                      <div className="flex items-start space-x-6">
+                        {/* Product Image */}
+                        <div className="relative w-32 h-32 flex-shrink-0">
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fill
+                            className="object-cover rounded-lg"
+                          />
+                        </div>
+
+                        {/* Product Details */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                            {item.name}
+                          </h3>
+                          <p className="text-sm text-gray-600 mb-2">{item.category}</p>
+                          <p className="text-sm text-gray-500 line-clamp-2">{item.description}</p>
+
+                          {/* Price */}
+                          <div className="flex items-center space-x-2 mt-4">
+                            <span className="text-xl font-bold text-green-600">{item.price}</span>
+                            {item.originalPrice && (
+                              <span className="text-sm text-gray-500 line-through">
+                                {item.originalPrice}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Quantity Controls */}
+                        <div className="flex flex-col items-end space-y-4">
+                          <div className="flex items-center space-x-3">
+                            <button
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-green-300 transition-colors duration-200"
+                            >
+                              <Minus className="w-4 h-4" />
+                            </button>
+                            <span className="w-16 text-center font-semibold text-lg">{item.quantity}</span>
+                            <button
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-green-300 transition-colors duration-200"
+                            >
+                              <Plus className="w-4 h-4" />
+                            </button>
+                          </div>
+
+                          {/* Remove Button */}
+                          <button
+                            onClick={() => removeFromCart(item.id)}
+                            className="text-red-600 hover:text-red-800 transition-colors duration-200 flex items-center space-x-2"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            <span className="text-sm font-medium">{t.remove}</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Clear Cart Button */}
+              <div className="mt-6">
+                <button
+                  onClick={clearCart}
+                  className="text-red-600 hover:text-red-800 transition-colors duration-200 flex items-center space-x-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>{t.clearCart}</span>
+                </button>
+              </div>
             </div>
 
-            {/* Clear Cart Button */}
-            <div className="mt-6">
-              <button
-                onClick={clearCart}
-                className="text-red-600 hover:text-red-800 transition-colors duration-200 flex items-center space-x-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                <span>{t.clearCart}</span>
-              </button>
-            </div>
-          </div>
+            {/* Order Summary */}
+            <div className="lg:col-span-1">
+              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm sticky top-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">{t.orderSummary}</h2>
 
-          {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm sticky top-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t.orderSummary}</h2>
-              
-              {/* Subtotal */}
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-base text-gray-600">{t.subtotal}</span>
-                <span className="text-lg font-semibold text-gray-900">
-                  ${getTotalPrice().toFixed(2)}
-                </span>
-              </div>
-
-              {/* Shipping */}
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-base text-gray-600">{t.shipping}</span>
-                <span className="text-base text-gray-900">
-                  {getTotalPrice() >= 50 ? t.free : '$9.99'}
-                </span>
-              </div>
-
-              {/* Tax */}
-              <div className="flex justify-between items-center mb-6">
-                <span className="text-base text-gray-600">{t.tax}</span>
-                <span className="text-base text-gray-900">
-                  ${(getTotalPrice() * 0.08).toFixed(2)}
-                </span>
-              </div>
-
-              {/* Total */}
-              <div className="border-t border-gray-300 pt-4 mb-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold text-gray-900">{t.total}</span>
-                  <span className="text-2xl font-bold text-green-600">
-                    ${(getTotalPrice() + (getTotalPrice() >= 50 ? 0 : 9.99) + (getTotalPrice() * 0.08)).toFixed(2)}
+                {/* Subtotal */}
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-base text-gray-600">{t.subtotal}</span>
+                  <span className="text-lg font-semibold text-gray-900">
+                    ${getTotalPrice().toFixed(2)}
                   </span>
                 </div>
+
+                {/* Shipping */}
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-base text-gray-600">{t.shipping}</span>
+                  <span className="text-base text-gray-900">
+                    {getTotalPrice() >= 50 ? t.free : '$9.99'}
+                  </span>
+                </div>
+
+                {/* Tax */}
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-base text-gray-600">{t.tax}</span>
+                  <span className="text-base text-gray-900">
+                    ${(getTotalPrice() * 0.08).toFixed(2)}
+                  </span>
+                </div>
+
+                {/* Total */}
+                <div className="border-t border-gray-300 pt-4 mb-6">
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg font-bold text-gray-900">{t.total}</span>
+                    <span className="text-2xl font-bold text-green-600">
+                      ${(getTotalPrice() + (getTotalPrice() >= 50 ? 0 : 9.99) + (getTotalPrice() * 0.08)).toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Checkout Button */}
+                <Link href={`/${locale}/checkout`}>
+                  <Button className="w-full mb-4 text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200" style={{ backgroundColor: '#003d38' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}>
+                    {t.proceedToCheckout}
+                  </Button>
+                </Link>
+
+                {/* Continue Shopping */}
+                <Link href={`/${locale}/categories`} className="block">
+                  <Button variant="outline" className="w-full border-gray-300 hover:bg-gray-50 text-lg py-3 rounded-lg transition-colors duration-200">
+                    {t.continueShopping}
+                  </Button>
+                </Link>
+
               </div>
-
-              {/* Checkout Button */}
-              <Link href={`/${locale}/checkout`}>
-                <Button className="w-full mb-4 text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200" style={{ backgroundColor: '#003d38' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}>
-                  {t.proceedToCheckout}
-                </Button>
-              </Link>
-
-              {/* Continue Shopping */}
-              <Link href={`/${locale}/categories`} className="block">
-                <Button variant="outline" className="w-full border-gray-300 hover:bg-gray-50 text-lg py-3 rounded-lg transition-colors duration-200">
-                  {t.continueShopping}
-                </Button>
-              </Link>
-
             </div>
           </div>
-        </div>
         </div>
       </div>
     </PageLayout>

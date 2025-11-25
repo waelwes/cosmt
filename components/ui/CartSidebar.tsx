@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useCart } from '../../contexts/CartContext';
+import { useCart } from '../../contexts/CartContextNew';
 import { Button } from './Button';
 import { Minus, Plus, ShoppingCart, X } from 'lucide-react';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
-      
+
       return () => {
         // Restore scroll position
         document.body.style.position = '';
@@ -60,18 +60,17 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
   return (
     <>
       {/* Full Screen Shadow Overlay */}
-      <div 
-        className={`fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-[9998] pointer-events-auto ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
+      <div
+        className={`fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-[9998] pointer-events-auto ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
         onClick={onClose}
-        style={{ 
+        style={{
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          width: '100%', 
+          width: '100%',
           height: '100vh',
           zIndex: 9998,
           transition: `opacity var(--cosmt-transition-duration) var(--cosmt-transition-easing)`
@@ -79,7 +78,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
       />
 
       {/* Sidebar */}
-      <div className="fixed right-0 top-0 w-full max-w-md bg-white border-l border-gray-200 z-[9999]"       style={{ 
+      <div className="fixed right-0 top-0 w-full max-w-md bg-white border-l border-gray-200 z-[9999]" style={{
         boxShadow: '-4px 0 15px rgba(0, 0, 0, 0.1)',
         transition: `transform var(--cosmt-transition-duration) var(--cosmt-transition-easing), box-shadow var(--cosmt-transition-duration) var(--cosmt-transition-easing)`,
         position: 'fixed',
@@ -152,9 +151,9 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
                           <X className="w-3 h-3" />
                         </button>
                       </div>
-                      
+
                       <p className="text-xs text-gray-500 mb-1.5">{item.category}</p>
-                      
+
                       {/* Bottom row: Counter and Price */}
                       <div className="flex items-center justify-between">
                         {/* Quantity Controls */}

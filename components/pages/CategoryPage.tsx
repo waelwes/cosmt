@@ -9,14 +9,14 @@ import { ProductGrid } from '../ui/ProductGrid';
 import { CategoryFilters } from '../ui/CategoryFilters';
 import { CategoryFilterWrapper } from '../ui/CategoryFilterWrapper';
 import { CategoryFilterMobileWrapper } from '../ui/CategoryFilterMobileWrapper';
-import { useCart } from '../../contexts/CartContext';
+import { useCart } from '../../contexts/CartContextNew';
 import { PageLayout } from '../layout/PageLayout';
 import { useProductsByCategory } from '../../hooks/useStorefrontData';
 import { LogoLoading } from '../ui/LogoLoading';
 import { Menu } from 'lucide-react';
 // Analytics temporarily disabled: module missing
-const trackCategoryView = (_slug: string) => {};
-const trackProductFilter = (_payload: any) => {};
+const trackCategoryView = (_slug: string) => { };
+const trackProductFilter = (_payload: any) => { };
 
 interface CategoryPageProps {
   category: Category;
@@ -51,8 +51,8 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
       error: error
     });
   }
-  
-  
+
+
   // Transform database products (preserve slugs for proper linking)
   const products = dbProducts?.map(product => ({
     id: product.id,
@@ -160,8 +160,8 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
         <div className="min-h-screen bg-white flex items-center justify-center">
           <div className="text-center">
             <p className="text-red-600 mb-4">Error loading products: {error}</p>
-            <button 
-              onClick={() => window.location.reload()} 
+            <button
+              onClick={() => window.location.reload()}
               className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
             >
               Try Again
@@ -215,7 +215,7 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
           <div className="hidden lg:block w-80 flex-shrink-0 space-y-6">
             {/* Categories Filter */}
             <CategoryFilterWrapper currentCategory={category.slug} />
-            
+
             {/* Product Filters */}
             <CategoryFilters
               filters={filters}
@@ -249,11 +249,11 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
 
             {/* Mobile Product Filters */}
             <div className="lg:hidden mb-6">
-            <CategoryFilters
+              <CategoryFilters
                 filters={filters}
                 onFilterChange={setFilters}
                 products={products}
-              categorySlug={category.slug}
+                categorySlug={category.slug}
                 sortOrder={sortOrder}
                 setSortOrder={setSortOrder}
               />
@@ -265,12 +265,12 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
                 <div className="flex items-center">
                   <h1 className="text-2xl font-bold text-gray-900">{category.name}</h1>
                 </div>
-                
+
                 {/* Center Product Count */}
                 <div className="flex-1 flex justify-center">
                   <span className="text-sm text-gray-500">{products.length} products found</span>
                 </div>
-                
+
                 {/* Sort Dropdown */}
                 <div className="flex items-center space-x-2">
                   <select

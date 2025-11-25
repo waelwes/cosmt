@@ -188,31 +188,18 @@ export const UnifiedLanguageContext = createContext<UnifiedLanguageContextType |
 
 export function UnifiedLanguageProvider({ children }: { children: React.ReactNode }) {
   const [currentLanguage, setCurrentLanguage] = useState<string>('en');
-  const [mounted, setMounted] = useState(false);
 
   // Load language from localStorage on mount
   useEffect(() => {
-    setMounted(true);
     const savedLanguage = localStorage.getItem('preferred-language') || 'en';
     console.log('UnifiedLanguageProvider: Loading saved language:', savedLanguage);
     setCurrentLanguage(savedLanguage);
   }, []);
 
-  // Save to localStorage when language changes (only when actually changed)
+  // Save to localStorage when language changes
   useEffect(() => {
-    if (mounted) {
-      const savedLang = localStorage.getItem('preferred-language');
-      if (savedLang !== currentLanguage) {
-        console.log('UnifiedLanguageProvider: Saving language to localStorage:', currentLanguage);
-        localStorage.setItem('preferred-language', currentLanguage);
-      }
-    }
-  }, [currentLanguage, mounted]);
-
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return <>{children}</>;
-  }
+    localStorage.setItem('preferred-language', currentLanguage);
+  }, [currentLanguage]);
 
   const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
   const t = translations[currentLanguage] || translations.en;

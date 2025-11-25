@@ -9,7 +9,7 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { useCart } from '../../contexts/CartContext';
+import { useCart } from '../../contexts/CartContextNew';
 import { WishlistButton } from '../ui/WishlistButton';
 import { Button } from '../ui/Button';
 import { useStorefrontData } from '../../hooks/useStorefrontData';
@@ -27,7 +27,7 @@ export const ProductShowcases: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
   const bestSellersSwiperRef = useRef<SwiperType | null>(null);
   const newProductsSwiperRef = useRef<SwiperType | null>(null);
-  
+
   // Use optimized database data with caching
   const { bestSellers, newProducts, loading, error } = useStorefrontData();
 
@@ -172,7 +172,7 @@ export const ProductShowcases: React.FC = () => {
               <div className="text-center mb-8">
                 <h2 className="text-xl font-bold text-gray-900">{t.bestSellers}</h2>
               </div>
-              
+
               <Swiper
                 key={`best-sellers-${isRTL ? 'rtl' : 'ltr'}-${isMounted}`}
                 modules={[Navigation, Autoplay]}
@@ -205,106 +205,101 @@ export const ProductShowcases: React.FC = () => {
                 }}
                 className="best-sellers-swiper"
               >
-            {bestSellers.map((product) => (
-                <SwiperSlide key={product.id}>
-                  <div className="group bg-white cosmt-product-card h-full">
-                <div className="relative">
-                  <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
-                    <div className="aspect-square bg-gray-100 overflow-hidden cursor-pointer">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        width={400}
-                        height={400}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                {bestSellers.map((product) => (
+                  <SwiperSlide key={product.id}>
+                    <div className="group bg-white cosmt-product-card h-full">
+                      <div className="relative">
+                        <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
+                          <div className="aspect-square bg-gray-100 overflow-hidden cursor-pointer">
+                            <Image
+                              src={product.image}
+                              alt={product.name}
+                              width={400}
+                              height={400}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        </Link>
+                        {product.is_best_seller && (
+                          <div className={`absolute top-2 text-white text-cosmt-xs font-semibold px-2 py-1 ${isRTL ? 'right-2' : 'left-2'
+                            }`} style={{ backgroundColor: '#00833F' }}>
+                            Best Seller
+                          </div>
+                        )}
+                        <div className={`absolute top-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${isRTL ? 'left-2' : 'right-2'
+                          }`}>
+                          <WishlistButton
+                            product={{
+                              id: product.id,
+                              name: product.name,
+                              price: parseFloat(product.price),
+                              originalPrice: product.original_price ? parseFloat(product.original_price) : undefined,
+                              image: product.image,
+                              brand: product.brand,
+                              category: product.category,
+                              slug: product.id
+                            }}
+                            variant="icon"
+                            size="sm"
+                            className="p-2"
+                          />
+                        </div>
+
+                        {/* Add to Cart Button - Appears on Hover */}
+                        <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                          <Button
+                            onClick={() => handleAddToCart(product)}
+                            className="w-full"
+                            variant="primary"
+                          >
+                            {t.addToCart}
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="p-4">
+                        <p className="text-cosmt-sm text-gray-600 mb-1">{product.brand}</p>
+                        <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
+                          <h3 className="font-semibold text-gray-900 mb-2 hover:text-green-600 transition-colors duration-200 cursor-pointer">
+                            {product.name}
+                          </h3>
+                        </Link>
+
+                        <div className={`flex items-center mb-2 ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'
+                          }`}>
+                          <div className="flex items-center">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-4 h-4 ${i < Math.floor(product.rating)
+                                    ? 'text-yellow-400 fill-current'
+                                    : 'text-gray-300'
+                                  }`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-cosmt-sm text-gray-600">
+                            {product.rating} ({product.reviews})
+                          </span>
+                        </div>
+
+                        <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'
+                          }`}>
+                          <span className="text-cosmt-lg font-bold text-gray-900">${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}</span>
+                          {product.original_price && (
+                            <span className="text-cosmt-sm text-gray-500 line-through">${typeof product.original_price === 'number' ? product.original_price.toFixed(2) : product.original_price}</span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </Link>
-                  {product.is_best_seller && (
-                    <div className={`absolute top-2 text-white text-cosmt-xs font-semibold px-2 py-1 ${
-                      isRTL ? 'right-2' : 'left-2'
-                    }`} style={{ backgroundColor: '#00833F' }}>
-                      Best Seller
-                    </div>
-                  )}
-                  <div className={`absolute top-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${
-                    isRTL ? 'left-2' : 'right-2'
-                  }`}>
-                    <WishlistButton
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        price: parseFloat(product.price),
-                        originalPrice: product.original_price ? parseFloat(product.original_price) : undefined,
-                        image: product.image,
-                        brand: product.brand,
-                        category: product.category,
-                        slug: product.id
-                      }}
-                      variant="icon"
-                      size="sm"
-                      className="p-2"
-                    />
-                  </div>
-                  
-        {/* Add to Cart Button - Appears on Hover */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-        <Button
-          onClick={() => handleAddToCart(product)}
-          className="w-full"
-          variant="primary"
-        >
-          {t.addToCart}
-        </Button>
-        </div>
-                </div>
-                
-                <div className="p-4">
-                  <p className="text-cosmt-sm text-gray-600 mb-1">{product.brand}</p>
-                  <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
-                    <h3 className="font-semibold text-gray-900 mb-2 hover:text-green-600 transition-colors duration-200 cursor-pointer">
-                      {product.name}
-                    </h3>
-                  </Link>
-                  
-                  <div className={`flex items-center mb-2 ${
-                    isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'
-                  }`}>
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.floor(product.rating)
-                              ? 'text-yellow-400 fill-current'
-                              : 'text-gray-300'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-cosmt-sm text-gray-600">
-                      {product.rating} ({product.reviews})
-                    </span>
-                  </div>
-                  
-                  <div className={`flex items-center ${
-                    isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'
-                  }`}>
-                    <span className="text-cosmt-lg font-bold text-gray-900">${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}</span>
-                    {product.original_price && (
-                      <span className="text-cosmt-sm text-gray-500 line-through">${typeof product.original_price === 'number' ? product.original_price.toFixed(2) : product.original_price}</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-                </SwiperSlide>
-            ))}
+                  </SwiperSlide>
+                ))}
               </Swiper>
-              
+
               {/* Navigation Buttons - Always render when products are loaded */}
               {!loading && bestSellers.length > 0 && (
                 <>
-                  <button 
+                  <button
                     className="best-sellers-prev"
                     style={{
                       position: 'absolute',
@@ -324,10 +319,10 @@ export const ProductShowcases: React.FC = () => {
                     aria-label="Previous slide"
                   >
                     <svg width="12" height="20" viewBox="0 0 18 33" fill="none" xmlns="http://www.w3.org/2000/svg" className={isRTL ? 'rotate-180' : ''}>
-                      <path d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" fill="black" stroke="white"/>
+                      <path d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" fill="black" stroke="white" />
                     </svg>
                   </button>
-                  <button 
+                  <button
                     className="best-sellers-next"
                     style={{
                       position: 'absolute',
@@ -347,7 +342,7 @@ export const ProductShowcases: React.FC = () => {
                     aria-label="Next slide"
                   >
                     <svg width="12" height="20" viewBox="0 0 18 33" fill="none" xmlns="http://www.w3.org/2000/svg" className={isRTL ? '' : 'rotate-180'}>
-                      <path d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" fill="black" stroke="white"/>
+                      <path d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" fill="black" stroke="white" />
                     </svg>
                   </button>
                 </>
@@ -399,9 +394,9 @@ export const ProductShowcases: React.FC = () => {
         <div>
           <div className="relative group">
             {/* Slider container with centered title */}
-            <div 
-              className="relative p-4 sm:p-6 lg:p-8" 
-              style={{ 
+            <div
+              className="relative p-4 sm:p-6 lg:p-8"
+              style={{
                 overflow: 'hidden',
                 backgroundColor: '#ffffff'
               }}
@@ -410,7 +405,7 @@ export const ProductShowcases: React.FC = () => {
               <div className="text-center mb-8">
                 <h2 className="text-xl font-bold text-gray-900">{t.newArrivals}</h2>
               </div>
-              
+
               <Swiper
                 key={`new-products-${isRTL ? 'rtl' : 'ltr'}-${isMounted}`}
                 modules={[Navigation, Autoplay]}
@@ -443,106 +438,101 @@ export const ProductShowcases: React.FC = () => {
                 }}
                 className="new-products-swiper"
               >
-            {newProducts.map((product) => (
-                <SwiperSlide key={product.id}>
-                  <div className="group bg-white cosmt-product-card h-full">
-                <div className="relative">
-                  <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
-                    <div className="aspect-square bg-gray-100 overflow-hidden cursor-pointer">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        width={400}
-                        height={400}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                {newProducts.map((product) => (
+                  <SwiperSlide key={product.id}>
+                    <div className="group bg-white cosmt-product-card h-full">
+                      <div className="relative">
+                        <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
+                          <div className="aspect-square bg-gray-100 overflow-hidden cursor-pointer">
+                            <Image
+                              src={product.image}
+                              alt={product.name}
+                              width={400}
+                              height={400}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        </Link>
+                        {product.isNew && (
+                          <div className={`absolute top-2 text-white text-cosmt-xs font-semibold px-2 py-1 ${isRTL ? 'right-2' : 'left-2'
+                            }`} style={{ backgroundColor: '#00833F' }}>
+                            New
+                          </div>
+                        )}
+                        <div className={`absolute top-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${isRTL ? 'left-2' : 'right-2'
+                          }`}>
+                          <WishlistButton
+                            product={{
+                              id: product.id,
+                              name: product.name,
+                              price: parseFloat(product.price),
+                              originalPrice: product.original_price ? parseFloat(product.original_price) : undefined,
+                              image: product.image,
+                              brand: product.brand,
+                              category: product.category,
+                              slug: product.id
+                            }}
+                            variant="icon"
+                            size="sm"
+                            className="p-2"
+                          />
+                        </div>
+
+                        {/* Add to Cart Button - Appears on Hover */}
+                        <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                          <Button
+                            onClick={() => handleAddToCart(product)}
+                            className="w-full"
+                            variant="primary"
+                          >
+                            {t.addToCart}
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="p-4">
+                        <p className="text-cosmt-sm text-gray-600 mb-1">{product.brand}</p>
+                        <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
+                          <h3 className="font-semibold text-gray-900 mb-2 hover:text-green-600 transition-colors duration-200 cursor-pointer">
+                            {product.name}
+                          </h3>
+                        </Link>
+
+                        <div className={`flex items-center mb-2 ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'
+                          }`}>
+                          <div className="flex items-center">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-4 h-4 ${i < Math.floor(product.rating)
+                                    ? 'text-yellow-400 fill-current'
+                                    : 'text-gray-300'
+                                  }`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-cosmt-sm text-gray-600">
+                            {product.rating} ({product.reviews})
+                          </span>
+                        </div>
+
+                        <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'
+                          }`}>
+                          <span className="text-cosmt-lg font-bold text-gray-900">${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}</span>
+                          {product.original_price && (
+                            <span className="text-cosmt-sm text-gray-500 line-through">${typeof product.original_price === 'number' ? product.original_price.toFixed(2) : product.original_price}</span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </Link>
-                  {product.isNew && (
-                        <div className={`absolute top-2 text-white text-cosmt-xs font-semibold px-2 py-1 ${
-                          isRTL ? 'right-2' : 'left-2'
-                        }`} style={{ backgroundColor: '#00833F' }}>
-                      New
-                    </div>
-                  )}
-                  <div className={`absolute top-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${
-                    isRTL ? 'left-2' : 'right-2'
-                  }`}>
-                    <WishlistButton
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        price: parseFloat(product.price),
-                        originalPrice: product.original_price ? parseFloat(product.original_price) : undefined,
-                        image: product.image,
-                        brand: product.brand,
-                        category: product.category,
-                        slug: product.id
-                      }}
-                      variant="icon"
-                      size="sm"
-                      className="p-2"
-                    />
-                  </div>
-                  
-        {/* Add to Cart Button - Appears on Hover */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-        <Button
-          onClick={() => handleAddToCart(product)}
-          className="w-full"
-          variant="primary"
-        >
-          {t.addToCart}
-        </Button>
-        </div>
-                </div>
-                
-                <div className="p-4">
-                  <p className="text-cosmt-sm text-gray-600 mb-1">{product.brand}</p>
-                  <Link href={buildProductPath(product.name, product.categories?.slug, product.subcategories?.slug, product.id)}>
-                    <h3 className="font-semibold text-gray-900 mb-2 hover:text-green-600 transition-colors duration-200 cursor-pointer">
-                      {product.name}
-                    </h3>
-                  </Link>
-                  
-                  <div className={`flex items-center mb-2 ${
-                    isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'
-                  }`}>
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.floor(product.rating)
-                              ? 'text-yellow-400 fill-current'
-                              : 'text-gray-300'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-cosmt-sm text-gray-600">
-                      {product.rating} ({product.reviews})
-                    </span>
-                  </div>
-                  
-                  <div className={`flex items-center ${
-                    isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'
-                  }`}>
-                    <span className="text-cosmt-lg font-bold text-gray-900">${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}</span>
-                    {product.original_price && (
-                      <span className="text-cosmt-sm text-gray-500 line-through">${typeof product.original_price === 'number' ? product.original_price.toFixed(2) : product.original_price}</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-                </SwiperSlide>
-            ))}
+                  </SwiperSlide>
+                ))}
               </Swiper>
-              
+
               {/* Navigation Buttons - Always render when products are loaded */}
               {!loading && newProducts.length > 0 && (
                 <>
-                  <button 
+                  <button
                     className="new-products-prev"
                     style={{
                       position: 'absolute',
@@ -562,10 +552,10 @@ export const ProductShowcases: React.FC = () => {
                     aria-label="Previous slide"
                   >
                     <svg width="12" height="20" viewBox="0 0 18 33" fill="none" xmlns="http://www.w3.org/2000/svg" className={isRTL ? 'rotate-180' : ''}>
-                      <path d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" fill="black" stroke="white"/>
+                      <path d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" fill="black" stroke="white" />
                     </svg>
                   </button>
-                  <button 
+                  <button
                     className="new-products-next"
                     style={{
                       position: 'absolute',
@@ -585,7 +575,7 @@ export const ProductShowcases: React.FC = () => {
                     aria-label="Next slide"
                   >
                     <svg width="12" height="20" viewBox="0 0 18 33" fill="none" xmlns="http://www.w3.org/2000/svg" className={isRTL ? '' : 'rotate-180'}>
-                      <path d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" fill="black" stroke="white"/>
+                      <path d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" fill="black" stroke="white" />
                     </svg>
                   </button>
                 </>

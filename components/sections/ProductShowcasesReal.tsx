@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Star, Heart, ShoppingCart, Eye } from 'lucide-react';
-import { useCart } from '../../contexts/CartContext';
+import { useCart } from '../../contexts/CartContextNew';
 import { WishlistButton } from '../ui/WishlistButton';
 import { Button } from '../ui/Button';
 import { useStorefrontData } from '../../hooks/useStorefrontData';
@@ -30,10 +30,10 @@ export const ProductShowcasesReal: React.FC = () => {
     });
   };
 
-  const ProductCard = ({ product, showBadge = false, badgeText = '' }: { 
-    product: any; 
-    showBadge?: boolean; 
-    badgeText?: string; 
+  const ProductCard = ({ product, showBadge = false, badgeText = '' }: {
+    product: any;
+    showBadge?: boolean;
+    badgeText?: string;
   }) => (
     <div className="group bg-white cosmt-product-card">
       <div className="relative">
@@ -48,13 +48,13 @@ export const ProductShowcasesReal: React.FC = () => {
             />
           </div>
         </Link>
-        
+
         {showBadge && (
           <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
             {badgeText}
           </div>
         )}
-        
+
         {product.isBestSeller && (
           <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
             Best Seller
@@ -95,20 +95,19 @@ export const ProductShowcasesReal: React.FC = () => {
           </h3>
           <WishlistButton productId={product.id} />
         </div>
-        
+
         <p className="mt-1 text-sm text-gray-500">{product.brand}</p>
-        
+
         <div className="mt-2 flex items-center justify-between">
           <div className="flex items-center space-x-1">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-4 h-4 ${
-                    i < Math.floor(product.rating)
+                  className={`w-4 h-4 ${i < Math.floor(product.rating)
                       ? 'text-yellow-400 fill-current'
                       : 'text-gray-300'
-                  }`}
+                    }`}
                 />
               ))}
             </div>
@@ -184,7 +183,7 @@ export const ProductShowcasesReal: React.FC = () => {
             <div className="mb-4">
               <h2 className="text-cosmt-3xl font-bold text-gray-900">{t.bestSellers}</h2>
             </div>
-            
+
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
               {bestSellers.map((product) => (
                 <ProductCard key={product.id} product={product} />
@@ -199,12 +198,12 @@ export const ProductShowcasesReal: React.FC = () => {
             <div className="mb-4">
               <h2 className="text-cosmt-3xl font-bold text-gray-900">New Arrivals</h2>
             </div>
-            
+
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
               {newProducts.map((product) => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
+                <ProductCard
+                  key={product.id}
+                  product={product}
                   showBadge={true}
                   badgeText="New"
                 />
@@ -219,12 +218,12 @@ export const ProductShowcasesReal: React.FC = () => {
             <div className="mb-4">
               <h2 className="text-cosmt-3xl font-bold text-gray-900">On Sale</h2>
             </div>
-            
+
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
               {onSaleProducts.map((product) => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
+                <ProductCard
+                  key={product.id}
+                  product={product}
                   showBadge={true}
                   badgeText="Sale"
                 />

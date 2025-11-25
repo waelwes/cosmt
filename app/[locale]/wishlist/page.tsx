@@ -8,7 +8,7 @@ import { Header } from '../../../components/layout/Header';
 import { Footer } from '../../../components/layout/Footer';
 import { Button } from '../../../components/ui/Button';
 import { useWishlist } from '../../../contexts/WishlistContext';
-import { useCart } from '../../../contexts/CartContext';
+import { useCart } from '../../../contexts/CartContextNew';
 import { useAuth } from '../../../contexts/AuthContextBypass';
 import { useProductDisplay } from '../../../hooks/useProductDisplay';
 import { useRouter } from 'next/navigation';
@@ -33,14 +33,14 @@ export default function WishlistPage({ params }: WishlistPageProps) {
   // Convert wishlist items for display with translations
   useEffect(() => {
     const wishlistItemsKey = JSON.stringify(wishlistItems.map(item => item.id).sort());
-    
+
     // Only convert if wishlist items have actually changed
     if (prevWishlistItemsRef.current === wishlistItemsKey) {
       return;
     }
-    
+
     prevWishlistItemsRef.current = wishlistItemsKey;
-    
+
     const convertItems = async () => {
       setIsLoading(true);
       try {
@@ -227,82 +227,82 @@ export default function WishlistPage({ params }: WishlistPageProps) {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {displayItems.map((item) => (
-                  <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group">
-                    {/* Product Image */}
-                    <div className="relative aspect-square overflow-hidden">
-                      <Link href={buildProductPath({ 
-                        name: item.name, 
-                        categorySlug: item.categories?.slug, 
-                        subcategorySlug: null, 
-                        productSlug: item.slug, 
-                        id: item.id 
-                      })}>
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </Link>
-                      
-                      {/* Wishlist Button */}
-                      <div className="absolute top-3 right-3">
-        <button
-          onClick={() => handleRemoveItem(item.id)}
-          className="p-2 text-red-600 hover:text-red-700 transition-colors"
-          title={t.removeFromWishlist}
-        >
-                          <Heart className="w-4 h-4 fill-current" />
-                        </button>
-                      </div>
-                    </div>
+                    <div key={item.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group">
+                      {/* Product Image */}
+                      <div className="relative aspect-square overflow-hidden">
+                        <Link href={buildProductPath({
+                          name: item.name,
+                          categorySlug: item.categories?.slug,
+                          subcategorySlug: null,
+                          productSlug: item.slug,
+                          id: item.id
+                        })}>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </Link>
 
-                    {/* Product Info */}
-                    <div className="p-4">
-                      <div className="mb-2">
-                        <p className="text-cosmt-xs font-medium text-gray-500 uppercase tracking-wide">
-                          {item.brand}
-                        </p>
-                        <h3 className="text-cosmt-sm font-semibold text-gray-900 line-clamp-2">
-                          <Link href={`/${locale}/product/${item.slug}`} className="hover:text-green-600">
-                            {item.name}
-                          </Link>
-                        </h3>
+                        {/* Wishlist Button */}
+                        <div className="absolute top-3 right-3">
+                          <button
+                            onClick={() => handleRemoveItem(item.id)}
+                            className="p-2 text-red-600 hover:text-red-700 transition-colors"
+                            title={t.removeFromWishlist}
+                          >
+                            <Heart className="w-4 h-4 fill-current" />
+                          </button>
+                        </div>
                       </div>
 
-                      {/* Price */}
-                      <div className="flex items-center space-x-2 mb-4">
-                        <span className="text-cosmt-lg font-bold text-gray-900">
-                          ${item.price.toFixed(2)}
-                        </span>
-                        {item.originalPrice && item.originalPrice > item.price && (
-                          <span className="text-cosmt-sm text-gray-500 line-through">
-                            ${item.originalPrice.toFixed(2)}
+                      {/* Product Info */}
+                      <div className="p-4">
+                        <div className="mb-2">
+                          <p className="text-cosmt-xs font-medium text-gray-500 uppercase tracking-wide">
+                            {item.brand}
+                          </p>
+                          <h3 className="text-cosmt-sm font-semibold text-gray-900 line-clamp-2">
+                            <Link href={`/${locale}/product/${item.slug}`} className="hover:text-green-600">
+                              {item.name}
+                            </Link>
+                          </h3>
+                        </div>
+
+                        {/* Price */}
+                        <div className="flex items-center space-x-2 mb-4">
+                          <span className="text-cosmt-lg font-bold text-gray-900">
+                            ${item.price.toFixed(2)}
                           </span>
-                        )}
-                      </div>
+                          {item.originalPrice && item.originalPrice > item.price && (
+                            <span className="text-cosmt-sm text-gray-500 line-through">
+                              ${item.originalPrice.toFixed(2)}
+                            </span>
+                          )}
+                        </div>
 
-                      {/* Actions */}
-                      <div className="flex space-x-2">
-                        <Button
-                          onClick={() => handleAddToCart(item)}
-                          size="sm"
-                          className="flex-1"
-                        >
-                          <ShoppingBag className="w-4 h-4 mr-2" />
-                          {t.addToCart}
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleRemoveItem(item.id)}
-                          className="px-3"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        {/* Actions */}
+                        <div className="flex space-x-2">
+                          <Button
+                            onClick={() => handleAddToCart(item)}
+                            size="sm"
+                            className="flex-1"
+                          >
+                            <ShoppingBag className="w-4 h-4 mr-2" />
+                            {t.addToCart}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleRemoveItem(item.id)}
+                            className="px-3"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   ))}
                 </div>
               )
