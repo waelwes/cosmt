@@ -1,0 +1,7 @@
+name,brand,price,originalPrice,stock,status,rating,reviews,image,isBestSeller,isOnSale,description
+"AVEDA Shampure Shampoo","AVEDA",32.00,38.00,50,active,4.5,120,"/images/products/aveda-shampure.jpg",true,false,"A gentle, sulfate-free shampoo with lavender and clary sage"
+"DAVINES OI Shampoo","DAVINES",28.50,,75,active,4.8,95,"/images/products/davines-oi-shampoo.jpg",false,true,"Nourishing shampoo with roucou oil for all hair types"
+"L'Oréal Professional Serie Expert","L'Oréal",24.99,29.99,100,active,4.2,200,"/images/products/loreal-expert.jpg",false,false,"Professional hair care for color-treated hair"
+"Kerastase Elixir Ultime","Kerastase",45.00,55.00,30,active,4.7,85,"/images/products/kerastase-elixir.jpg",true,true,"Luxury hair oil for ultimate shine and softness"
+"Redken All Soft Shampoo","Redken",26.00,,60,active,4.3,150,"/images/products/redken-all-soft.jpg",false,false,"Moisturizing shampoo for dry, brittle hair"
+

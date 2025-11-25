@@ -115,16 +115,66 @@ export const SubCategoryPage: React.FC<SubCategoryPageProps> = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white">
+      <PageLayout>
         <div className="cosmt-container py-8">
-          <div className="flex items-center justify-center h-64">
-            <LogoLoading 
-              size="lg" 
-              className="text-center"
-            />
+          {/* Breadcrumbs Skeleton */}
+          <div className="flex items-center space-x-2 mb-6">
+            <div className="h-4 bg-gray-200 rounded w-16 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-1"></div>
+            <div className="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-1"></div>
+            <div className="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
+          </div>
+
+          {/* Page Header Skeleton */}
+          <div className="mb-12">
+            <div className="h-12 bg-gray-200 rounded w-96 mb-4 animate-pulse"></div>
+            <div className="h-6 bg-gray-200 rounded w-full max-w-3xl animate-pulse"></div>
+          </div>
+
+          <div className="flex gap-8">
+            {/* Category Filter Sidebar Skeleton - Desktop */}
+            <div className="hidden lg:block w-80 flex-shrink-0">
+              <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <div className="h-6 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
+                <div className="space-y-2">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Main Content Skeleton */}
+            <div className="flex-1">
+              {/* Welcome Message Skeleton */}
+              <div className="mb-8">
+                <div className="h-8 bg-gray-200 rounded w-48 mb-4 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded w-full mb-2 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+              </div>
+
+              {/* Featured Products Skeleton */}
+              <div>
+                <div className="flex items-center justify-between mb-8">
+                  <div className="h-8 bg-gray-200 rounded w-48 animate-pulse"></div>
+                  <div className="h-10 bg-gray-200 rounded w-24 animate-pulse"></div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="bg-white border border-gray-200 rounded-lg p-4">
+                      <div className="aspect-square bg-gray-200 rounded-lg mb-4 animate-pulse"></div>
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2 animate-pulse"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse"></div>
+                      <div className="h-6 bg-gray-200 rounded w-20 animate-pulse"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </PageLayout>
     );
   }
 
@@ -188,7 +238,7 @@ export const SubCategoryPage: React.FC<SubCategoryPageProps> = ({
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {featuredProducts.map((product) => (
-                    <div key={product.id} className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div key={product.id} className="group bg-white border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300">
                       <div className="relative h-48">
                         <Image
                           src={product.image}

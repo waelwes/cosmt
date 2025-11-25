@@ -4,19 +4,40 @@
 @import '../styles/rtl.css';
 @import './admin/theme.css';
 
-/* Custom checkbox styling for brand green color */
+/* Force square checkboxes - completely custom styling */
 input[type="checkbox"] {
-  accent-color: #00514B !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  width: 12px !important;
+  height: 12px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0 !important;
+  background-color: #ffffff !important;
+  position: relative !important;
+  cursor: pointer !important;
+  outline: none !important;
 }
 
 input[type="checkbox"]:checked {
-  background-color: #00514B !important;
-  border-color: #00514B !important;
+  background-color: #003d38 !important;
+  border-color: #003d38 !important;
+}
+
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 /* For older browsers that don't support accent-color */
 input[type="checkbox"]:checked::before {
-  background-color: #00514B !important;
+  background-color: #003d38 !important;
 }
 
 /* Hide scrollbar for tab navigation */
@@ -39,15 +60,17 @@ input[type="checkbox"]:checked::before {
 /* RTL Base Styles - Moved to styles/rtl.css */
 
 :root {
-  --cosmt-primary: #00514B;
-  --cosmt-primary-dark: #003A35;
-  --cosmt-primary-darker: #002A25;
+  --cosmt-primary: #003d38;
+  --cosmt-primary-dark: #002a25;
+  --cosmt-primary-darker: #001a17;
   --cosmt-primary-light: #E6F7F5;
-  --cosmt-primary-soft: #00514B;
-  --cosmt-primary-soft-dark: #003A35;
+  --cosmt-primary-soft: #003d38;
+  --cosmt-primary-soft-dark: #002a25;
   --cosmt-background: #ffffff;
   --cosmt-text: #111827;
   --cosmt-text-light: #4b5563;
+  --cosmt-transition-duration: 800ms;
+  --cosmt-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
   --cosmt-text-lighter: #6b7280;
   --cosmt-promotion-bg: #2d5a27;
   --cosmt-gray-50: #f9fafb;
@@ -87,12 +110,20 @@ input[type="checkbox"]:checked::before {
 /* Dark mode configuration for Tailwind v4 */
 @variant dark (.dark &);
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
   background: var(--cosmt-background);
   color: var(--cosmt-text);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-weight: 400;
   line-height: 1.6;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* RTL Support - More specific selectors */
@@ -1049,7 +1080,7 @@ html body [data-admin="true"] .admin-sidebar a:active {
 .admin-sidebar {
   flex-shrink: 0;
   width: 16rem; /* 256px */
-  background: #002A25 !important; /* Darker green background */
+  background: #001a17 !important; /* Darker green background */
   will-change: transform;
   min-height: 100vh; /* Full height */
   overflow-y: auto; /* Enable scrolling */
@@ -1065,8 +1096,8 @@ html body [data-admin="true"] .admin-sidebar a:active {
 
 /* Force admin sidebar background to be darker green */
 [data-admin="true"] .admin-sidebar {
-  background: #002A25 !important;
-  background-color: #002A25 !important;
+  background: #001a17 !important;
+  background-color: #001a17 !important;
   overflow-y: auto; /* Enable scrolling */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
@@ -1090,17 +1121,17 @@ html body [data-admin="true"] .admin-sidebar a:active {
 /* Exclude sidebar from admin cards gray background rules */
 [data-admin="true"] .admin-sidebar.bg-white,
 [data-admin="true"] .admin-sidebar[class*="bg-white"] {
-  background-color: #002A25 !important;
+  background-color: #001a17 !important;
 }
 
 /* Force admin sidebar container to be darker green */
 [data-admin="true"] .admin-sidebar {
-  background-color: #002A25 !important;
+  background-color: #001a17 !important;
 }
 
 /* Force admin sidebar main container to be darker green */
 [data-admin="true"] .admin-sidebar > div {
-  background-color: #002A25 !important;
+  background-color: #001a17 !important;
 }
 
 /* Override any gray background on admin sidebar */
@@ -1114,8 +1145,8 @@ html body [data-admin="true"] .admin-sidebar a:active {
 [data-admin="true"] .admin-sidebar,
 [data-admin="true"] .admin-sidebar > div,
 [data-admin="true"] .admin-sidebar > div > div {
-  background-color: #002A25 !important;
-  background: #002A25 !important;
+  background-color: #001a17 !important;
+  background: #001a17 !important;
 }
 
 /* Ultimate sidebar darker green override - force all possible selectors */
@@ -1126,8 +1157,8 @@ html body [data-admin="true"] .admin-sidebar a:active {
 [data-admin="true"] .admin-sidebar nav,
 [data-admin="true"] .admin-sidebar ul,
 [data-admin="true"] .admin-sidebar li {
-  background-color: #002A25 !important;
-  background: #002A25 !important;
+  background-color: #001a17 !important;
+  background: #001a17 !important;
 }
 
 /* Override any remaining black backgrounds */
@@ -1135,8 +1166,8 @@ html body [data-admin="true"] .admin-sidebar a:active {
 [data-admin="true"] .admin-sidebar[style*="background: #000000"],
 [data-admin="true"] .admin-sidebar[style*="background-color: black"],
 [data-admin="true"] .admin-sidebar[style*="background: black"] {
-  background-color: #002A25 !important;
-  background: #002A25 !important;
+  background-color: #001a17 !important;
+  background: #001a17 !important;
 }
 
 /* Ensure hover text color works properly - highest specificity */
@@ -1200,8 +1231,8 @@ html body [data-admin="true"] .admin-sidebar a:active {
 /* Override any dynamic changes */
 [data-admin="true"] .admin-sidebar[class*="bg-"],
 [data-admin="true"] .admin-sidebar[style*="background"] {
-  background-color: #002A25 !important;
-  background: #002A25 !important;
+  background-color: #001a17 !important;
+  background: #001a17 !important;
 }
 
 .admin-main {
@@ -1272,7 +1303,7 @@ html body [data-admin="true"] .admin-sidebar a:active {
 }
 
 [data-admin="true"] .admin-sidebar button:hover {
-  background-color: #003A35 !important;
+  background-color: #002a25 !important;
   border-radius: 0.25rem !important;
   outline: none !important;
   box-shadow: none !important;
@@ -1280,7 +1311,7 @@ html body [data-admin="true"] .admin-sidebar a:active {
 }
 
 [data-admin="true"] .admin-sidebar a:hover {
-  background-color: #003A35 !important;
+  background-color: #002a25 !important;
   border-radius: 0.25rem !important;
   outline: none !important;
   box-shadow: none !important;
@@ -1290,13 +1321,13 @@ html body [data-admin="true"] .admin-sidebar a:active {
 /* Ultra specific hover override for admin sidebar */
 html body [data-admin="true"] .admin-sidebar button:hover,
 html body [data-admin="true"] .admin-sidebar a:hover {
-  background-color: #003A35 !important;
+  background-color: #002a25 !important;
 }
 
 /* Active state for admin sidebar */
 [data-admin="true"] .admin-sidebar button.active,
 [data-admin="true"] .admin-sidebar a.active {
-  background-color: #003A35 !important;
+  background-color: #002a25 !important;
 }
 
 /* Analytics page border fixes - Remove vertical lines */
@@ -1399,11 +1430,17 @@ input[type="datetime-local"],
 select,
 textarea {
   border-radius: 0.25rem !important;
-  border: 1px solid #e5e7eb !important;
+  border: 1px solid #ededed !important;
   background-color: #ffffff !important;
   color: #111827 !important;
   padding: 0.5rem 0.75rem !important;
   transition: border-color 0.2s ease !important;
+}
+
+/* Navigation Search Input - Override global styles */
+input[type="search"].navigation-search-input {
+  border: 1px solid #9ca3af !important;
+  border-radius: 0.375rem !important;
 }
 
 /* Global Input Hover Effects - All Website Inputs */
@@ -1420,7 +1457,7 @@ input[type="time"]:hover,
 input[type="datetime-local"]:hover,
 select:hover,
 textarea:hover {
-  border-color: #00514B !important;
+  border-color: #003d38 !important;
   transition: border-color 0.2s ease !important;
 }
 
@@ -1438,7 +1475,7 @@ input[type="time"]:active,
 input[type="datetime-local"]:active,
 select:active,
 textarea:active {
-  border-color: #00514B !important;
+  border-color: #003d38 !important;
   transition: border-color 0.2s ease !important;
 }
 
@@ -1456,7 +1493,7 @@ input[type="time"]:focus,
 input[type="datetime-local"]:focus,
 select:focus,
 textarea:focus {
-  border-color: #00514B !important;
+  border-color: #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
   transition: border-color 0.2s ease !important;
@@ -1498,7 +1535,7 @@ textarea:focus {
 .dark input[type="datetime-local"]:hover,
 .dark select:hover,
 .dark textarea:hover {
-  border-color: #00514B !important;
+  border-color: #003d38 !important;
   transition: border-color 0.2s ease !important;
 }
 
@@ -1516,7 +1553,7 @@ textarea:focus {
 .dark input[type="datetime-local"]:active,
 .dark select:active,
 .dark textarea:active {
-  border-color: #00514B !important;
+  border-color: #003d38 !important;
   transition: border-color 0.2s ease !important;
 }
 
@@ -1534,7 +1571,7 @@ textarea:focus {
 .dark input[type="datetime-local"]:focus,
 .dark select:focus,
 .dark textarea:focus {
-  border-color: #00514B !important;
+  border-color: #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
   transition: border-color 0.2s ease !important;
@@ -1577,6 +1614,26 @@ textarea:hover {
 
 /* Mobile-specific improvements */
 @media (max-width: 768px) {
+  /* Prevent horizontal scrolling */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    position: relative;
+  }
+  
+  /* Ensure all containers don't overflow */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Prevent images and media from overflowing */
+  img, video, iframe {
+    max-width: 100%;
+    height: auto;
+  }
+  
   /* Improve touch targets */
   button, 
   [role="button"], 
@@ -1589,11 +1646,15 @@ textarea:hover {
   .cosmt-container {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
   
   /* Mobile header improvements */
   .cosmt-navigation {
     padding: 0;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
   
   /* Mobile-friendly text sizes */
@@ -1627,7 +1688,26 @@ textarea:hover {
 }
 
 .cosmt-navigation {
-  @apply bg-white border-b border-gray-200 sticky top-0 z-50;
+  @apply bg-white sticky top-0 z-50;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  position: relative;
+  isolation: isolate;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+.cosmt-navigation::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+}
+
+.cosmt-navigation * {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+.cosmt-navigation *::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
 }
 
 .cosmt-hero-slider {
@@ -1636,7 +1716,6 @@ textarea:hover {
 
 .cosmt-product-card {
   @apply transition-all duration-300 hover:scale-[1.02];
-  border-radius: 6px !important;
 }
 
 /* Main Website Cards - 6px border radius (exclude admin pages) */
@@ -1727,7 +1806,7 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] button:focus-visible {
   border: 1px solid #d1d5db !important;
   background-color: #f9fafb !important;
-  outline: 2px solid #00514B !important;
+  outline: 2px solid #003d38 !important;
   outline-offset: 2px !important;
 }
 
@@ -1759,7 +1838,7 @@ body:not([data-admin="true"]) .rounded-lg {
   background-color: var(--cosmt-primary-dark) !important;
   border: none !important;
   color: white !important;
-  outline: 2px solid #00514B !important;
+  outline: 2px solid #003d38 !important;
   outline-offset: 2px !important;
 }
 
@@ -1907,8 +1986,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] textarea:focus {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #00514B !important;
-  border: 1px solid #00514B !important;
+  border-color: #003d38 !important;
+  border: 1px solid #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
   color: #111827 !important;
@@ -1930,8 +2009,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] textarea:hover {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #00514B !important;
-  border: 1px solid #00514B !important;
+  border-color: #003d38 !important;
+  border: 1px solid #003d38 !important;
   color: #111827 !important;
 }
 
@@ -1951,8 +2030,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] textarea:active {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #00514B !important;
-  border: 1px solid #00514B !important;
+  border-color: #003d38 !important;
+  border: 1px solid #003d38 !important;
   color: #111827 !important;
 }
 
@@ -2070,8 +2149,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] .filter-select:focus {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #00514B !important;
-  border: 1px solid #00514B !important;
+  border-color: #003d38 !important;
+  border: 1px solid #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
   color: #111827 !important;
@@ -2081,8 +2160,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] .filter-select:hover {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #00514B !important;
-  border: 1px solid #00514B !important;
+  border-color: #003d38 !important;
+  border: 1px solid #003d38 !important;
   color: #111827 !important;
 }
 
@@ -2090,8 +2169,8 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] .filter-select:active {
   background-color: #ffffff !important;
   background: #ffffff !important;
-  border-color: #00514B !important;
-  border: 1px solid #00514B !important;
+  border-color: #003d38 !important;
+  border: 1px solid #003d38 !important;
   color: #111827 !important;
 }
 
@@ -2202,12 +2281,31 @@ body:not([data-admin="true"]) .rounded-lg {
 }
 
 .cosmt-footer {
-  @apply bg-gray-900 text-white;
+  @apply text-white;
+  background-color: #001a17;
 }
 
 .cosmt-promotion-bar {
-  @apply text-white py-0.5 px-2 md:py-1 md:px-4 relative;
-  background-color: #00833F;
+  @apply text-white py-1 px-2 md:px-4 relative;
+  background-color: #003d38;
+  height: 32px;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+.cosmt-promotion-bar::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+}
+
+.cosmt-promotion-bar * {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+.cosmt-promotion-bar *::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
 }
 
 /* Scrolling text animation */
@@ -2221,7 +2319,7 @@ body:not([data-admin="true"]) .rounded-lg {
 }
 
 .animate-scroll {
-  animation: scroll 30s linear infinite;
+  animation: scroll 25s linear infinite;
   will-change: transform;
 }
 
@@ -2229,9 +2327,138 @@ body:not([data-admin="true"]) .rounded-lg {
   animation-play-state: paused;
 }
 
-/* Remove all border radius for sharp, angular design - EXCEPT admin pages */
+/* Remove all border radius and borders for sharp, angular design - EXCEPT admin pages */
 body:not([data-admin="true"]) * {
   border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+}
+
+/* Allow borders for input elements on main website */
+body:not([data-admin="true"]) input,
+body:not([data-admin="true"]) input[type="text"],
+body:not([data-admin="true"]) input[type="email"],
+body:not([data-admin="true"]) input[type="password"],
+body:not([data-admin="true"]) input[type="number"],
+body:not([data-admin="true"]) input[type="tel"],
+body:not([data-admin="true"]) input[type="url"],
+body:not([data-admin="true"]) input[type="search"],
+body:not([data-admin="true"]) input[type="date"],
+body:not([data-admin="true"]) input[type="time"],
+body:not([data-admin="true"]) input[type="datetime-local"],
+body:not([data-admin="true"]) select,
+body:not([data-admin="true"]) textarea {
+  border: 1px solid #ededed !important;
+}
+
+/* NUCLEAR OPTION - Force remove ALL border-radius from ALL elements on non-admin pages */
+body:not([data-admin="true"]) *,
+body:not([data-admin="true"]) *::before,
+body:not([data-admin="true"]) *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Allow circular shapes for loading dots and specific UI elements */
+body:not([data-admin="true"]) .dot-animation,
+body:not([data-admin="true"]) .rounded-full,
+body:not([data-admin="true"]) .animate-bounce,
+body:not([data-admin="true"]) [class*="dot"],
+body:not([data-admin="true"]) [class*="loader"],
+body:not([data-admin="true"]) [class*="loading"] {
+  border-radius: 9999px !important;
+  -webkit-border-radius: 9999px !important;
+  -moz-border-radius: 9999px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* SPECIFIC TARGETING FOR CATEGORIES SIDEBAR - Force remove border-radius */
+body:not([data-admin="true"]) .rounded-md,
+body:not([data-admin="true"]) .rounded-lg,
+body:not([data-admin="true"]) .rounded-xl,
+body:not([data-admin="true"]) .rounded-2xl,
+body:not([data-admin="true"]) .rounded-3xl,
+body:not([data-admin="true"]) .rounded-full,
+body:not([data-admin="true"]) .rounded-sm,
+body:not([data-admin="true"]) .rounded {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+}
+
+/* ULTRA-SPECIFIC CATEGORIES SIDEBAR TARGETING */
+body:not([data-admin="true"]) div[class*="bg-white"][class*="rounded-lg"],
+body:not([data-admin="true"]) div[class*="border"][class*="rounded"],
+body:not([data-admin="true"]) div[class*="rounded-md"],
+body:not([data-admin="true"]) div[class*="rounded-lg"],
+body:not([data-admin="true"]) .space-y-1 > div[class*="rounded"],
+body:not([data-admin="true"]) .space-y-1 > div > div[class*="rounded"],
+body:not([data-admin="true"]) .flex.items-center.justify-between[class*="rounded"],
+body:not([data-admin="true"]) .flex.items-center.justify-between > div[class*="rounded"] {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+}
+
+/* TARGET CATEGORIES SIDEBAR SPECIFICALLY */
+body:not([data-admin="true"]) div[class*="bg-white"][class*="rounded-lg"],
+body:not([data-admin="true"]) div[class*="border"][class*="rounded"],
+body:not([data-admin="true"]) div[class*="rounded-md"],
+body:not([data-admin="true"]) div[class*="rounded-lg"] {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+}
+
+/* TARGET CATEGORY ITEMS */
+body:not([data-admin="true"]) .space-y-1 > div,
+body:not([data-admin="true"]) .space-y-1 > div > div,
+body:not([data-admin="true"]) .flex.items-center.justify-between,
+body:not([data-admin="true"]) .flex.items-center.justify-between > div {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+}
+
+/* Restore title borders only */
+body:not([data-admin="true"]) .border-b.border-gray-200 {
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+/* Force remove all borders and border-radius from category pages specifically */
+body:not([data-admin="true"]) .categories-page *,
+body:not([data-admin="true"]) [class*="categories"] *,
+body:not([data-admin="true"]) [class*="category"] * {
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Force remove border-radius from product cards on categories page */
+body:not([data-admin="true"]) .product-card-group,
+body:not([data-admin="true"]) .product-card-group *,
+body:not([data-admin="true"]) [class*="product-card"],
+body:not([data-admin="true"]) [class*="product-card"] *,
+body:not([data-admin="true"]) .bg-white.pt-0.px-0.pb-4,
+body:not([data-admin="true"]) .bg-white.pt-0.px-0.pb-4 *,
+body:not([data-admin="true"]) .relative.aspect-square.bg-white.overflow-hidden.mb-4,
+body:not([data-admin="true"]) .relative.aspect-square.bg-white.overflow-hidden.mb-4 *,
+/* Ultra-specific targeting for ProductCard components */
+body:not([data-admin="true"]) div[class*="product-card-group"],
+body:not([data-admin="true"]) div[class*="product-card-group"] *,
+body:not([data-admin="true"]) div[class*="product-card-group"] > div,
+body:not([data-admin="true"]) div[class*="product-card-group"] > div > div {
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
 }
 
 /* Custom scrollbar */
@@ -2244,11 +2471,11 @@ body:not([data-admin="true"]) * {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #00833F;
+  background: #003d38;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00662f;
+  background: #002a25;
 }
 
 /* Smooth scrolling */
@@ -2316,7 +2543,8 @@ button {
 /* Softer green button styling */
 button.bg-cosmt-primary,
 button[class*="primary"] {
-  background-color: #00514B !important;
+  background-color: #003d38 !important;
+  color: #ffffff !important;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
   transition: all 0.2s ease-in-out !important;
   filter: brightness(1) !important;
@@ -2324,7 +2552,8 @@ button[class*="primary"] {
 
 button.bg-cosmt-primary:hover,
 button[class*="primary"]:hover {
-  background-color: #003A35 !important;
+  background-color: #002a25 !important;
+  color: #ffffff !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
   transform: translateY(-1px) !important;
   filter: brightness(1.05) !important;
@@ -2332,7 +2561,8 @@ button[class*="primary"]:hover {
 
 button.bg-cosmt-primary:active,
 button[class*="primary"]:active {
-  background-color: #002A25 !important;
+  background-color: #001a17 !important;
+  color: #ffffff !important;
   transform: translateY(0) !important;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
   filter: brightness(0.95) !important;
@@ -2625,7 +2855,7 @@ input[type="reset"][class*="rounded"] {
 .tab-navigation button[class*="border-[#00514B]"],
 .tab-navigation button[class*="text-[#00514B]"] {
   border: none !important;
-  border-bottom: 2px solid #00514B !important;
+  border-bottom: 2px solid #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -2646,7 +2876,7 @@ input[type="reset"][class*="rounded"] {
 [data-admin="true"] .tab-navigation button[class*="text-green-600"],
 [data-admin="true"] .tab-navigation button[class*="text-[#00514B]"] {
   border: none !important;
-  border-bottom: 2px solid #00514B !important;
+  border-bottom: 2px solid #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -2659,8 +2889,8 @@ input[type="reset"][class*="rounded"] {
 .tab-navigation button.active,
 [data-admin="true"] .tab-navigation button.active {
   border: none !important;
-  border-bottom: 2px solid #00514B !important;
-  border-color: #00514B !important;
+  border-bottom: 2px solid #003d38 !important;
+  border-color: #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -2673,8 +2903,8 @@ input[type="reset"][class*="rounded"] {
 [data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:focus,
 [data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:active {
   border: none !important;
-  border-bottom: 2px solid #00514B !important;
-  border-color: #00514B !important;
+  border-bottom: 2px solid #003d38 !important;
+  border-color: #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -2691,8 +2921,8 @@ input[type="reset"][class*="rounded"] {
 [data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:active,
 [data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:focus-visible {
   border: none !important;
-  border-bottom: 2px solid #00514B !important;
-  border-color: #00514B !important;
+  border-bottom: 2px solid #003d38 !important;
+  border-color: #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
   ring: none !important;
@@ -2716,8 +2946,8 @@ input[type="reset"][class*="rounded"] {
 [data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:before,
 [data-admin="true"] .tab-navigation button[class*="text-[#00514B]"]:after {
   border: none !important;
-  border-bottom: 2px solid #00514B !important;
-  border-color: #00514B !important;
+  border-bottom: 2px solid #003d38 !important;
+  border-color: #003d38 !important;
   border-top: none !important;
   border-left: none !important;
   border-right: none !important;
@@ -2748,8 +2978,8 @@ input[type="reset"][class*="rounded"] {
 .tab-navigation button[class*="text-[#00514B]"]:active,
 .tab-navigation button[class*="text-[#00514B]"]:focus-visible {
   border: none !important;
-  border-bottom: 2px solid #00514B !important;
-  border-color: #00514B !important;
+  border-bottom: 2px solid #003d38 !important;
+  border-color: #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -2770,8 +3000,8 @@ input[type="reset"][class*="rounded"] {
 .tab-navigation button[class*="text-[#00514B]"]:before,
 .tab-navigation button[class*="text-[#00514B]"]:after {
   border: none !important;
-  border-bottom: 2px solid #00514B !important;
-  border-color: #00514B !important;
+  border-bottom: 2px solid #003d38 !important;
+  border-color: #003d38 !important;
   border-top: none !important;
   border-left: none !important;
   border-right: none !important;
@@ -2819,8 +3049,8 @@ button[class*="text-[#00514B]"].tab-navigation,
 [data-admin="true"] button.tab-navigation[class*="text-[#00514B]"],
 [data-admin="true"] button[class*="text-[#00514B]"].tab-navigation {
   border: none !important;
-  border-bottom: 2px solid #00514B !important;
-  border-color: #00514B !important;
+  border-bottom: 2px solid #003d38 !important;
+  border-color: #003d38 !important;
   outline: none !important;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
@@ -2934,13 +3164,13 @@ button[class*="text-[#00514B]"].tab-navigation,
 [data-admin="true"] nav button[class*="border-b-2"].active,
 [data-admin="true"] .tab-navigation button[class*="text-green-600"],
 [data-admin="true"] nav button[class*="text-green-600"] {
-  color: #00514B !important;
-  border-bottom-color: #00514B !important;
+  color: #003d38 !important;
+  border-bottom-color: #003d38 !important;
 }
 
 /* Product form tabs active state */
 [data-admin="true"] .flex button[class*="text-green-600"] {
-  color: #00514B !important;
+  color: #003d38 !important;
 }
 
 /* Override global button border radius for tab buttons */
@@ -3484,4 +3714,11 @@ html[dir="rtl"] .admin-header {
 
 [dir="rtl"] .space-y-3 > * {
   direction: rtl;
+}
+
+/* Upper navigation border */
+.upper-nav-border {
+  background-color: #dedede;
+  height: 1px;
+  margin-top: 10px;
 }

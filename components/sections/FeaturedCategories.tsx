@@ -35,7 +35,7 @@ export const FeaturedCategories: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="py-8" style={{backgroundColor: '#fbfbfb'}}>
+      <div className="py-4 bg-white">
         <div className="cosmt-container">
           <div className="text-center">
             <div className="animate-pulse">
@@ -53,7 +53,7 @@ export const FeaturedCategories: React.FC = () => {
   }
 
   return (
-    <div className="py-8" style={{backgroundColor: '#fbfbfb'}}>
+    <div className="py-4 bg-white">
       <div className="cosmt-container">
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -107,7 +107,10 @@ export const FeaturedCategories: React.FC = () => {
         <div className="text-center mt-12">
           <Link
             href="/categories"
-            className="inline-flex items-center px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-200 text-lg"
+            className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors duration-200 text-lg"
+            style={{ backgroundColor: '#003d38' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
           >
             {isRTL ? 'عرض جميع الفئات' : 'View All Categories'}
             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,100 +1,80 @@
 'use client';
 
 import React from 'react';
-import { Truck, Gift, Star, Heart, Sparkles, Globe } from 'lucide-react';
-import SimpleSitePreferencesDropdown from '../SimpleSitePreferencesDropdown';
+import { Truck, Gift, Star, Heart, Sparkles } from 'lucide-react';
+
 export const TopPromotionBar: React.FC = () => {
-  const [isPreferencesOpen, setIsPreferencesOpen] = React.useState(false);
-
-  // Close dropdown when clicking outside
-  React.useEffect(() => {
-    if (!isPreferencesOpen) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      // Check if click is outside both the button container and the dropdown
-      if (!target.closest('.site-preferences-dropdown') && 
-          !target.closest('[data-dropdown="site-preferences"]')) {
-        setIsPreferencesOpen(false);
-      }
-    };
-
-    // Add a small delay to prevent immediate closing when opening
-    const timeoutId = setTimeout(() => {
-      document.addEventListener('mousedown', handleClickOutside);
-    }, 100);
-
-    return () => {
-      clearTimeout(timeoutId);
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isPreferencesOpen]);
 
   const promotionalTexts = [
-    { icon: <Truck className="w-3 h-3 md:w-4 md:h-4" />, text: "Free shipping on orders over $50" },
-    { icon: <Gift className="w-3 h-3 md:w-4 md:h-4" />, text: "20% off your first order" },
-    { icon: <Star className="w-3 h-3 md:w-4 md:h-4" />, text: "Premium beauty products" },
-    { icon: <Heart className="w-3 h-3 md:w-4 md:h-4" />, text: "In our Cosmetic Market you find all you need" },
-    { icon: <Sparkles className="w-3 h-3 md:w-4 md:h-4" />, text: "Professional quality at affordable prices" },
-    { icon: <Star className="w-3 h-3 md:w-4 md:h-4" />, text: "Expert beauty advice and tips" },
-    { icon: <Gift className="w-3 h-3 md:w-4 md:h-4" />, text: "Exclusive deals and new arrivals" },
-    { icon: <Truck className="w-3 h-3 md:w-4 md:h-4" />, text: "Fast and secure delivery worldwide" },
-    { icon: <Heart className="w-3 h-3 md:w-4 md:h-4" />, text: "Natural and organic beauty solutions" },
-    { icon: <Sparkles className="w-3 h-3 md:w-4 md:h-4" />, text: "Cruelty-free and vegan products" },
-    { icon: <Star className="w-3 h-3 md:w-4 md:h-4" />, text: "Hair care for every hair type" },
-    { icon: <Gift className="w-3 h-3 md:w-4 md:h-4" />, text: "Skincare routines that work" },
-    { icon: <Truck className="w-3 h-3 md:w-4 md:h-4" />, text: "Same day delivery available" },
-    { icon: <Heart className="w-3 h-3 md:w-4 md:h-4" />, text: "Beauty experts at your service" },
-    { icon: <Sparkles className="w-3 h-3 md:w-4 md:h-4" />, text: "Transform your beauty routine" },
-    { icon: <Star className="w-3 h-3 md:w-4 md:h-4" />, text: "Glowing skin starts here" },
-    { icon: <Gift className="w-3 h-3 md:w-4 md:h-4" />, text: "Luxury beauty made accessible" },
-    { icon: <Truck className="w-3 h-3 md:w-4 md:h-4" />, text: "Free returns within 30 days" },
-    { icon: <Heart className="w-3 h-3 md:w-4 md:h-4" />, text: "Join thousands of satisfied customers" },
-    { icon: <Sparkles className="w-3 h-3 md:w-4 md:h-4" />, text: "Your beauty journey begins now" }
+    { icon: <Truck className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Free shipping on orders over $50" },
+    { icon: <Gift className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "20% off your first order" },
+    { icon: <Star className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Premium beauty products" },
+    { icon: <Heart className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "In our Cosmetic Market you find all you need" },
+    { icon: <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Professional quality at affordable prices" },
+    { icon: <Star className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Expert beauty advice and tips" },
+    { icon: <Gift className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Exclusive deals and new arrivals" },
+    { icon: <Truck className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Fast and secure delivery worldwide" },
+    { icon: <Heart className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Natural and organic beauty solutions" },
+    { icon: <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Cruelty-free and vegan products" },
+    { icon: <Star className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Hair care for every hair type" },
+    { icon: <Gift className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Skincare routines that work" },
+    { icon: <Truck className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Same day delivery available" },
+    { icon: <Heart className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Beauty experts at your service" },
+    { icon: <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Transform your beauty routine" },
+    { icon: <Star className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Glowing skin starts here" },
+    { icon: <Gift className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Luxury beauty made accessible" },
+    { icon: <Truck className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Free returns within 30 days" },
+    { icon: <Heart className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Join thousands of satisfied customers" },
+    { icon: <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Your beauty journey begins now" },
+    { icon: <Truck className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Premium skincare for all skin types" },
+    { icon: <Gift className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Award-winning beauty products" },
+    { icon: <Star className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Trusted by beauty professionals" },
+    { icon: <Heart className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Sustainable and eco-friendly options" },
+    { icon: <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "International shipping available" },
+    { icon: <Star className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "24/7 customer support" },
+    { icon: <Gift className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Money-back guarantee" },
+    { icon: <Truck className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Express delivery options" },
+    { icon: <Heart className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Personalized beauty recommendations" },
+    { icon: <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Beauty tutorials and guides" },
+    { icon: <Star className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Trending beauty products" },
+    { icon: <Gift className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Seasonal beauty specials" },
+    { icon: <Truck className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Bulk order discounts" },
+    { icon: <Heart className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Beauty subscription boxes" },
+    { icon: <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Virtual makeup consultations" },
+    { icon: <Star className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Beauty product reviews" },
+    { icon: <Gift className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Gift wrapping services" },
+    { icon: <Truck className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Store pickup available" },
+    { icon: <Heart className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Beauty community forum" },
+    { icon: <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />, text: "Beauty blog and insights" }
   ];
 
   return (
-    <div className="cosmt-promotion-bar overflow-hidden">
-      <div className="cosmt-container">
-        <div className="flex items-center text-xs md:text-cosmt-sm font-medium">
-          {/* Promotional Text - Scrolling container */}
-          <div className="flex-1 overflow-hidden">
-            <div className="flex items-center space-x-12 md:space-x-16 animate-scroll">
-              {promotionalTexts.map((item, index) => (
-                <div key={index} className="flex items-center space-x-3 whitespace-nowrap">
-                  {item.icon}
-                  <span className="tracking-wide">{item.text}</span>
-                </div>
-              ))}
-              {/* Duplicate for seamless loop */}
-              {promotionalTexts.map((item, index) => (
-                <div key={`duplicate-${index}`} className="flex items-center space-x-3 whitespace-nowrap">
-                  {item.icon}
-                  <span className="tracking-wide">{item.text}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-              {/* Site Preferences Dropdown - Positioned on the right */}
-              <div className="flex-shrink-0 ml-4 relative site-preferences-dropdown">
-                <button
-                  onClick={() => {
-                    setIsPreferencesOpen(!isPreferencesOpen);
-                  }}
-                   className="flex items-center justify-center w-8 h-8 text-gray-800 dark:text-gray-200 transition-all duration-200 rounded-md"
-                  title="Site Preferences"
-                  aria-label="Open Site Preferences"
-                >
-                  <Globe className="w-5 h-5 text-white" />
-                </button>
-                
-                {/* Site Preferences Dropdown */}
-                <SimpleSitePreferencesDropdown
-                  isOpen={isPreferencesOpen}
-                  onClose={() => setIsPreferencesOpen(false)}
-                />
+    <div className="cosmt-promotion-bar overflow-hidden" style={{ overflowX: 'hidden', overflowY: 'hidden', width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
+      <div className="flex items-center text-[10px] md:text-xs font-medium h-full">
+        {/* Promotional Text - Scrolling container */}
+        <div className="flex-1 overflow-hidden scrollbar-hide" style={{ overflowX: 'hidden', overflowY: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <div className="flex items-center animate-scroll" style={{ overflow: 'hidden', animationDuration: '60s' }}>
+            {promotionalTexts.map((item, index) => (
+              <div key={index} className="flex items-center space-x-3 whitespace-nowrap" style={{ marginRight: '2rem', marginLeft: index === 0 ? '0' : '0' }}>
+                {item.icon}
+                <span className="tracking-wide">{item.text}</span>
               </div>
+            ))}
+            {/* Duplicate for seamless loop */}
+            {promotionalTexts.map((item, index) => (
+              <div key={`duplicate-${index}`} className="flex items-center space-x-3 whitespace-nowrap" style={{ marginRight: '2rem', marginLeft: '0' }}>
+                {item.icon}
+                <span className="tracking-wide">{item.text}</span>
+              </div>
+            ))}
+            {/* Third copy for extra seamless loop */}
+            {promotionalTexts.map((item, index) => (
+              <div key={`third-${index}`} className="flex items-center space-x-3 whitespace-nowrap" style={{ marginRight: '2rem', marginLeft: '0' }}>
+                {item.icon}
+                <span className="tracking-wide">{item.text}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -104,6 +104,15 @@ export async function GET(request: NextRequest) {
     console.log('products count:', paginatedProducts.length);
     console.log('total:', total);
 
+    // Check if the requested page is valid
+    if (page > totalPages && totalPages > 0) {
+      console.log(`⚠️ API: Requested page ${page} is greater than total pages ${totalPages}`);
+      return NextResponse.json({
+        success: false,
+        error: `Page ${page} does not exist. Maximum page is ${totalPages}.`
+      }, { status: 404 });
+    }
+
     return NextResponse.json({
       success: true,
       data: paginatedProducts,

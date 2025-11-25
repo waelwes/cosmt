@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from './Button';
-import { Star, Heart, ShoppingBag } from 'lucide-react';
+import { Star, Heart, ShoppingCart } from 'lucide-react';
 import { Product } from '../../lib/types/Product';
 import { buildProductPath } from '../../utils/slug';
 
@@ -17,7 +17,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
     return (
       <div className="text-center py-12">
         <div className="text-gray-400 mb-4">
-          <ShoppingBag className="w-16 h-16 mx-auto" />
+          <ShoppingCart className="w-16 h-16 mx-auto" />
         </div>
         <h3 className="text-cosmt-lg font-medium text-gray-900 mb-2">No products found</h3>
         <p className="text-cosmt-sm text-gray-600">Try adjusting your filters or search terms</p>
@@ -28,7 +28,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {products.map((product) => (
-        <div key={product.id} className="group bg-white rounded-lg overflow-hidden">
+        <div key={product.id} className="group bg-white overflow-hidden">
           <div className="relative aspect-square bg-gray-50">
             <Link href={buildProductPath({
               name: product.name,
@@ -85,7 +85,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
             {/* Product Name */}
             <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-2">
               <Link href={buildProductPath({ name: product.name, categorySlug: product.categories?.slug, subcategorySlug: product.subcategories?.slug, productSlug: product.slug, id: product.id })} className="hover:text-gray-700 transition-colors duration-200">
-                {product.name}
+                {product.name.startsWith(product.brand + ' ') ? product.name.slice((product.brand + ' ').length) : product.name}
               </Link>
             </h3>
             

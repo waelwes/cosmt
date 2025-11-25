@@ -1,11 +1,5 @@
-import { ServiceContainer } from '@/lib/di/ServiceContainer';
-import { ICategoryService } from '@/lib/factories/interfaces/ICategoryService';
-import { IProductService } from '@/lib/factories/interfaces/IProductService';
-import Link from 'next/link';
 import type { Metadata } from 'next';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
-import { buildProductPath } from '@/utils/slug';
+import CategoriesIndexPageContent from './CategoriesIndexPageContent';
 
 // Language-specific content
 const categoriesContent = {
@@ -205,10 +199,10 @@ const categoriesContent = {
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const { locale } = params;
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
   const content = categoriesContent[locale as keyof typeof categoriesContent] || categoriesContent.en;
-  
+
   return {
     title: content.title,
     description: content.description,
@@ -220,217 +214,9 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   };
 }
 
-export default async function CategoriesIndexPage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+export default async function CategoriesIndexPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const content = categoriesContent[locale as keyof typeof categoriesContent] || categoriesContent.en;
-  
-  const categoryService: ICategoryService = ServiceContainer
-    .getInstance()
-    .getServiceFactory()
-    .createCategoryService();
 
-  const productService: IProductService = ServiceContainer
-    .getInstance()
-    .getServiceFactory()
-    .createProductService();
-
-  const categories = await categoryService.getCategoriesWithSubcategories();
-  const allProducts = await productService.getProducts();
-
-  return (
-    <div className="min-h-screen" style={{backgroundColor: '#fbfbfb'}}>
-      <Header />
-      <div className="cosmt-container py-10">
-        <nav className="text-sm text-gray-600 mb-6">
-          <ol className="flex space-x-2">
-            <li><Link href={`/${locale}`}>{content.breadcrumbHome}</Link></li>
-            <li>/</li>
-            <li className="text-gray-900">{content.breadcrumbCategories}</li>
-          </ol>
-        </nav>
-        
-         {/* Header Card */}
-         <div className="mb-8">
-           <div className="bg-white border border-gray-200 rounded-lg p-6 w-full">
-             <div className="flex items-center justify-between w-full">
-               <div className="flex items-center space-x-2">
-                 <div className="text-2xl font-semibold text-gray-900">
-                   {content.allProducts}
-                 </div>
-               </div>
-               
-               <div className="text-sm text-gray-600">
-                 <span className="font-medium">{allProducts.length}</span> {content.productsFound}
-               </div>
-               
-               <div className="flex items-center space-x-2">
-                 <span className="text-sm text-gray-600">{content.sortBy}</span>
-                 <select className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                   <option value="popular">{content.popular}</option>
-                   <option value="new">{content.newArrivals}</option>
-                   <option value="bestsellers">{content.bestSellers}</option>
-                   <option value="price-asc">{content.priceAsc}</option>
-                   <option value="price-desc">{content.priceDesc}</option>
-                   <option value="rated">{content.rated}</option>
-                   <option value="scores">{content.scores}</option>
-                 </select>
-               </div>
-             </div>
-           </div>
-         </div>
-        
-        <div className="flex gap-8">
-          {/* Left Sidebar */}
-          <div className="w-80 flex-shrink-0">
-            <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-4">
-              {/* Categories */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{content.categories}</h3>
-                <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {categories.map((category: any) => (
-                    <Link 
-                      key={category.id} 
-                      href={`/${locale}/categories/${category.slug}`}
-                      className="block p-3 bg-gray-50 rounded-lg hover:bg-green-50 hover:border-green-200 border border-transparent transition-all duration-200"
-                    >
-                      <h4 className="text-sm font-medium text-gray-900 hover:text-green-600 mb-1">
-                        {category.name}
-                      </h4>
-                      {Array.isArray(category.subcategories) && category.subcategories.length > 0 && (
-                        <p className="text-xs text-gray-500">
-                          {category.subcategories.length} {content.subcategories}
-                        </p>
-                      )}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* Filters */}
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">{content.filters}</h3>
-                  
-                  {/* Price Range */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">{content.priceRange}</h4>
-                    <div className="space-y-2">
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">{content.under25}</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">{content.price25to50}</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">{content.price50to100}</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">{content.over100}</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Brand */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">{content.brand}</h4>
-                    <div className="space-y-2">
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">L'Oréal</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">Pantene</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">Head & Shoulders</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">Garnier</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Product Type */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">{content.productType}</h4>
-                    <div className="space-y-2">
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">{content.shampoo}</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">{content.conditioner}</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">{content.treatment}</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                        <span className="ml-2 text-sm text-gray-600">{content.styling}</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Clear Filters */}
-                  <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm font-medium transition-colors">
-                    {content.clearFilters}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="flex-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {allProducts.map((product: any) => (
-            <Link 
-              key={product.id} 
-              href={buildProductPath({ 
-                name: product.name, 
-                categorySlug: product.categories?.slug, 
-                subcategorySlug: null, 
-                productSlug: product.slug, 
-                id: product.id 
-              })} 
-              className="group bg-white border border-gray-200 rounded-lg p-6 hover:border-green-500 transition-all duration-200"
-            >
-              <div className="aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
-                {product.image ? (
-                  <img 
-                    src={product.image} 
-                    alt={product.name}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                ) : (
-                  <div className="text-gray-400 text-sm">{content.noImage}</div>
-              )}
-            </div>
-              <h3 className="text-lg font-medium text-gray-900 group-hover:text-green-600 mb-2">
-                {product.name}
-              </h3>
-              <p className="text-sm text-gray-500 mb-2">
-                {product.categories?.name}
-              </p>
-              <p className="text-lg font-semibold text-green-600">
-                ${product.price}
-              </p>
-            </Link>
-          ))}
-        </div>
-      </div>
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
+  return <CategoriesIndexPageContent locale={locale} content={content} />;
 }

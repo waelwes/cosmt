@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { ApiConnectionTest } from '@/components/debug/ApiConnectionTest';
 import { 
   Plus, 
   Search, 
@@ -83,18 +84,21 @@ export default function ProductsPage() {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [selectedProducts, setSelectedProducts] = useState<Set<number>>(new Set());
+  const [showBulkActions, setShowBulkActions] = useState(false);
+  const [lastKnownTotalPages, setLastKnownTotalPages] = useState(1);
   const [visibleColumns, setVisibleColumns] = useState({
     id: true,
     image: true,
     name: true,
     category: true,
     brand: true,
-    type: true,
+    type: false,
     price: true,
     stock: true,
     status: true,
-    rating: true,
-    sku: true,
+    rating: false,
+    sku: false,
     created: true,
     actions: true
   });
@@ -129,6 +133,13 @@ export default function ProductsPage() {
   const allProducts = productsData?.products ? productsData.products.map(transformProduct) : [];
   const totalProducts = productsData?.total || 0;
   const totalPages = productsData?.totalPages || 1;
+  
+  // Update last known total pages when we successfully get data
+  useEffect(() => {
+    if (productsData?.totalPages && productsData.totalPages > 0) {
+      setLastKnownTotalPages(productsData.totalPages);
+    }
+  }, [productsData?.totalPages]);
   
   // Debug logging
   console.log('🔍 Products Debug Info:');
@@ -169,16 +180,99 @@ export default function ProductsPage() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
+
+  // Bulk delete function
+  const handleBulkDelete = async () => {
+    if (selectedProducts.size === 0) return;
+    
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${selectedProducts.size} product${selectedProducts.size !== 1 ? 's' : ''}? This action cannot be undone.`
+    );
+    
+    if (confirmed) {
+      try {
+        const productsToDelete = Array.from(selectedProducts);
+        const deletePromises = productsToDelete.map(id => 
+          fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
+        );
+        
+        await Promise.all(deletePromises);
+        
+        // Clear selection and reset to page 1 to avoid 404 errors
+        setSelectedProducts(new Set());
+        setShowBulkActions(false);
+        setCurrentPage(1);
+        
+        // The page change will trigger a refetch automatically via useProducts
+        alert(`Successfully deleted ${productsToDelete.length} product${productsToDelete.length !== 1 ? 's' : ''}.`);
+      } catch (error) {
+        console.error('Bulk delete failed:', error);
+        alert('Failed to delete some products. Please try again.');
+      }
+    }
+  };
+
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategory, selectedStatus, sortBy, sortOrder]);
 
+  // Ensure current page doesn't exceed total pages
+  useEffect(() => {
+    if (productsData?.totalPages && currentPage > productsData.totalPages) {
+      console.log(`⚠️ Current page ${currentPage} exceeds total pages ${productsData.totalPages}, redirecting to page ${productsData.totalPages}`);
+      setCurrentPage(productsData.totalPages);
+    }
+  }, [productsData?.totalPages, currentPage]);
+
+  // Handle 404 errors by resetting to valid page
+  useEffect(() => {
+    if (error && error.includes('404')) {
+      console.log('🔄 404 error detected, resetting to valid page');
+      // Use last known total pages to redirect to a valid page
+      const lastPage = Math.max(1, lastKnownTotalPages);
+      console.log(`📄 Redirecting to page ${lastPage} (last known: ${lastKnownTotalPages})`);
+      setCurrentPage(lastPage);
+    }
+  }, [error, lastKnownTotalPages]);
+
+  // Prevent navigation to invalid pages
+  const handlePageChange = (newPage: number) => {
+    console.log(`🔄 Page change requested: ${currentPage} → ${newPage}`);
+    console.log(`📊 Total pages available: ${productsData?.totalPages || 'unknown'}`);
+    
+    // Ensure newPage is within valid bounds
+    if (newPage < 1) {
+      console.log(`⚠️ Attempted to navigate to page ${newPage}, setting to page 1`);
+      setCurrentPage(1);
+      return;
+    }
+    
+    // If we know the total pages, ensure we don't go beyond it
+    if (productsData?.totalPages) {
+      if (newPage > productsData.totalPages) {
+        console.log(`⚠️ Attempted to navigate to page ${newPage}, but only ${productsData.totalPages} pages exist`);
+        setCurrentPage(productsData.totalPages);
+        return;
+      }
+    }
+    
+    console.log(`✅ Valid page navigation to page ${newPage}`);
+    setCurrentPage(newPage);
+  };
+
   const { create, update, remove, loading: crudLoading } = useCrudOperations<Product>(
     '/api/admin/products',
     () => {
-      refetch(); // Refresh data after successful operation
+      // Close modal and clear selection
       setShowDeleteModal(null);
+      setSelectedProducts(new Set());
+      setShowBulkActions(false);
+      
+      // Reset to page 1 to avoid 404 errors after deletion
+      setCurrentPage(1);
+      
+      // The page change will trigger a refetch automatically via useProducts
     },
     (error) => {
       console.error('CRUD operation failed:', error);
@@ -235,6 +329,44 @@ export default function ProductsPage() {
 
     return filtered;
   }, [allProducts, debouncedSearchTerm, filters]);
+
+  // Selection functions
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      const allIds = new Set(filteredProducts.map(p => p.id));
+      setSelectedProducts(allIds);
+      setShowBulkActions(true);
+    } else {
+      setSelectedProducts(new Set());
+      setShowBulkActions(false);
+    }
+  };
+
+  const handleSelectProduct = (productId: number, checked: boolean) => {
+    const newSelected = new Set(selectedProducts);
+    if (checked) {
+      newSelected.add(productId);
+    } else {
+      newSelected.delete(productId);
+    }
+    setSelectedProducts(newSelected);
+    setShowBulkActions(newSelected.size > 0);
+  };
+
+  const isAllSelected = filteredProducts.length > 0 && selectedProducts.size === filteredProducts.length;
+  const isIndeterminate = selectedProducts.size > 0 && selectedProducts.size < filteredProducts.length;
+
+  // Debug logging for selection state
+  console.log('🔍 Selection Debug:', {
+    selectedProducts: Array.from(selectedProducts),
+    selectedCount: selectedProducts.size,
+    totalProducts: filteredProducts.length,
+    isAllSelected,
+    isIndeterminate,
+    showBulkActions,
+    currentPage,
+    totalPages: productsData?.totalPages
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -473,7 +605,8 @@ export default function ProductsPage() {
       alert('Products imported successfully!');
     } catch (error) {
       console.error('Import failed:', error);
-      alert('Failed to import products. Please check the file format and try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(`Failed to import products: ${errorMessage}`);
     } finally {
       setImportLoading(false);
     }
@@ -481,38 +614,134 @@ export default function ProductsPage() {
 
   const importFromCSV = async (file: File) => {
     const text = await file.text();
-    const lines = text.split('\n');
-    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    console.log('Raw CSV content:', text.substring(0, 500)); // Show first 500 chars
+    
+    // Handle different line endings and remove empty lines
+    const lines = text.split(/\r?\n/).filter(line => line.trim());
+    console.log('Total lines after filtering:', lines.length);
+    console.log('All lines:', lines);
+    
+    if (lines.length < 2) {
+      throw new Error('CSV file must have at least a header row and one data row. Please check your file format.');
+    }
+    
+    // Detect delimiter (comma, semicolon, or tab)
+    const firstLine = lines[0];
+    let delimiter = ',';
+    if (firstLine.includes(';') && !firstLine.includes(',')) {
+      delimiter = ';';
+    } else if (firstLine.includes('\t')) {
+      delimiter = '\t';
+    }
+    console.log('Detected delimiter:', delimiter);
+    
+    const headers = firstLine.split(delimiter).map(h => h.trim().replace(/"/g, ''));
+    console.log('CSV Headers:', headers);
+    console.log('Expected format: ID, Image, Name, Category, Brand, Type, Price, Stock, Status, Rating, SKU, Created');
+    
+    // Validate headers
+    const requiredHeaders = ['name', 'brand', 'price'];
+    const missingHeaders = requiredHeaders.filter(h => !headers.some(header => header.toLowerCase() === h));
+    if (missingHeaders.length > 0) {
+      throw new Error(`Missing required headers: ${missingHeaders.join(', ')}. Please ensure your CSV has columns for Name, Brand, and Price.`);
+    }
     
     const products = [];
     for (let i = 1; i < lines.length; i++) {
-      if (lines[i].trim()) {
-        const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
-        if (values.length >= headers.length) {
+      const line = lines[i].trim();
+      console.log(`Processing line ${i + 1}: "${line}"`);
+      
+      if (line) {
+        // Parse CSV line properly handling quoted fields
+        const values = parseCSVLine(line, delimiter);
+        console.log(`Row ${i + 1} values:`, values);
+        console.log(`Row ${i + 1} values length:`, values.length);
+        
+        if (values.length >= 7) { // At least ID, Image, Name, Category, Brand, Type, Price
           const product = {
-            name: values[0] || '',
-            brand: values[1] || '',
-            category: values[2] || '',
-            price: parseFloat(values[3]) || 0,
-            originalPrice: values[4] ? parseFloat(values[4]) : null,
-            stock: parseInt(values[5]) || 0,
-            status: (values[6] === 'inactive' ? 'inactive' : 'active') as 'active' | 'inactive',
-            rating: parseFloat(values[7]) || 0,
-            reviews: parseInt(values[8]) || 0,
-            image: values[9] || '/api/placeholder/300/300',
-            isBestSeller: values[10] === 'true',
-            isOnSale: values[11] === 'true',
-            description: values[12] || ''
+            name: (values[2] || '').trim(), // Name column
+            brand: (values[4] || '').trim(), // Brand column
+            price: parseFloat(values[6]) || 0, // Price column
+            originalPrice: null, // Not in your CSV
+            stock: parseInt(values[7]) || 0, // Stock column
+            status: (values[8] === 'inactive' || values[8] === 'out_of_stock' ? 'inactive' : 'active') as 'active' | 'inactive',
+            rating: parseFloat(values[9]) || 0, // Rating column
+            reviews: 0, // Not in your CSV, default to 0
+            image: (values[1] || '/api/placeholder/300/300').trim(), // Image column
+            isBestSeller: false, // Not in your CSV, default to false
+            isOnSale: false, // Not in your CSV, default to false
+            description: `${values[3]} - ${values[5]}` // Category - Type as description
           };
+          
+          console.log('Parsed product:', product);
+          
+          // Validate required fields
+          if (!product.name || !product.brand || product.price <= 0) {
+            console.error('Invalid product data:', product);
+            console.error('Values that caused the issue:', {
+              name: values[0],
+              brand: values[1], 
+              price: values[2],
+              parsedPrice: parseFloat(values[2]),
+              allValues: values
+            });
+            throw new Error(`Invalid product data in row ${i + 1}: Missing required fields (name, brand, price). 
+            
+Debug info:
+- Name: "${values[0]}" (${typeof values[0]})
+- Brand: "${values[1]}" (${typeof values[1]})
+- Price: "${values[2]}" (${typeof values[2]})
+- Parsed Price: ${parseFloat(values[2])}
+
+Please check that your CSV format matches the expected format:
+name,brand,price,originalPrice,stock,status,rating,reviews,image,isBestSeller,isOnSale,description`);
+          }
+          
           products.push(product);
+        } else {
+          console.warn(`Row ${i + 1} has insufficient columns (${values.length}), skipping`);
         }
       }
     }
     
+    console.log(`Parsed ${products.length} products from CSV`);
+    
+    if (products.length === 0) {
+      throw new Error('No valid products found in CSV file. Please check the file format and ensure it has data rows.');
+    }
+    
     // Create products via API
     for (const product of products) {
+      try {
       await create(product);
+      } catch (error) {
+        console.error('Failed to create product:', product, error);
+        throw new Error(`Failed to create product "${product.name}": ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
     }
+  };
+
+  // Helper function to parse CSV line properly handling quoted fields
+  const parseCSVLine = (line: string, delimiter: string): string[] => {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === delimiter && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    
+    result.push(current.trim());
+    return result;
   };
 
   const importFromExcel = async (file: File) => {
@@ -522,25 +751,46 @@ export default function ProductsPage() {
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
     
-    const products = jsonData.map((row: Record<string, unknown>) => ({
-      name: row.name || row.Name || '',
-      brand: row.brand || row.Brand || '',
-      category: row.category || row.Category || '',
-      price: parseFloat(row.price || row.Price) || 0,
-      originalPrice: row.originalPrice || row['Original Price'] ? parseFloat(row.originalPrice || row['Original Price']) : null,
-      stock: parseInt(row.stock || row.Stock) || 0,
+    console.log('Excel data sample:', jsonData.slice(0, 2));
+    console.log('Expected columns: name, brand, price, originalPrice, stock, status, rating, reviews, image, isBestSeller, isOnSale, description');
+    
+    const products = jsonData.map((row: Record<string, unknown>, index: number) => {
+      const product = {
+        name: String(row.name || row.Name || '').trim(),
+        brand: String(row.brand || row.Brand || '').trim(),
+        price: parseFloat(String(row.price || row.Price)) || 0,
+        originalPrice: row.originalPrice || row['Original Price'] ? parseFloat(String(row.originalPrice || row['Original Price'])) : null,
+        stock: parseInt(String(row.stock || row.Stock)) || 0,
       status: (row.status === 'inactive' || row.Status === 'inactive' ? 'inactive' : 'active') as 'active' | 'inactive',
-      rating: parseFloat(row.rating || row.Rating) || 0,
-      reviews: parseInt(row.reviews || row.Reviews) || 0,
-      image: row.image || row.Image || '/api/placeholder/300/300',
-      isBestSeller: row.isBestSeller || row['Best Seller'] === 'true' || row['Best Seller'] === true,
-      isOnSale: row.isOnSale || row['On Sale'] === 'true' || row['On Sale'] === true,
-      description: row.description || row.Description || ''
-    }));
+        rating: parseFloat(String(row.rating || row.Rating)) || 0,
+        reviews: parseInt(String(row.reviews || row.Reviews)) || 0,
+        image: String(row.image || row.Image || '/api/placeholder/300/300').trim(),
+        isBestSeller: row.isBestSeller === true || row['Best Seller'] === 'true' || row['Best Seller'] === true,
+        isOnSale: row.isOnSale === true || row['On Sale'] === 'true' || row['On Sale'] === true,
+        description: String(row.description || row.Description || '').trim()
+      };
+      
+      console.log(`Row ${index + 1} parsed product:`, product);
+      
+      // Validate required fields
+      if (!product.name || !product.brand || product.price <= 0) {
+        console.error('Invalid product data:', product);
+        throw new Error(`Invalid product data in row ${index + 1}: Missing required fields (name, brand, price)`);
+      }
+      
+      return product;
+    });
+    
+    console.log(`Parsed ${products.length} products from Excel`);
     
     // Create products via API
     for (const product of products) {
+      try {
       await create(product);
+      } catch (error) {
+        console.error('Failed to create product:', product, error);
+        throw new Error(`Failed to create product "${product.name}": ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
     }
   };
 
@@ -564,12 +814,12 @@ export default function ProductsPage() {
       name: true,
       category: true,
       brand: true,
-      type: true,
+      type: false,
       price: true,
       stock: true,
       status: true,
-      rating: true,
-      sku: true,
+      rating: false,
+      sku: false,
       created: true,
       actions: true
     });
@@ -616,6 +866,11 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-4">
+
+      
+      {/* API Connection Test - Remove this after debugging */}
+      <ApiConnectionTest />
+      
       {/* Single Combined Card */}
       <div className="analytics-card p-0">
         {/* Header */}
@@ -926,23 +1181,83 @@ export default function ProductsPage() {
 
         </div>
 
+        {/* Bulk Actions Bar - Shopify Style */}
+        {showBulkActions && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 mb-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    {selectedProducts.size} product{selectedProducts.size !== 1 ? 's' : ''} selected
+                  </span>
+                </div>
+                <button
+                  onClick={() => {
+                    setSelectedProducts(new Set());
+                    setShowBulkActions(false);
+                  }}
+                  className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 underline"
+                >
+                  Clear selection
+                </button>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    // TODO: Implement bulk edit
+                    alert('Bulk edit feature coming soon!');
+                  }}
+                >
+                  <Edit className="w-4 h-4 mr-1" />
+                  Edit Selected
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={handleBulkDelete}
+                >
+                  <Trash2 className="w-4 h-4 mr-1" />
+                  Delete Selected
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Products Table */}
         <div className="overflow-x-auto max-w-full">
-          <table id="products-table" className="w-full divide-y table-auto" style={{ minWidth: '800px' }}>
+          <table id="products-table" className="w-full divide-y table-fixed" style={{ minWidth: '1000px' }}>
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
+                <th className="px-3 py-4 text-left w-8">
+                  <input
+                    type="checkbox"
+                    checked={isAllSelected}
+                    ref={(input) => {
+                      if (input) input.indeterminate = isIndeterminate;
+                    }}
+                    onChange={(e) => {
+                      console.log('Select all clicked:', e.target.checked);
+                      handleSelectAll(e.target.checked);
+                    }}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                  />
+                </th>
                 {visibleColumns.id && (
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-12">
+                  <th className="px-3 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-16">
                     ID
                   </th>
                 )}
                 {visibleColumns.image && (
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-16">
+                  <th className="px-3 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-20">
                     Image
                   </th>
                 )}
                 {visibleColumns.name && (
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider min-w-[150px] max-w-[200px]">
+                  <th className="px-3 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-64">
                     Name
                   </th>
                 )}
@@ -962,12 +1277,12 @@ export default function ProductsPage() {
                   </th>
                 )}
                 {visibleColumns.price && (
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-20">
+                  <th className="px-3 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-24">
                     Price
                   </th>
                 )}
                 {visibleColumns.stock && (
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-16">
+                  <th className="px-3 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-20">
                     Stock
                   </th>
                 )}
@@ -992,7 +1307,7 @@ export default function ProductsPage() {
                   </th>
                 )}
                 {visibleColumns.actions && (
-                  <th className="px-2 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-20">
+                  <th className="px-3 py-4 text-right text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-300 uppercase tracking-wider w-24">
                     Actions
                   </th>
                 )}
@@ -1001,7 +1316,7 @@ export default function ProductsPage() {
             <tbody className="bg-white dark:bg-gray-800 divide-y">
               {error ? (
                 <tr>
-                  <td colSpan={Object.values(visibleColumns).filter(Boolean).length} className="px-6 py-12 text-center">
+                  <td colSpan={Object.values(visibleColumns).filter(Boolean).length + 1} className="px-6 py-12 text-center">
                     <div className="text-center">
                       <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Error Loading Products</h3>
@@ -1015,7 +1330,7 @@ export default function ProductsPage() {
                 </tr>
               ) : loading ? (
                 <tr>
-                  <td colSpan={Object.values(visibleColumns).filter(Boolean).length} className="px-6 py-12 text-center">
+                  <td colSpan={Object.values(visibleColumns).filter(Boolean).length + 1} className="px-6 py-12 text-center">
                     <div className="flex items-center justify-center space-x-2">
                       <span>No products found</span>
                     </div>
@@ -1023,7 +1338,7 @@ export default function ProductsPage() {
                 </tr>
               ) : filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={Object.values(visibleColumns).filter(Boolean).length} className="px-6 py-12 text-center">
+                  <td colSpan={Object.values(visibleColumns).filter(Boolean).length + 1} className="px-6 py-12 text-center">
                     <div className="text-center">
                       <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Products Found</h3>
@@ -1047,21 +1362,48 @@ export default function ProductsPage() {
                   </td>
                 </tr>
               ) : (
-                filteredProducts.map((product) => (
-                <tr key={product.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                filteredProducts.map((product, index) => {
+                  // Calculate the row number based on current page and position
+                  const rowNumber = (currentPage - 1) * itemsPerPage + index + 1;
+                  
+                  return (
+                <tr 
+                  key={product.id} 
+                  className={`hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-200 dark:border-gray-600 cursor-pointer ${
+                    selectedProducts.has(product.id) ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                  }`}
+                  onClick={(e) => {
+                    // Don't trigger if clicking on checkbox or action buttons
+                    if (e.target instanceof HTMLInputElement || e.target.closest('button')) return;
+                    handleSelectProduct(product.id, !selectedProducts.has(product.id));
+                  }}
+                >
+                  {/* Selection Column */}
+                  <td className="px-3 py-4 whitespace-nowrap w-8">
+                    <input
+                      type="checkbox"
+                      checked={selectedProducts.has(product.id)}
+                      onChange={(e) => {
+                        e.stopPropagation(); // Prevent row click
+                        console.log('Product checkbox clicked:', product.id, e.target.checked);
+                        handleSelectProduct(product.id, e.target.checked);
+                      }}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                    />
+                  </td>
                   {/* ID Column */}
                   {visibleColumns.id && (
-                    <td className="px-2 py-3 whitespace-nowrap">
-                      <div className="text-xs font-medium text-gray-900 dark:text-gray-100">#{product.id}</div>
+                    <td className="px-3 py-4 whitespace-nowrap w-16">
+                      <div className="text-xs font-medium text-gray-900 dark:text-gray-100">#{rowNumber}</div>
                     </td>
                   )}
                   
                   {/* Image Column */}
                   {visibleColumns.image && (
-                    <td className="px-2 py-3 whitespace-nowrap">
-                      <div className="flex-shrink-0 h-8 w-8">
+                    <td className="px-3 py-4 whitespace-nowrap w-20">
+                      <div className="flex-shrink-0 h-10 w-10">
                         <img
-                          className="h-8 w-8 rounded object-cover"
+                          className="h-10 w-10 rounded object-cover"
                           src={product.image || '/api/placeholder/300/300'}
                           alt={product.name}
                           onError={(e) => {
@@ -1075,7 +1417,7 @@ export default function ProductsPage() {
                   
                   {/* Name Column */}
                   {visibleColumns.name && (
-                    <td className="px-2 py-3">
+                    <td className="px-3 py-4 w-64">
                       <div className="flex items-center">
                         <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{product.name}</div>
                         {product.isBestSeller && (
@@ -1116,7 +1458,7 @@ export default function ProductsPage() {
                   
                   {/* Price Column */}
                   {visibleColumns.price && (
-                    <td className="px-2 py-3 whitespace-nowrap">
+                    <td className="px-3 py-4 whitespace-nowrap w-24">
                       <div className="text-sm font-medium text-gray-900 dark:text-gray-100">${product.price.toFixed(2)}</div>
                       {product.originalPrice && (
                         <div className="text-xs text-gray-500 dark:text-gray-400 line-through">
@@ -1128,7 +1470,7 @@ export default function ProductsPage() {
                   
                   {/* Stock Column */}
                   {visibleColumns.stock && (
-                    <td className="px-2 py-3 whitespace-nowrap">
+                    <td className="px-3 py-4 whitespace-nowrap w-20">
                       <div className={`text-sm font-medium ${getStockColor(product.stock)}`}>
                         {product.stock}
                       </div>
@@ -1184,7 +1526,7 @@ export default function ProductsPage() {
                   
                   {/* Actions Column */}
                   {visibleColumns.actions && (
-                    <td className="px-2 py-3 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-3 py-4 whitespace-nowrap text-right text-sm font-medium w-24">
                       <div className="flex items-center justify-end space-x-1">
                         <button 
                           onClick={() => handleView(product)}
@@ -1211,7 +1553,8 @@ export default function ProductsPage() {
                     </td>
                   )}
                 </tr>
-                ))
+                );
+                })
               )}
             </tbody>
           </table>
@@ -1247,7 +1590,7 @@ export default function ProductsPage() {
               <Button 
                 variant="secondary" 
                 size="sm"
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
               >
                 Previous
@@ -1256,12 +1599,14 @@ export default function ProductsPage() {
               {/* Page numbers */}
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                 const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
+                // Only show page numbers that actually exist
+                if (pageNum > totalPages) return null;
                 return (
                   <Button
                     key={pageNum}
                     variant={pageNum === currentPage ? "primary" : "secondary"}
                     size="sm"
-                    onClick={() => setCurrentPage(pageNum)}
+                    onClick={() => handlePageChange(pageNum)}
                   >
                     {pageNum}
                   </Button>
@@ -1271,7 +1616,7 @@ export default function ProductsPage() {
               <Button 
                 variant="secondary" 
                 size="sm"
-                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
               >
                 Next

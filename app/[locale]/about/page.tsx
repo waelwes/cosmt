@@ -220,7 +220,10 @@ export default function AboutPage({ params }: { params: { locale: string } }) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href={`/${locale}/categories`}
-              className="px-8 py-3 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 font-medium"
+              className="px-8 py-3 text-white transition-colors duration-200 font-medium"
+              style={{ backgroundColor: '#003d38' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
             >
               {content.shopButton}
             </a>

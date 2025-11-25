@@ -4,9 +4,35 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useRouter, usePathname } from 'next/navigation';
 import { getUserLocale, savePreferences, isFirstVisit, SUPPORTED_LOCALES } from '../utils/detectLocale';
 
-const LocaleContext = createContext();
+interface UserLocale {
+  locale: string;
+  country: string;
+  currency: string;
+  path: string;
+}
 
-export function LocaleProvider({ children }) {
+interface LocaleContextType {
+  locale: string;
+  country: string;
+  currency: string;
+  isLoading: boolean;
+  isInitialized: boolean;
+  updateLocale: (newLocale: string, newCountry: string, newCurrency: string, shouldRedirect?: boolean) => void;
+  getCurrentLocale: () => {
+    locale: string;
+    country: string;
+    currency: string;
+    path: string;
+    name: string;
+    flag: string;
+  };
+  isPathMatchingLocale: () => boolean;
+  isFirstVisit: boolean;
+}
+
+const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
+
+export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState('en');
   const [country, setCountry] = useState('US');
   const [currency, setCurrency] = useState('USD');
@@ -39,7 +65,7 @@ export function LocaleProvider({ children }) {
         }
         
         // Only auto-detect if no manual preference exists
-        const userLocale = await getUserLocale();
+        const userLocale: UserLocale = await getUserLocale();
         
         // Update state
         setLocale(userLocale.locale);
@@ -77,7 +103,7 @@ export function LocaleProvider({ children }) {
   }, [router, pathname]);
 
   // Update locale with optional redirect
-  const updateLocale = async (newLocale, newCountry, newCurrency, shouldRedirect = true) => {
+  const updateLocale = async (newLocale: string, newCountry: string, newCurrency: string, shouldRedirect = true) => {
     try {
       // Update state
       setLocale(newLocale);
@@ -101,7 +127,7 @@ export function LocaleProvider({ children }) {
       // Only redirect if shouldRedirect is true
       if (shouldRedirect) {
         // Get new path
-        const newPath = SUPPORTED_LOCALES[newLocale]?.path || '/en';
+        const newPath = (SUPPORTED_LOCALES as Record<string, any>)[newLocale]?.path || '/tr';
         
         // Update current path to new locale
         const currentPath = pathname;
@@ -114,8 +140,10 @@ export function LocaleProvider({ children }) {
           targetPath = currentPath.replace(/^\/[a-z]{2}/, newPath);
         }
         
-        // Navigate to new path
-        router.push(targetPath);
+        // Navigate to new path only if different
+        if (targetPath !== currentPath) {
+          router.push(targetPath);
+        }
       }
       
     } catch (error) {
@@ -125,22 +153,24 @@ export function LocaleProvider({ children }) {
 
   // Get current locale info
   const getCurrentLocale = () => {
+    const localeData = (SUPPORTED_LOCALES as Record<string, any>)[locale];
     return {
       locale,
       country,
       currency,
-      path: SUPPORTED_LOCALES[locale]?.path || '/en',
-      name: SUPPORTED_LOCALES[locale]?.name || 'English',
-      flag: SUPPORTED_LOCALES[locale]?.flag || '🇺🇸',
+      path: localeData?.path || '/tr',
+      name: localeData?.name || 'English',
+      flag: localeData?.flag || '🇺🇸',
     };
   };
 
   // Check if current path matches locale
   const isPathMatchingLocale = () => {
     const currentPath = pathname;
-    const expectedPath = SUPPORTED_LOCALES[locale]?.path || '/en';
-    
-    if (currentPath === '/' && expectedPath === '/en') return true;
+    const localeData = (SUPPORTED_LOCALES as Record<string, any>)[locale];
+    const expectedPath = localeData?.path || '/tr';
+
+    if (currentPath === '/' && expectedPath === '/tr') return true;
     return currentPath.startsWith(expectedPath);
   };
 

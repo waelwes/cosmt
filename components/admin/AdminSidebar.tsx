@@ -294,7 +294,7 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
           <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
             <Link href="/admin/dashboard" className="flex items-center px-3">
               <Image
-                src="http://localhost:3000/images/logos/COSMT.png"
+                src="/images/logos/COSMT.png"
                 alt="COSMT Logo"
                 width={80}
                 height={24}

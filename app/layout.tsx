@@ -39,11 +39,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: 'http://localhost:3000/images/logos/COSMT.png', sizes: '32x32', type: 'image/png' },
-      { url: 'http://localhost:3000/images/logos/COSMT.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/images/logos/COSMT.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/logos/COSMT.png', sizes: '16x16', type: 'image/png' },
     ],
-    shortcut: 'http://localhost:3000/images/logos/COSMT.png',
-    apple: 'http://localhost:3000/images/logos/COSMT.png',
+    shortcut: '/favicon.svg',
+    apple: '/images/logos/COSMT.png',
   },
   openGraph: {
     title: "COSMAT - Premium Beauty & Hair Care Products",
@@ -86,9 +87,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html suppressHydrationWarning>
+    <html suppressHydrationWarning className="overflow-x-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
         suppressHydrationWarning={true}
       >
         <ErrorBoundary>

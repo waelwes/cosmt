@@ -43,7 +43,7 @@ export const BeautyTips: React.FC = () => {
   const { isRTL } = useRTL();
 
   return (
-    <div className="py-8" style={{backgroundColor: '#fbfbfb'}}>
+    <div className="py-4 bg-white">
       <div className="cosmt-container">
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -71,14 +71,17 @@ export const BeautyTips: React.FC = () => {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="bg-green-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
+                  <span className="text-white text-sm font-semibold px-3 py-1 rounded-full" style={{ backgroundColor: '#003d38' }}>
                     {tip.category}
                   </span>
                 </div>
               </div>
               
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-green-600 transition-colors duration-300 mb-3 line-clamp-2">
+                <h3 className="text-xl font-semibold text-gray-900 transition-colors duration-300 mb-3 line-clamp-2" style={{ color: 'inherit' }}>
+                  <style dangerouslySetInnerHTML={{__html: `
+                    .group:hover h3 { color: #003d38 !important; }
+                  `}} />
                   {tip.title}
                 </h3>
                 <p className="text-gray-600 mb-4 line-clamp-3">
@@ -110,7 +113,10 @@ export const BeautyTips: React.FC = () => {
         <div className="text-center mt-12">
           <Link
             href="/blog"
-            className="inline-flex items-center px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-200 text-lg"
+            className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors duration-200 text-lg"
+            style={{ backgroundColor: '#003d38' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
           >
             {isRTL ? 'عرض جميع المقالات' : 'View All Articles'}
             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

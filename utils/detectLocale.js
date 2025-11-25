@@ -2,12 +2,12 @@
 // Auto-detects user region, language, and currency on first visit
 
 export const SUPPORTED_LOCALES = {
-  en: { country: 'US', currency: 'USD', path: '/en', name: 'English', flag: '🇺🇸' },
-  ar: { country: 'SA', currency: 'SAR', path: '/ar', name: 'العربية', flag: '🇸🇦' },
+  en: { country: 'US', currency: 'USD', path: '/tr', name: 'English', flag: '🇺🇸' },
+  ar: { country: 'SA', currency: 'SAR', path: '/tr', name: 'العربية', flag: '🇸🇦' },
   tr: { country: 'TR', currency: 'TRY', path: '/tr', name: 'Türkçe', flag: '🇹🇷' },
-  de: { country: 'DE', currency: 'EUR', path: '/de', name: 'Deutsch', flag: '🇩🇪' },
-  fr: { country: 'FR', currency: 'EUR', path: '/fr', name: 'Français', flag: '🇫🇷' },
-  es: { country: 'ES', currency: 'EUR', path: '/es', name: 'Español', flag: '🇪🇸' },
+  de: { country: 'DE', currency: 'EUR', path: '/tr', name: 'Deutsch', flag: '🇩🇪' },
+  fr: { country: 'FR', currency: 'EUR', path: '/tr', name: 'Français', flag: '🇫🇷' },
+  es: { country: 'ES', currency: 'EUR', path: '/tr', name: 'Español', flag: '🇪🇸' },
 };
 
 export const COUNTRY_MAPPING = {

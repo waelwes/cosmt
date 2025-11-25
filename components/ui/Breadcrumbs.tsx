@@ -23,7 +23,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
           {item.href ? (
             <Link
               href={item.href}
-              className="hover:text-green-600 transition-colors duration-200 text-gray-700"
+              className="transition-colors duration-200 text-gray-700 hover:[color:#003d38]"
             >
               {item.label}
             </Link>

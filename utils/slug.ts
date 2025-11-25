@@ -68,27 +68,29 @@ export function buildProductPath(params: {
   subcategorySlug?: string | null;
   productSlug?: string | null;
   id?: number | string | null;
+  locale?: string;
 }) {
-  const { name, categorySlug, subcategorySlug, productSlug, id } = params;
+  const { name, categorySlug, subcategorySlug, productSlug, id, locale } = params;
   const safeProductSlug = productSlug || (name ? generateSlug(name) : "");
   const safeCategory = categorySlug || "";
   const safeSubcategory = subcategorySlug || "";
+  const localePrefix = locale ? `/${locale}` : "";
 
-  if (!safeProductSlug || !id) return `/product/${id ?? ""}`;
+  if (!safeProductSlug || !id) return `${localePrefix}/product/${id ?? ""}`;
 
   if (safeSubcategory && safeSubcategory === safeProductSlug && safeCategory) {
-    return `/categories/${safeCategory}/${safeSubcategory}`;
+    return `${localePrefix}/categories/${safeCategory}/${safeSubcategory}`;
   }
 
   if (safeCategory && safeSubcategory) {
-    return `/categories/${safeCategory}/${safeSubcategory}/${safeProductSlug}`;
+    return `${localePrefix}/categories/${safeCategory}/${safeSubcategory}/${safeProductSlug}`;
   }
 
   if (safeCategory) {
-    return `/categories/${safeCategory}/${safeProductSlug}`;
+    return `${localePrefix}/categories/${safeCategory}/${safeProductSlug}`;
   }
 
-  return `/product/${id}`;
+  return `${localePrefix}/product/${id}`;
 }
 
 /**

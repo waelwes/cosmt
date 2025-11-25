@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Heart, ShoppingBag, Trash2, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,12 +15,12 @@ import { useRouter } from 'next/navigation';
 import { buildProductPath } from '../../../utils/slug';
 
 interface WishlistPageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export default function WishlistPage({ params }: WishlistPageProps) {
-  const { locale } = params;
+  const { locale } = React.use(params);
   const { wishlistItems, removeFromWishlist, clearWishlist } = useWishlist();
   const { addToCart } = useCart();
   const { user } = useAuth();
@@ -28,9 +28,19 @@ export default function WishlistPage({ params }: WishlistPageProps) {
   const router = useRouter();
   const [displayItems, setDisplayItems] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const prevWishlistItemsRef = useRef<string>('');
 
   // Convert wishlist items for display with translations
   useEffect(() => {
+    const wishlistItemsKey = JSON.stringify(wishlistItems.map(item => item.id).sort());
+    
+    // Only convert if wishlist items have actually changed
+    if (prevWishlistItemsRef.current === wishlistItemsKey) {
+      return;
+    }
+    
+    prevWishlistItemsRef.current = wishlistItemsKey;
+    
     const convertItems = async () => {
       setIsLoading(true);
       try {
@@ -45,7 +55,8 @@ export default function WishlistPage({ params }: WishlistPageProps) {
     };
 
     convertItems();
-  }, [wishlistItems, convertProductsForDisplay]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wishlistItems]);
 
   const translations = {
     en: {

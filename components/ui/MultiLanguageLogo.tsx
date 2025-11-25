@@ -84,7 +84,7 @@ export const MultiLanguageLogo: React.FC<MultiLanguageLogoProps> = ({
   };
 
   const logoElement = (
-    <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} ${className}`}>
+    <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} ${className}`} style={{ lineHeight: 0 }}>
       {/* Use the actual logo image */}
       <img
         src="/images/logos/COSMT.png"
@@ -104,7 +104,9 @@ export const MultiLanguageLogo: React.FC<MultiLanguageLogoProps> = ({
         style={{
           // Ensure logo doesn't get flipped in RTL
           transform: 'none',
-          direction: 'ltr'
+          direction: 'ltr',
+          display: 'block',
+          verticalAlign: 'top'
         }}
       />
       
@@ -118,7 +120,7 @@ export const MultiLanguageLogo: React.FC<MultiLanguageLogoProps> = ({
 
   if (href) {
     return (
-      <Link href={href} className="block">
+      <Link href={href} className="block" style={{ lineHeight: 0 }}>
         {logoElement}
       </Link>
     );

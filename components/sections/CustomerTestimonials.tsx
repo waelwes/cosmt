@@ -48,7 +48,7 @@ export const CustomerTestimonials: React.FC = () => {
   const { isRTL } = useRTL();
 
   return (
-    <div className="py-8 bg-gradient-to-r from-green-50 to-blue-50">
+    <div className="py-4 bg-white">
       <div className="cosmt-container">
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">

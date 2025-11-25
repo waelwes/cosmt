@@ -63,7 +63,7 @@ export const ExpandableCategories: React.FC<ExpandableCategoriesProps> = ({
               {hasChildren && (
                 <button
                   onClick={() => toggleCategory(sub.id)}
-                  className="ml-2 p-1 hover:bg-gray-100 rounded transition-colors"
+                  className="ml-2 p-1 transition-colors"
                 >
                   <ChevronRight 
                     className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${

@@ -100,19 +100,11 @@ class SupabaseDatabase {
       console.log('🔍 Database: getProducts query', filters);
       console.log('🗄️ Database query starting with filters:', filters);
       const startTime = Date.now();
-    
-    // Add timeout for queries (10 seconds max - increased from 5)
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Query timeout after 10 seconds')), 10000)
-    );
-      console.log('🔍 Database: getProducts query', filters);
-      console.log('🗄️ Database query starting with filters:', filters);
-      const startTime = Date.now();
-    
-    // Add timeout for queries (10 seconds max - increased from 5)
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Query timeout after 10 seconds')), 10000)
-    );
+
+      // Add timeout for queries (10 seconds max - increased from 5)
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Query timeout after 10 seconds')), 10000)
+      );
     
     const page = filters?.page || 1;
     const limit = filters?.limit || 20; // Default to 20 products per page

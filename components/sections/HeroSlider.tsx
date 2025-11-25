@@ -1,43 +1,21 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Link from 'next/link';
 import { useRTL } from '../../contexts/UnifiedLanguageContext';
 
 // Real hero slides with actual content
 const slides = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-    title: 'Premium Beauty Products',
-    subtitle: 'Discover our curated collection of professional cosmetics',
-    ctaText: 'Shop Now',
-    ctaLink: '/categories'
+    image: '/images/hero/fino-cover.jpg',
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2087&q=80',
-    title: 'New Arrivals',
-    subtitle: 'Latest beauty trends and innovative products',
-    ctaText: 'Explore',
-    ctaLink: '/categories?filter=new'
+    image: '/images/hero/fino-cover.jpg',
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1512496015851-a90fb38cd796?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2085&q=80',
-    title: 'Skincare Essentials',
-    subtitle: 'Transform your skin with our premium skincare collection',
-    ctaText: 'Shop Skincare',
-    ctaLink: '/categories/skincare'
-  },
-  {
-    id: 4,
-    image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-    title: 'Makeup Collection',
-    subtitle: 'Express your beauty with our professional makeup range',
-    ctaText: 'Shop Makeup',
-    ctaLink: '/categories/makeup'
+    image: '/images/hero/fino-cover.jpg',
   },
 ];
 
@@ -45,6 +23,7 @@ export const HeroSlider: React.FC = () => {
   const { isRTL } = useRTL();
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Auto-play functionality
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -53,101 +32,111 @@ export const HeroSlider: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
-
-  const goToPrevious = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
-  const goToNext = () => {
+  const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
 
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
   return (
-    <div 
-      className="relative w-full h-[70vh] min-h-[500px] max-h-[800px] overflow-hidden"
-      style={{
-        backgroundColor: 'var(--hero-bg-color, #f8fafc)',
-      }}
-    >
-      {/* Slides */}
-      <div className="relative h-full">
-        {slides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
+    <div className="py-2">
+      <div className="cosmt-container">
+        <div className="relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] min-h-[300px] sm:min-h-[400px] md:min-h-[500px] max-h-[800px] overflow-hidden rounded-2xl group">
+          {/* Slides */}
+          {slides.map((slide, index) => (
             <div
-              className="h-full bg-cover bg-center bg-no-repeat relative"
-              style={{
-                backgroundImage: `url(${slide.image})`,
-              }}
+              key={slide.id}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
             >
-              {/* Dark overlay for better text readability */}
-              <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-              
-              {/* Content overlay */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className={`text-center text-white px-4 max-w-4xl ${isRTL ? 'text-right' : 'text-left'}`}>
-                  <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
-                    {slide.title}
-                  </h1>
-                  <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-                    {slide.subtitle}
-                  </p>
-                  <Link
-                    href={slide.ctaLink}
-                    className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    {slide.ctaText}
-                  </Link>
-                </div>
+              <div
+                className="h-full w-full bg-cover bg-center bg-no-repeat relative"
+                style={{
+                  backgroundImage: `url(${slide.image})`,
+                }}
+              >
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
 
-      {/* Navigation Arrows */}
-      <button
-        onClick={isRTL ? goToNext : goToPrevious}
-        className={`absolute top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-all duration-200 p-3 bg-black/20 hover:bg-black/40 rounded-full backdrop-blur-sm z-10 ${
-          isRTL ? 'right-4 sm:right-8' : 'left-4 sm:left-8'
-        }`}
-        aria-label="Previous slide"
-      >
-        <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
-      </button>
-      <button
-        onClick={isRTL ? goToPrevious : goToNext}
-        className={`absolute top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-all duration-200 p-3 bg-black/20 hover:bg-black/40 rounded-full backdrop-blur-sm z-10 ${
-          isRTL ? 'left-4 sm:left-8' : 'right-4 sm:right-8'
-        }`}
-        aria-label="Next slide"
-      >
-        <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
-      </button>
-
-      {/* Slider Dots */}
-      <div className={`absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 flex ${
-        isRTL ? 'space-x-reverse space-x-2 sm:space-x-3' : 'space-x-2 sm:space-x-3'
-      }`}>
-        {slides.map((_, index) => (
+          {/* Navigation Arrows - Same style as product sliders */}
           <button
-            key={index}
-            onClick={() => goToSlide(index)}
-          className={`w-3 h-3 transition-all duration-200 rounded-full backdrop-blur-sm ${
-            index === currentSlide
-              ? 'bg-white scale-125 shadow-lg'
-              : 'bg-white/50 hover:bg-white/75 hover:scale-110'
-          }`}
-          aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+            onClick={prevSlide}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              left: isRTL ? 'auto' : '8px',
+              right: isRTL ? '8px' : 'auto',
+              cursor: 'pointer',
+              backgroundColor: 'transparent',
+              border: 'none',
+              padding: 0,
+              display: 'block',
+              opacity: 0.7,
+              transition: 'opacity 0.3s ease',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.7'}
+            aria-label="Previous slide"
+          >
+            <svg 
+              width="12" 
+              height="20" 
+              viewBox="0 0 18 33" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              className={isRTL ? 'rotate-180' : ''}
+            >
+              <path 
+                d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" 
+                fill="black" 
+                stroke="white"
+              />
+            </svg>
+          </button>
+
+          <button
+            onClick={nextSlide}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              left: isRTL ? '8px' : 'auto',
+              right: isRTL ? 'auto' : '8px',
+              cursor: 'pointer',
+              backgroundColor: 'transparent',
+              border: 'none',
+              padding: 0,
+              display: 'block',
+              opacity: 0.7,
+              transition: 'opacity 0.3s ease',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.7'}
+            aria-label="Next slide"
+          >
+            <svg 
+              width="12" 
+              height="20" 
+              viewBox="0 0 18 33" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              className={isRTL ? '' : 'rotate-180'}
+            >
+              <path 
+                d="M16.2422 31.8281L17.6484 30.4922C17.9297 30.1406 17.9297 29.5781 17.6484 29.2969L4.92188 16.5L17.6484 3.77344C17.9297 3.49219 17.9297 2.92969 17.6484 2.57812L16.2422 1.24219C15.8906 0.890625 15.3984 0.890625 15.0469 1.24219L0.28125 15.9375C0 16.2891 0 16.7812 0.28125 17.1328L15.0469 31.8281C15.3984 32.1797 15.8906 32.1797 16.2422 31.8281Z" 
+                fill="black" 
+                stroke="white"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

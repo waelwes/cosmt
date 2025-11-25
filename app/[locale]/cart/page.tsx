@@ -315,7 +315,7 @@ export default function CartPage({ params }: CartPageProps) {
 
               {/* Checkout Button */}
               <Link href={`/${locale}/checkout`}>
-                <Button className="w-full mb-4 bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200">
+                <Button className="w-full mb-4 text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200" style={{ backgroundColor: '#003d38' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}>
                   {t.proceedToCheckout}
                 </Button>
               </Link>

@@ -128,25 +128,25 @@ export const Footer: React.FC = () => {
                 <div className={`flex ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                   <a
                     href="#"
-                    className="p-2 bg-gray-800 hover:bg-green-600 transition-colors duration-200"
+                    className="p-2 transition-colors duration-200 hover:text-teal-400"
                   >
                     <Facebook className="w-5 h-5" />
                   </a>
                   <a
                     href="#"
-                    className="p-2 bg-gray-800 hover:bg-green-600 transition-colors duration-200"
+                    className="p-2 transition-colors duration-200 hover:text-teal-400"
                   >
                     <Instagram className="w-5 h-5" />
                   </a>
                   <a
                     href="#"
-                    className="p-2 bg-gray-800 hover:bg-green-600 transition-colors duration-200"
+                    className="p-2 transition-colors duration-200 hover:text-teal-400"
                   >
                     <Twitter className="w-5 h-5" />
                   </a>
                   <a
                     href="#"
-                    className="p-2 bg-gray-800 hover:bg-green-600 transition-colors duration-200"
+                    className="p-2 transition-colors duration-200 hover:text-teal-400"
                   >
                     <Youtube className="w-5 h-5" />
                   </a>
@@ -156,15 +156,15 @@ export const Footer: React.FC = () => {
               {/* Contact Info */}
               <div className="mt-6 space-y-3">
                 <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                  <Phone className="w-4 h-4" style={{ color: '#00833F' }} />
+                  <Phone className="w-4 h-4" style={{ color: '#003d38' }} />
                   <span className="text-cosmt-sm text-gray-300">1-800-BEAUTY</span>
                 </div>
                 <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                  <Mail className="w-4 h-4" style={{ color: '#00833F' }} />
+                  <Mail className="w-4 h-4" style={{ color: '#003d38' }} />
                   <span className="text-cosmt-sm text-gray-300">info@cosmt.com</span>
                 </div>
                 <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
-                  <MapPin className="w-4 h-4" style={{ color: '#00833F' }} />
+                  <MapPin className="w-4 h-4" style={{ color: '#003d38' }} />
                     <span className="text-cosmt-sm text-gray-300">
                       {isArabic ? 'نيويورك، نيويورك' : 
                        language === 'tr' ? 'New York, NY' : 
@@ -267,15 +267,7 @@ export const Footer: React.FC = () => {
       <div className="border-t border-gray-800 py-6">
         <div className="cosmt-container">
           <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="text-center md:text-left flex items-center space-x-4">
-              <Image
-                src="http://localhost:3000/images/logos/COSMT.png"
-                alt="COSMT Logo"
-                width={60}
-                height={20}
-                className="h-4 w-auto opacity-80"
-                unoptimized={true}
-              />
+            <div className="text-center md:text-left">
               <p className="text-gray-400 text-cosmt-sm">
                 © 2024 COSMT. All rights reserved. | Made with ❤️ for beauty lovers
               </p>

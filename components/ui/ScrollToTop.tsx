@@ -41,8 +41,9 @@ export const ScrollToTop: React.FC = () => {
     <button
       onClick={scrollToTop}
       className="fixed bottom-8 right-8 z-50 p-3 text-white shadow-lg transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-      style={{ backgroundColor: '#00833F' }}
-      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#00662f'}
+      style={{ backgroundColor: '#003d38' }}
+      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
       aria-label="Scroll to top"
     >
       <ChevronUp className="w-6 h-6" />

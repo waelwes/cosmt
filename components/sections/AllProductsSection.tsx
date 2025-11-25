@@ -47,7 +47,7 @@ export const AllProductsSection: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-6">
+      <div className="text-center py-4">
         <p className="text-gray-600">Loading products...</p>
       </div>
     );
@@ -55,7 +55,7 @@ export const AllProductsSection: React.FC = () => {
 
   if (error) {
     return (
-      <div className="text-center py-12 text-red-600">
+      <div className="text-center py-4 text-red-600">
         <p>Error loading products: {error}</p>
       </div>
     );
@@ -63,14 +63,14 @@ export const AllProductsSection: React.FC = () => {
 
   if (!products || products.length === 0) {
     return (
-      <div className="text-center py-6">
+      <div className="text-center py-4">
         <p className="text-gray-600">No products found.</p>
       </div>
     );
   }
 
   return (
-    <section className="py-8">
+    <section className="py-4">
       <div className="mb-4 text-sm text-gray-600">
         Showing {products.length} products
       </div>
@@ -108,5 +108,3 @@ export const AllProductsSection: React.FC = () => {
     </section>
   );
 };
-
-

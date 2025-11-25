@@ -42,16 +42,20 @@ export const CategoryShowcase: React.FC = () => {
 
   if (loading) {
     return (
-      <div 
-        className="py-8"
+      <div
+        className="py-4"
         style={{ backgroundColor: 'var(--category-bg-color)' }}
       >
         <div className="cosmt-container">
-          <div className="flex items-center justify-center h-64">
-            <LogoLoading 
-              size="lg" 
-              className="text-center"
-            />
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
+            {[...Array(15)].map((_, i) => (
+              <div key={i} className="flex flex-col items-center text-center p-2">
+                <div className="relative mb-2 sm:mb-3">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gray-200 animate-pulse"></div>
+                </div>
+                <div className="h-3 bg-gray-200 rounded animate-pulse w-16"></div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -60,8 +64,8 @@ export const CategoryShowcase: React.FC = () => {
 
   if (error) {
     return (
-      <div 
-        className="py-8"
+      <div
+        className="py-4"
         style={{ backgroundColor: 'var(--category-bg-color)' }}
       >
         <div className="cosmt-container">
@@ -70,7 +74,10 @@ export const CategoryShowcase: React.FC = () => {
               <p className="text-red-600 mb-4">Error loading categories: {error}</p>
               <button 
                 onClick={() => window.location.reload()} 
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                className="px-4 py-2 text-white rounded"
+                style={{ backgroundColor: '#003d38' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
               >
                 Try Again
               </button>
@@ -82,8 +89,8 @@ export const CategoryShowcase: React.FC = () => {
   }
 
   return (
-    <div 
-      className="py-8"
+    <div
+      className="py-4"
       style={{ backgroundColor: 'var(--category-bg-color)' }}
     >
       <div className="cosmt-container">
@@ -94,14 +101,14 @@ export const CategoryShowcase: React.FC = () => {
             <Link
               key={category.id}
               href={`/categories/${category.slug}`}
-              className="group flex flex-col items-center text-center p-2 rounded-lg active:bg-gray-50 transition-colors duration-200"
+              className="group flex flex-col items-center text-center p-2 active:bg-gray-50 transition-colors duration-200"
             >
               {/* RTL: Show image first, then title below */}
               {isRTL ? (
                 <>
                   {/* Category Image Container */}
                   <div className="relative mb-2 sm:mb-3 group-hover:scale-105 transition-transform duration-300">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border-2 border-gray-200 group-hover:border-[#00514B] transition-colors duration-300">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 overflow-hidden group-hover:bg-[#00514B] transition-colors duration-300">
                       {category.image && category.image.trim() !== '' ? (
                         <Image
                           src={category.image}
@@ -119,7 +126,7 @@ export const CategoryShowcase: React.FC = () => {
                       )}
                     </div>
                     {/* Hover overlay */}
-                    <div className="absolute inset-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#00514B] bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg"></div>
+                    <div className="absolute inset-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#00514B] bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
                   </div>
                   
                   {/* Category Name - Below image in RTL */}
@@ -132,7 +139,7 @@ export const CategoryShowcase: React.FC = () => {
                   {/* LTR: Show image first, then title */}
                   {/* Category Image Container */}
                   <div className="relative mb-2 sm:mb-3 group-hover:scale-105 transition-transform duration-300">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border-2 border-gray-200 group-hover:border-[#00514B] transition-colors duration-300">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 overflow-hidden group-hover:bg-[#00514B] transition-colors duration-300">
                       {category.image && category.image.trim() !== '' ? (
                         <Image
                           src={category.image}
@@ -150,7 +157,7 @@ export const CategoryShowcase: React.FC = () => {
                       )}
                     </div>
                     {/* Hover overlay */}
-                    <div className="absolute inset-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#00514B] bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg"></div>
+                    <div className="absolute inset-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#00514B] bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
                   </div>
 
                   {/* Category Name */}

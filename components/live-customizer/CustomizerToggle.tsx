@@ -23,7 +23,7 @@ import {
   Star,
   Mail,
   Users,
-  ShoppingBag,
+  ShoppingCart,
   Home,
   ChevronDown,
   ChevronRight

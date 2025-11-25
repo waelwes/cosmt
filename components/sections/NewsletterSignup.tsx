@@ -39,7 +39,7 @@ export const NewsletterSignup: React.FC = () => {
 
   if (isSubscribed) {
     return (
-      <div className="py-8 bg-gradient-to-r from-green-600 to-green-700">
+      <div className="py-4 bg-gradient-to-r from-green-600 to-green-700">
         <div className="cosmt-container">
           <div className="text-center">
             <CheckCircle className="w-16 h-16 text-white mx-auto mb-4" />
@@ -59,7 +59,7 @@ export const NewsletterSignup: React.FC = () => {
   }
 
   return (
-    <div className="py-8 bg-gradient-to-r from-green-600 to-green-700">
+    <div className="py-4 bg-gradient-to-r from-green-600 to-green-700">
       <div className="cosmt-container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
@@ -122,7 +122,10 @@ export const NewsletterSignup: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+                className="w-full text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+                style={{ backgroundColor: '#003d38' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
               >
                 {isRTL ? 'اشترك واحصل على الخصم' : 'Subscribe & Get Discount'}
               </button>

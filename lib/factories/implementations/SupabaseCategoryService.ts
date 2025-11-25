@@ -389,7 +389,7 @@ export class SupabaseCategoryService implements ICategoryService {
         .order('parent_id', { ascending: false }) // null values first
         .order('sort_order', { ascending: true })
         .order('name', { ascending: true })
-        .limit(50); // Limit to prevent fetching too many records
+        .limit(500); // Increased limit to fetch all categories and subcategories
 
       if (allCategoriesError) {
         console.error('❌ Error fetching all categories:', {

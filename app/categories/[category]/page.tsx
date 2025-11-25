@@ -214,6 +214,143 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                     </div>
                   </div>
 
+                  {/* Hair Care Products - Only show for hair-care category */}
+                  {category.slug === 'hair-care' && (
+                    <div className="mb-4">
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">Hair Care Products</h4>
+                      <div className="space-y-2 max-h-48 overflow-y-auto">
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Care Spray</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hair Conditioner</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hair Lotion</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hair Mask</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hair Peeling</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hair Serum</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hair Tonic</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hair Oil</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Shampoo</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Set</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Bond Strengthener</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Care Foam</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Brush</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hairpin</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Blow Dryer Brush</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Keratin Lotion</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Cutting Comb</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Crepe Comb</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Massage Comb</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Perm Paper</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Perm Lotion</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Perm Stabilizer</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Perm Comb</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Pump</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hair Detangling Comb</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Hair Clip</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Comb</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Bobby Pin</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Clasp</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Knob Net</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Bun Brush</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input type="checkbox" className="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+                          <span className="ml-2 text-sm text-gray-600">Mace Sponge</span>
+                        </label>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Clear Filters */}
                   <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md text-sm font-medium transition-colors">
                     Clear All Filters
@@ -257,7 +394,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 {products.map((product: any) => (
                   <ProductCard
                     key={product.id}
@@ -276,5 +413,3 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     </div>
   );
 }
-
-

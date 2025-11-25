@@ -536,7 +536,10 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
 
                 <Button
                   type="submit"
-                  className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200"
+                  className="w-full text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200"
+                  style={{ backgroundColor: '#003d38' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
                   disabled={loading}
                 >
                   {loading ? t.processing : t.placeOrder}

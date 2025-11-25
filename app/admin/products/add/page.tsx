@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { 
   ArrowLeft,
   Save,
-  RefreshCw,
   AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -19,6 +18,7 @@ interface Product {
   brand: string;
   category: string;
   subcategory?: string;
+  childCategory?: string;
   price: number;
   originalPrice: number | null;
   stock: number;
@@ -63,9 +63,9 @@ interface ProductVariant {
 
 export default function AddProductPage() {
   // State for categories and subcategories
-  const [categories, setCategories] = useState<any[]>([]);
-  const [subcategories, setSubcategories] = useState<any[]>([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [categories, setCategories] = useState<{id: number; name: string; slug: string; level?: number; parentId?: number}[]>([]);
+  const [subcategories, setSubcategories] = useState<{id: number; name: string; slug: string}[]>([]);
+  const [allChildCategories, setAllChildCategories] = useState<{id: number; name: string; slug: string}[]>([]);
 
   const [formData, setFormData] = useState<Product>({
     id: 0,
@@ -73,6 +73,7 @@ export default function AddProductPage() {
     brand: '',
     category: 'Hair Care',
     subcategory: '',
+    childCategory: '',
     price: 0,
     originalPrice: null,
     stock: 0,
@@ -117,8 +118,6 @@ export default function AddProductPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        setLoadingCategories(true);
-        
         // Fetch main categories
         const categoriesResponse = await fetch('/api/admin/categories?level=1');
         const categoriesData = await categoriesResponse.json();
@@ -127,20 +126,17 @@ export default function AddProductPage() {
           setCategories(categoriesData.data);
         }
         
-        // Fetch subcategories for the first category if available
-        if (categoriesData.data && categoriesData.data.length > 0) {
-          const firstCategoryId = categoriesData.data[0].id;
-          const subcategoriesResponse = await fetch(`/api/admin/categories?level=2&parentId=${firstCategoryId}`);
-          const subcategoriesData = await subcategoriesResponse.json();
-          
-          if (subcategoriesData.success) {
-            setSubcategories(subcategoriesData.data);
-          }
+        // Fetch ALL child categories (level 2) independently
+        const allSubcategoriesResponse = await fetch('/api/admin/categories?level=2');
+        const allSubcategoriesData = await allSubcategoriesResponse.json();
+        
+        if (allSubcategoriesData.success) {
+          setAllChildCategories(allSubcategoriesData.data);
+          // Also set as subcategories for backward compatibility
+          setSubcategories(allSubcategoriesData.data);
         }
       } catch (error) {
         console.error('Error fetching categories:', error);
-      } finally {
-        setLoadingCategories(false);
       }
     };
 
@@ -154,7 +150,7 @@ export default function AddProductPage() {
     finish: []
   });
   const [newTag, setNewTag] = useState('');
-  const [availableSubcategories, setAvailableSubcategories] = useState<{id: string; name: string; slug: string}[]>([]);
+  const [availableChildCategories, setAvailableChildCategories] = useState<{id: number; name: string; slug: string}[]>([]);
   const [availableCategories, setAvailableCategories] = useState<{id: number; name: string; slug: string; level: number; parentId?: number}[]>([]);
 
   // Update available categories when categories state changes
@@ -162,10 +158,20 @@ export default function AddProductPage() {
     setAvailableCategories(categories);
   }, [categories]);
 
-  // Update available subcategories when subcategories state changes
+  // Set available child categories separately (Level 2 from all sources)
   useEffect(() => {
-    setAvailableSubcategories(subcategories);
-  }, [subcategories]);
+    if (allChildCategories.length > 0) {
+      // Use all child categories (level 2) for the child categories dropdown
+      setAvailableChildCategories(allChildCategories);
+    } else if (subcategories.length > 0) {
+      // Fallback to loaded subcategories
+      setAvailableChildCategories(subcategories);
+    }
+  }, [allChildCategories, subcategories]);
+
+  // For subcategories dropdown, we'll fetch level 3+ categories
+  // This will be set when a child category is selected
+  const [level3Categories, setLevel3Categories] = useState<{id: number; name: string; slug: string}[]>([]);
 
   // Handle category change and fetch subcategories
   const handleCategoryNameChange = async (categoryName: string) => {
@@ -634,37 +640,51 @@ export default function AddProductPage() {
                   )}
                 </div>
 
-                {/* Subcategory */}
+                {/* Child Category Dropdown */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Subcategory
+                    Child Category (Level 2) <span className="text-xs text-gray-500">e.g. Perfume and Deodorant, Solar Products</span>
                   </label>
                   <select
-                    value={formData.subcategory || ''}
-                    onChange={(e) => handleUpdateField('subcategory', e.target.value)}
+                    value={formData.childCategory || ''}
+                    onChange={(e) => {
+                      handleUpdateField('childCategory', e.target.value);
+                      // Fetch level 3 categories when a child category is selected
+                      const selectedChildCat = availableChildCategories.find(c => c.name === e.target.value);
+                      if (selectedChildCat) {
+                        fetch(`/api/admin/categories?level=3&parentId=${selectedChildCat.id}`)
+                          .then(res => res.json())
+                          .then(data => {
+                            if (data.success) {
+                              setLevel3Categories(data.data);
+                            }
+                          })
+                          .catch(err => console.error('Error fetching level 3 categories:', err));
+                      }
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 cursor-pointer"
-                    disabled={availableSubcategories.length === 0}
+                    disabled={availableChildCategories.length === 0}
                   >
-                    <option value="">Select a subcategory (optional)</option>
-                    {availableSubcategories.length > 0 ? (
-                      availableSubcategories.map((subcategory) => (
-                        <option key={subcategory.id} value={subcategory.name}>
-                          {subcategory.name}
+                    <option value="">Select a child category (optional)</option>
+                    {availableChildCategories.length > 0 ? (
+                      availableChildCategories.map((childCat) => (
+                        <option key={childCat.id} value={childCat.name}>
+                          {childCat.name}
                         </option>
                       ))
                     ) : (
-                      <option value="" disabled>
-                        {formData.category ? 'No subcategories available' : 'Select a category first'}
-                      </option>
+                      <option value="" disabled>Loading child categories...</option>
                     )}
                   </select>
-                  {availableSubcategories.length === 0 && (
-                    <p className="mt-1 text-xs text-gray-500">
-                      No subcategories available for this category
+                  {availableChildCategories.length === 0 && (
+                    <p className="mt-1 text-xs text-blue-600">
+                      No child categories available or loading...
                     </p>
                   )}
                 </div>
+              </div>
 
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Brand */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -699,6 +719,37 @@ export default function AddProductPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 cursor-text"
                     placeholder="Enter SKU"
                   />
+                </div>
+
+                {/* Subcategories Dropdown (Level 3+) */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Subcategory (Level 3+) <span className="text-xs text-gray-500">e.g. Perfume, Deodorant, Sunscreen</span>
+                  </label>
+                  <select
+                    value={formData.subcategory || ''}
+                    onChange={(e) => handleUpdateField('subcategory', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 cursor-pointer"
+                    disabled={level3Categories.length === 0}
+                  >
+                    <option value="">Select a subcategory (optional)</option>
+                    {level3Categories.length > 0 ? (
+                      level3Categories.map((subcat) => (
+                        <option key={subcat.id} value={subcat.name}>
+                          {subcat.name}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        {formData.childCategory ? 'No subcategories available for this child category' : 'Select a child category first'}
+                      </option>
+                    )}
+                  </select>
+                  {!formData.childCategory && level3Categories.length === 0 && (
+                    <p className="mt-1 text-xs text-amber-600">
+                      Please select a child category first to see subcategories
+                    </p>
+                  )}
                 </div>
 
                 {/* Tags */}

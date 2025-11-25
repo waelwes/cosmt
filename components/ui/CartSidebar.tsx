@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../../contexts/CartContext';
 import { Button } from './Button';
-import { Minus, Plus, ShoppingBag, X } from 'lucide-react';
+import { Minus, Plus, ShoppingCart, X } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -18,19 +18,28 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
   // Prevent body scroll when cart is open
   useEffect(() => {
     if (isOpen) {
-      // Add a small delay to prevent jump
-      const timer = setTimeout(() => {
-        document.body.style.overflow = 'hidden';
-      }, 100);
-      return () => clearTimeout(timer);
+      // Store current scroll position
+      const scrollY = window.scrollY;
+      // Prevent body scroll
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        // Restore scroll position
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
     }
-
-    // Cleanup on unmount
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen]);
 
   // Helper function to safely format price
@@ -48,13 +57,13 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
     return `$${price.toFixed(2)}`;
   };
 
-  if (!isOpen) return null;
-
   return (
     <>
       {/* Full Screen Shadow Overlay */}
       <div 
-        className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-[60] opacity-100 pointer-events-auto"
+        className={`fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-[9998] pointer-events-auto ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
         onClick={onClose}
         style={{ 
           position: 'fixed',
@@ -62,17 +71,17 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
           left: 0,
           right: 0,
           bottom: 0,
-          width: '100vw', 
+          width: '100%', 
           height: '100vh',
-          zIndex: 60,
-          transition: 'opacity 400ms cubic-bezier(0.4, 0, 0.2, 1)'
+          zIndex: 9998,
+          transition: `opacity var(--cosmt-transition-duration) var(--cosmt-transition-easing)`
         }}
       />
 
       {/* Sidebar */}
-      <div className="fixed right-0 top-0 w-full max-w-md bg-white border-l border-gray-200 transform z-[70] translate-x-0" style={{ 
+      <div className="fixed right-0 top-0 w-full max-w-md bg-white border-l border-gray-200 z-[9999]"       style={{ 
         boxShadow: '-4px 0 15px rgba(0, 0, 0, 0.1)',
-        transition: 'transform 400ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 400ms cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: `transform var(--cosmt-transition-duration) var(--cosmt-transition-easing), box-shadow var(--cosmt-transition-duration) var(--cosmt-transition-easing)`,
         position: 'fixed',
         top: 0,
         right: 0,
@@ -81,7 +90,10 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
         maxWidth: '28rem', // Same width for both mobile and desktop
         display: 'flex',
         flexDirection: 'column',
-        WebkitOverflowScrolling: 'touch' // Smooth scrolling on iOS
+        WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+        transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
+        visibility: 'visible',
+        zIndex: 9999
       }}>
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -101,7 +113,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
           <div className="flex-1 overflow-y-auto p-4 min-h-0">
             {items.length === 0 ? (
               <div className="text-center py-12">
-                <ShoppingBag className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                <ShoppingCart className="w-16 h-16 mx-auto text-gray-300 mb-4" />
                 <h3 className="text-cosmt-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
                 <p className="text-cosmt-sm text-gray-600 mb-6">
                   Add some products to get started

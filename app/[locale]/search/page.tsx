@@ -247,11 +247,23 @@ export default function SearchPage({ params }: { params: { locale: string } }) {
                   value={localQuery}
                   onChange={(e) => setLocalQuery(e.target.value)}
                   placeholder={content.searchPlaceholder}
-                  className="w-full px-4 py-3 border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200 rounded-lg"
+                  className="w-full px-4 py-3 border border-gray-300 text-base focus:outline-none focus:ring-2 transition-colors duration-200 rounded-lg"
+                  style={{ '--tw-ring-color': '#003d38' } as React.CSSProperties}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = '#003d38';
+                    e.currentTarget.style.boxShadow = '0 0 0 2px rgba(0, 61, 56, 0.2)';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = '';
+                    e.currentTarget.style.boxShadow = '';
+                  }}
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 rounded-lg font-medium"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2 text-white transition-colors duration-200 rounded-lg font-medium"
+                  style={{ backgroundColor: '#003d38' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
                 >
                   {content.searchButton}
                 </button>
@@ -292,7 +304,8 @@ export default function SearchPage({ params }: { params: { locale: string } }) {
                           value={category}
                           checked={filters.category === category}
                           onChange={(e) => setFilters({ category: e.target.value })}
-                          className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                          className="w-4 h-4 border-gray-300"
+                          style={{ accentColor: '#003d38' }}
                         />
                         <span className="text-sm text-gray-700 font-medium">{category}</span>
                       </label>
@@ -312,7 +325,8 @@ export default function SearchPage({ params }: { params: { locale: string } }) {
                           value={brand}
                           checked={filters.brand === brand}
                           onChange={(e) => setFilters({ brand: e.target.value })}
-                          className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+                          className="w-4 h-4 border-gray-300"
+                          style={{ accentColor: '#003d38' }}
                         />
                         <span className="text-sm text-gray-700 font-medium">{brand}</span>
                       </label>
@@ -345,7 +359,16 @@ export default function SearchPage({ params }: { params: { locale: string } }) {
                   <select
                     value={filters.sortBy}
                     onChange={(e) => setFilters({ sortBy: e.target.value as any })}
-                    className="w-full px-4 py-3 border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition-colors duration-200"
+                    className="w-full px-4 py-3 border border-gray-300 text-sm focus:outline-none focus:ring-2 rounded-lg transition-colors duration-200"
+                    style={{ '--tw-ring-color': '#003d38' } as React.CSSProperties}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = '#003d38';
+                      e.currentTarget.style.boxShadow = '0 0 0 2px rgba(0, 61, 56, 0.2)';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = '';
+                      e.currentTarget.style.boxShadow = '';
+                    }}
                   >
                     <option value="relevance">{content.relevance}</option>
                     <option value="price-low">{content.priceLow}</option>
@@ -403,7 +426,7 @@ export default function SearchPage({ params }: { params: { locale: string } }) {
                       {/* Badges */}
                       <div className="absolute top-2 left-2 flex flex-col space-y-1">
                         {product.isNew && (
-                          <span className="px-2 py-1 bg-green-600 text-white text-xs font-medium rounded">
+                          <span className="px-2 py-1 text-white text-xs font-medium rounded" style={{ backgroundColor: '#003d38' }}>
                             {content.new}
                           </span>
                         )}
@@ -418,7 +441,10 @@ export default function SearchPage({ params }: { params: { locale: string } }) {
                       <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                         <Button
                           onClick={() => handleAddToCart(product)}
-                          className="w-full bg-green-600 hover:bg-green-700 text-white"
+                          className="w-full text-white"
+                          style={{ backgroundColor: '#003d38' }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
                         >
                           {content.addToCart}
                         </Button>

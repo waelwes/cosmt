@@ -92,11 +92,63 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
   if (loading) {
     return (
       <PageLayout>
-        <div className="min-h-screen bg-white flex items-center justify-center">
-          <LogoLoading 
-            size="lg" 
-            className="text-center"
-          />
+        {/* Category Banner Skeleton */}
+        <div className="relative h-64 md:h-80 bg-gray-200 animate-pulse">
+          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-center">
+            <div className="text-white cosmt-container">
+              <div className="h-12 bg-gray-400 rounded w-64 mx-auto mb-3 animate-pulse"></div>
+              <div className="h-6 bg-gray-400 rounded w-96 mx-auto animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="cosmt-container py-8">
+          {/* Breadcrumbs Skeleton */}
+          <div className="flex items-center space-x-2 mb-6">
+            <div className="h-4 bg-gray-200 rounded w-16 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-1"></div>
+            <div className="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-1"></div>
+            <div className="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Left Sidebar Skeleton - Desktop */}
+            <div className="hidden lg:block w-80 flex-shrink-0 space-y-6">
+              <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <div className="h-6 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
+                <div className="space-y-2">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Main Content Area Skeleton */}
+            <main className="flex-1">
+              {/* Category Header Card Skeleton */}
+              <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+                <div className="flex items-center justify-between">
+                  <div className="h-8 bg-gray-200 rounded w-48 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+                  <div className="h-8 bg-gray-200 rounded w-32 animate-pulse"></div>
+                </div>
+              </div>
+
+              {/* Products Grid Skeleton */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="bg-white border border-gray-200 rounded-lg p-4">
+                    <div className="aspect-square bg-gray-200 rounded-lg mb-4 animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2 animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse"></div>
+                    <div className="h-6 bg-gray-200 rounded w-20 animate-pulse"></div>
+                  </div>
+                ))}
+              </div>
+            </main>
+          </div>
         </div>
       </PageLayout>
     );
@@ -208,7 +260,7 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
             </div>
 
             {/* Category Header Card */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+            <div className="bg-white border border-gray-200 p-6 mb-8">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <h1 className="text-2xl font-bold text-gray-900">{category.name}</h1>

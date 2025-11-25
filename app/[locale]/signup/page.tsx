@@ -10,12 +10,12 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface SignUpPageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export default function SignUpPage({ params }: SignUpPageProps) {
-  const { locale } = params;
+  const { locale } = React.use(params);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',

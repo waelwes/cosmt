@@ -159,6 +159,8 @@ html[dir="rtl"] .space-x-3 > * + * { margin-left: 0 !important; margin-right: 0.
 html[dir="rtl"] .space-x-4 > * + * { margin-left: 0 !important; margin-right: 1rem !important; }
 html[dir="rtl"] .space-x-6 > * + * { margin-left: 0 !important; margin-right: 1.5rem !important; }
 html[dir="rtl"] .space-x-8 > * + * { margin-left: 0 !important; margin-right: 2rem !important; }
+html[dir="rtl"] .space-x-18 > * + * { margin-left: 0 !important; margin-right: 4.5rem !important; }
+html[dir="rtl"] .space-x-24 > * + * { margin-left: 0 !important; margin-right: 6rem !important; }
 
 /* RTL Border */
 html[dir="rtl"] .border-l { border-left: none !important; border-right: 1px solid !important; }

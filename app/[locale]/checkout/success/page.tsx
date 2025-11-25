@@ -253,7 +253,7 @@ function CheckoutSuccessContent({ locale }: { locale: string }) {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href={`/${locale}`} className="flex-1">
-              <Button className="w-full flex items-center justify-center bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200">
+              <Button className="w-full flex items-center justify-center text-white text-lg py-3 rounded-lg font-semibold transition-colors duration-200" style={{ backgroundColor: '#003d38' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 {t.backToHomepage}
               </Button>

@@ -1,15 +1,26 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Globe, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/contexts/UnifiedLanguageContext';
 import { useLocale } from '@/contexts/LocaleProvider';
+import { SUPPORTED_LOCALES } from '../utils/detectLocale';
+
+// Safe useLocale hook that handles missing provider
+function useSafeLocale() {
+  try {
+    return useLocale();
+  } catch (error) {
+    return null;
+  }
+}
 
 interface LocaleContextType {
   locale: string;
   country: string;
   currency: string;
-  updateLocale: (locale: string, country: string, currency: string) => void;
+  updateLocale: (locale: string, country: string, currency: string, shouldRedirect?: boolean) => void;
 }
 
 const countries = [
@@ -35,22 +46,11 @@ const countries = [
   { code: 'CH', name: 'Switzerland', flag: '🇨🇭', language: 'de', currency: 'CHF' },
 ];
 
-const languages = [
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-  { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
-  { code: 'ja', name: '日本語', flag: '🇯🇵' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' },
-  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
-  { code: 'pt', name: 'Português', flag: '🇧🇷' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'ko', name: '한국어', flag: '🇰🇷' },
-];
+const languages = Object.entries(SUPPORTED_LOCALES).map(([code, config]) => ({
+  code,
+  name: config.name,
+  flag: config.flag,
+}));
 
 const currencies = [
   { code: 'USD', symbol: '$', name: 'US Dollar' },
@@ -74,14 +74,34 @@ const currencies = [
 interface SimpleSitePreferencesDropdownProps {
   isOpen: boolean;
   onClose: () => void;
+  buttonRef?: React.RefObject<HTMLButtonElement>;
 }
 
-export default function SimpleSitePreferencesDropdown({ isOpen, onClose }: SimpleSitePreferencesDropdownProps) {
+export default function SimpleSitePreferencesDropdown({ isOpen, onClose, buttonRef }: SimpleSitePreferencesDropdownProps) {
   const { currentLanguage, setCurrentLanguage } = useLanguage();
-  const localeContext = useLocale();
+  const localeContext = useSafeLocale();
   const [selectedCountry, setSelectedCountry] = useState('US');
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage);
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [isMounted, setIsMounted] = useState(false);
+  const [position, setPosition] = useState({ top: 0, right: 0 });
+
+  // Handle mounting for portal
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Calculate position based on button
+  useEffect(() => {
+    if (isOpen && buttonRef?.current && isMounted) {
+      const button = buttonRef.current;
+      const rect = button.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + 8, // 8px gap (mt-2)
+        right: window.innerWidth - rect.right,
+      });
+    }
+  }, [isOpen, buttonRef, isMounted]);
 
   // Sync with locale context
   useEffect(() => {
@@ -104,14 +124,15 @@ export default function SimpleSitePreferencesDropdown({ isOpen, onClose }: Simpl
       'DE': { language: 'de', currency: 'EUR' },
       'FR': { language: 'fr', currency: 'EUR' },
       'ES': { language: 'es', currency: 'EUR' },
-      'IT': { language: 'it', currency: 'EUR' },
-      'NL': { language: 'nl', currency: 'EUR' },
-      'JP': { language: 'ja', currency: 'JPY' },
-      'CN': { language: 'zh', currency: 'CNY' },
-      'IN': { language: 'hi', currency: 'INR' },
-      'BR': { language: 'pt', currency: 'BRL' },
-      'RU': { language: 'ru', currency: 'RUB' },
-      'KR': { language: 'ko', currency: 'KRW' },
+      'IT': { language: 'en', currency: 'EUR' },
+      'NL': { language: 'en', currency: 'EUR' },
+      'JP': { language: 'en', currency: 'JPY' },
+      'CN': { language: 'en', currency: 'CNY' },
+      'IN': { language: 'en', currency: 'INR' },
+      'BR': { language: 'en', currency: 'BRL' },
+      'RU': { language: 'en', currency: 'RUB' },
+      'KR': { language: 'en', currency: 'KRW' },
+      'CH': { language: 'de', currency: 'CHF' },
     };
     
     const defaults = countryDefaults[countryCode];
@@ -137,28 +158,34 @@ export default function SimpleSitePreferencesDropdown({ isOpen, onClose }: Simpl
   // Save preferences
   const handleSave = () => {
     // Update both language context and locale provider
-    setCurrentLanguage(selectedLanguage as 'en' | 'ar' | 'tr' | 'de' | 'fr' | 'es' | 'it' | 'nl' | 'ja' | 'zh' | 'hi' | 'pt' | 'ru' | 'ko');
+    setCurrentLanguage(selectedLanguage as 'en' | 'ar' | 'tr' | 'de' | 'fr' | 'es');
     if (localeContext && (localeContext as LocaleContextType).updateLocale) {
-      // Only redirect if country changed, not for language/currency only changes
-      const shouldRedirect = selectedCountry !== (localeContext as LocaleContextType).country;
+      // Disable redirect to prevent navigation errors
+      const shouldRedirect = false; // selectedCountry !== (localeContext as LocaleContextType).country;
       (localeContext as LocaleContextType).updateLocale(selectedLanguage, selectedCountry, selectedCurrency, shouldRedirect);
     }
     // Close dropdown after saving
     onClose();
   };
 
-  if (!isOpen) {
+  if (!isOpen || !isMounted) {
     return null;
   }
-  return (
+
+  const dropdownContent = (
     <div 
-      className="fixed right-4 top-20 w-80 bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-[9999]"
+      className="fixed w-80 bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-[10000]"
       data-dropdown="site-preferences"
+      style={{ 
+        zIndex: 10000,
+        top: `${position.top}px`,
+        right: `${position.right}px`,
+      }}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center space-x-2">
-          <Globe className="w-5 h-5 text-green-600" />
+          <Globe className="w-5 h-5" style={{ color: '#003d38' }} />
           <h3 className="font-semibold text-gray-900 dark:text-white">Site Preferences</h3>
         </div>
         <button
@@ -180,7 +207,20 @@ export default function SimpleSitePreferencesDropdown({ isOpen, onClose }: Simpl
             <select
               value={selectedCountry}
               onChange={(e) => handleCountryChange(e.target.value)}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 appearance-none cursor-pointer"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white appearance-none cursor-pointer"
+              style={{ 
+                accentColor: '#003d38',
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = '#003d38';
+                e.currentTarget.style.outline = '2px solid #003d38';
+                e.currentTarget.style.outlineOffset = '2px';
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = '';
+                e.currentTarget.style.outline = '';
+                e.currentTarget.style.outlineOffset = '';
+              }}
             >
               {countries.map((country) => (
                 <option key={country.code} value={country.code}>
@@ -201,7 +241,20 @@ export default function SimpleSitePreferencesDropdown({ isOpen, onClose }: Simpl
             <select
               value={selectedLanguage}
               onChange={(e) => handleLanguageChange(e.target.value)}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 appearance-none cursor-pointer"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white appearance-none cursor-pointer"
+              style={{ 
+                accentColor: '#003d38',
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = '#003d38';
+                e.currentTarget.style.outline = '2px solid #003d38';
+                e.currentTarget.style.outlineOffset = '2px';
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = '';
+                e.currentTarget.style.outline = '';
+                e.currentTarget.style.outlineOffset = '';
+              }}
             >
               {languages.map((language) => (
                 <option key={language.code} value={language.code}>
@@ -222,7 +275,20 @@ export default function SimpleSitePreferencesDropdown({ isOpen, onClose }: Simpl
             <select
               value={selectedCurrency}
               onChange={(e) => handleCurrencyChange(e.target.value)}
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 appearance-none cursor-pointer"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white appearance-none cursor-pointer"
+              style={{ 
+                accentColor: '#003d38',
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = '#003d38';
+                e.currentTarget.style.outline = '2px solid #003d38';
+                e.currentTarget.style.outlineOffset = '2px';
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = '';
+                e.currentTarget.style.outline = '';
+                e.currentTarget.style.outlineOffset = '';
+              }}
             >
               {currencies.map((currency) => (
                 <option key={currency.code} value={currency.code}>
@@ -245,11 +311,16 @@ export default function SimpleSitePreferencesDropdown({ isOpen, onClose }: Simpl
         </button>
         <button
           onClick={handleSave}
-          className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+          className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors"
+          style={{ backgroundColor: '#003d38' }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
         >
           Save
         </button>
       </div>
     </div>
   );
+
+  return createPortal(dropdownContent, document.body);
 }

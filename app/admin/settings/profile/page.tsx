@@ -24,7 +24,7 @@ export default function ProfileSettingsPage() {
     email: 'admin@cosmat.com',
     phone: '+1 (555) 123-4567',
     address: '123 Beauty Street, New York, NY 10001',
-    avatar: 'http://localhost:3000/images/logos/COSMT.png',
+    avatar: '/images/logos/COSMT.png',
     role: 'Super Admin',
     department: 'Administration',
     joinDate: '2024-01-01',

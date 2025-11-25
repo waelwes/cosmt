@@ -328,7 +328,10 @@ export default function ContactPage({ params }: { params: { locale: string } }) 
               </div>
               <button
                 type="submit"
-                className="w-full px-6 py-3 bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 font-medium"
+                className="w-full px-6 py-3 text-white transition-colors duration-200 font-medium"
+                style={{ backgroundColor: '#003d38' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
               >
                 {content.sendButton}
               </button>

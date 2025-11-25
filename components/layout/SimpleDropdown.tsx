@@ -158,7 +158,10 @@ export default function SimpleDropdown({ isOpen, onClose }: SimpleDropdownProps)
           </button>
           <button 
             onClick={handleSave}
-            className="px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+            className="px-4 py-2 text-sm text-white rounded"
+            style={{ backgroundColor: '#003d38' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#002a25'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#003d38'}
           >
             Save
           </button>

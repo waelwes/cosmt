@@ -173,14 +173,14 @@ export const ProductShowcasesReal: React.FC = () => {
   }
 
   return (
-    <div 
-      className="cosmt-brand-section"
+    <div
+      className="py-4 cosmt-brand-section"
       style={{ backgroundColor: 'var(--product-bg-color)' }}
     >
       <div className="cosmt-container">
         {/* Best Sellers Section */}
         {bestSellers.length > 0 && (
-          <div className="mb-8">
+          <div className="pb-4 bg-white">
             <div className="mb-4">
               <h2 className="text-cosmt-3xl font-bold text-gray-900">{t.bestSellers}</h2>
             </div>
@@ -195,7 +195,7 @@ export const ProductShowcasesReal: React.FC = () => {
 
         {/* New Products Section */}
         {newProducts.length > 0 && (
-          <div className="mb-8">
+          <div className="py-4">
             <div className="mb-4">
               <h2 className="text-cosmt-3xl font-bold text-gray-900">New Arrivals</h2>
             </div>
@@ -215,7 +215,7 @@ export const ProductShowcasesReal: React.FC = () => {
 
         {/* On Sale Products Section */}
         {onSaleProducts.length > 0 && (
-          <div className="mb-8">
+          <div className="py-4">
             <div className="mb-4">
               <h2 className="text-cosmt-3xl font-bold text-gray-900">On Sale</h2>
             </div>
