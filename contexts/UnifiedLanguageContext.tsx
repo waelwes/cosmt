@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-export type Language = 'en' | 'ar' | 'tr' | 'de' | 'fr' | 'es';
+export type LanguageCode = 'en' | 'ar' | 'tr' | 'de' | 'fr' | 'es';
 export type Direction = 'ltr' | 'rtl';
 
 interface Language {
@@ -35,7 +35,7 @@ interface Translations {
   refresh: string;
   export: string;
   import: string;
-  
+
   // Navigation
   dashboard: string;
   products: string;
@@ -47,7 +47,7 @@ interface Translations {
   settings: string;
   support: string;
   apps: string;
-  
+
   // Categories
   skincare: string;
   bodyCare: string;
@@ -59,12 +59,12 @@ interface Translations {
   toolsDevices: string;
   naturalOrganic: string;
   momBabyCare: string;
-  
+
   // Product sections
   bestSellers: string;
   newArrivals: string;
   addToCart: string;
-  
+
   // Common UI
   allCategories: string;
   sale: string;
@@ -85,7 +85,7 @@ const translations: Record<string, Translations> = {
     refresh: 'Refresh',
     export: 'Export',
     import: 'Import',
-    
+
     // Navigation
     dashboard: 'Dashboard',
     products: 'Products',
@@ -97,7 +97,7 @@ const translations: Record<string, Translations> = {
     settings: 'Settings',
     support: 'Support',
     apps: 'Apps',
-    
+
     // Categories
     skincare: 'Skincare',
     bodyCare: 'Body Care',
@@ -109,17 +109,17 @@ const translations: Record<string, Translations> = {
     toolsDevices: 'Tools & Devices',
     naturalOrganic: 'Natural & Organic',
     momBabyCare: 'Mom & Baby Care',
-    
+
     // Product sections
     bestSellers: 'Best Sellers',
     newArrivals: 'New Arrivals',
     addToCart: 'Add to Cart',
-    
+
     // Common UI
     allCategories: 'All Categories',
     sale: 'Sale',
   },
-  
+
   ar: {
     // Common
     loading: 'جاري التحميل...',
@@ -134,7 +134,7 @@ const translations: Record<string, Translations> = {
     refresh: 'تحديث',
     export: 'تصدير',
     import: 'استيراد',
-    
+
     // Navigation
     dashboard: 'لوحة التحكم',
     products: 'المنتجات',
@@ -146,7 +146,7 @@ const translations: Record<string, Translations> = {
     settings: 'الإعدادات',
     support: 'الدعم',
     apps: 'التطبيقات',
-    
+
     // Categories
     skincare: 'العناية بالبشرة',
     bodyCare: 'العناية بالجسم',
@@ -158,12 +158,12 @@ const translations: Record<string, Translations> = {
     toolsDevices: 'الأدوات والأجهزة',
     naturalOrganic: 'طبيعي وعضوي',
     momBabyCare: 'عناية الأم والطفل',
-    
+
     // Product sections
     bestSellers: 'الأكثر مبيعاً',
     newArrivals: 'وصل حديثاً',
     addToCart: 'أضف للسلة',
-    
+
     // Common UI
     allCategories: 'جميع الفئات',
     sale: 'تخفيضات',
@@ -177,8 +177,8 @@ interface UnifiedLanguageContextType {
   t: Translations;
   direction: 'ltr' | 'rtl';
   // RTL specific
-  language: Language;
-  setLanguage: (lang: Language) => void;
+  language: LanguageCode;
+  setLanguage: (lang: LanguageCode) => void;
   isRTL: boolean;
   isArabic: boolean;
   isEnglish: boolean;
@@ -187,7 +187,7 @@ interface UnifiedLanguageContextType {
 export const UnifiedLanguageContext = createContext<UnifiedLanguageContextType | undefined>(undefined);
 
 export function UnifiedLanguageProvider({ children }: { children: React.ReactNode }) {
-  const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [currentLanguage, setCurrentLanguage] = useState<string>('en');
   const [mounted, setMounted] = useState(false);
 
   // Load language from localStorage on mount
@@ -216,14 +216,14 @@ export function UnifiedLanguageProvider({ children }: { children: React.ReactNod
 
   const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
   const t = translations[currentLanguage] || translations.en;
-  
-  const language = currentLanguage as Language;
+
+  const language = currentLanguage as LanguageCode;
   const direction = currentLang.direction;
   const isRTL = direction === 'rtl';
   const isArabic = language === 'ar';
   const isEnglish = language === 'en';
 
-  const setLanguage = (lang: Language) => {
+  const setLanguage = (lang: LanguageCode) => {
     setCurrentLanguage(lang);
   };
 
@@ -278,7 +278,7 @@ export function useRTL() {
   if (context === undefined) {
     // Return default values if context is not available
     return {
-      language: 'en' as Language,
+      language: 'en' as LanguageCode,
       setLanguage: () => {},
       direction: 'ltr' as Direction,
       isRTL: false,
