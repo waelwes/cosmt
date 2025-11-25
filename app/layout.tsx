@@ -92,15 +92,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
         suppressHydrationWarning={true}
       >
-        <AuthProvider>
-          <WishlistProvider>
-            <CartProvider>
-              <SearchProvider>
-                {children}
-              </SearchProvider>
-            </CartProvider>
-          </WishlistProvider>
-        </AuthProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <SearchProvider>
+              {children}
+            </SearchProvider>
+          </CartProvider>
+        </WishlistProvider>
       </body>
     </html>
   );
