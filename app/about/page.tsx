@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import { PageLayout } from '../../components/layout/PageLayout';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'About COSMT - Professional Beauty & Cosmetics Brand',
   description: 'Learn about COSMT\'s mission to provide professional-grade beauty and cosmetics products. Discover our story, values, and commitment to quality.',
@@ -39,12 +41,12 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h2 className="text-cosmt-3xl font-bold text-gray-900 mb-6">Our Story</h2>
           <p className="text-cosmt-lg text-gray-600 leading-relaxed mb-6">
-            COSMT was founded with a simple yet powerful mission: to make professional-grade beauty 
-            and cosmetics accessible to everyone. We believe that everyone deserves access to high-quality 
+            COSMT was founded with a simple yet powerful mission: to make professional-grade beauty
+            and cosmetics accessible to everyone. We believe that everyone deserves access to high-quality
             products that enhance their natural beauty and boost their confidence.
           </p>
           <p className="text-cosmt-lg text-gray-600 leading-relaxed">
-            Our carefully curated selection features products from trusted brands like AVEDA and DAVINES, 
+            Our carefully curated selection features products from trusted brands like AVEDA and DAVINES,
             ensuring that every item meets our strict standards for quality, effectiveness, and safety.
           </p>
         </div>
