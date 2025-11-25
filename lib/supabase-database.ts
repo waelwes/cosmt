@@ -96,15 +96,14 @@ class SupabaseDatabase {
     page?: number;
     limit?: number;
   }): Promise<{ products: Product[]; total: number; page: number; totalPages: number }> {
-    return (async () => {
-      console.log('🔍 Database: getProducts query', filters);
-      console.log('🗄️ Database query starting with filters:', filters);
-      const startTime = Date.now();
+    console.log('🔍 Database: getProducts query', filters);
+    console.log('🗄️ Database query starting with filters:', filters);
+    const startTime = Date.now();
 
-      // Add timeout for queries (10 seconds max - increased from 5)
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Query timeout after 10 seconds')), 10000)
-      );
+    // Add timeout for queries (10 seconds max - increased from 5)
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Query timeout after 10 seconds')), 10000)
+    );
     
     const page = filters?.page || 1;
     const limit = filters?.limit || 20; // Default to 20 products per page
@@ -220,7 +219,6 @@ class SupabaseDatabase {
       console.error('❌ Query timeout:', timeoutError);
       throw new Error('Database query timed out. Please try again.');
     }
-    });
   }
 
   async getProduct(id: number): Promise<Product | null> {
