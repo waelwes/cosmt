@@ -1,10 +1,10 @@
 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import Image from 'next/image';
 import { Search, Menu, X, ShoppingCart, User, Heart, LogOut, Globe } from 'lucide-react';
-import { Input } from '../ui/Input';
 import { MobileSearchModal } from './MobileSearchModal';
 import { MegaMenu } from './MegaMenu';
 import { CartSidebar } from '../ui/CartSidebar';
@@ -13,9 +13,7 @@ import { useSearch } from '../../contexts/SearchContext';
 import { useAuth } from '../../contexts/AuthContextBypass';
 import { useWishlist } from '../../contexts/WishlistContext';
 import { useRTL } from '../../contexts/UnifiedLanguageContext';
-import { useLanguage } from '../../contexts/UnifiedLanguageContext';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { MultiLanguageLogo } from '../ui/MultiLanguageLogo';
 import SimpleSitePreferencesDropdown from '../SimpleSitePreferencesDropdown';
 
@@ -70,14 +68,17 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
   const { user, userProfile, signOut } = useAuth();
   const { getWishlistCount } = useWishlist();
   const { isRTL } = useRTL();
-  const { t } = useLanguage();
   const router = useRouter();
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [megaMenuCategory, setMegaMenuCategory] = useState<string | null>(null);
 
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [userHoverTimeout, setUserHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isMobileUserMenuOpen, setIsMobileUserMenuOpen] = useState(false);
+  const userButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const [userMenuStyle, setUserMenuStyle] = useState<{ top: number; left: number } | null>(null);
+  const userMenuRef = React.useRef<HTMLDivElement | null>(null);
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState('');
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
@@ -90,17 +91,18 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
     if (query && query.trim()) {
       setSearchQuery(query);
       setIsSearchDropdownOpen(true);
-    }
+    };
   };
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchInputValue(value);
     setSearchQuery(value);
-    setIsSearchDropdownOpen(true); // Always show dropdown when typing
+    setIsSearchDropdownOpen(true);
   };
 
   const handleSearchInputFocus = () => {
+    console.log('handleSearchInputFocus called');
     setIsSearchDropdownOpen(true);
   };
 
@@ -109,7 +111,8 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
     try {
       const results = typeof getFilteredResults === 'function' ? getFilteredResults() : getFilteredResults;
       return Array.isArray(results) ? results.slice(0, 8) : [];
-    } catch (error) {
+    } catch (err) {
+      void err;
       return [];
     }
   };
@@ -124,6 +127,7 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isSearchDropdownOpen && !(event.target as Element).closest('.search-dropdown-container')) {
+        console.log('handleClickOutside called, closing dropdown');
         setIsSearchDropdownOpen(false);
       }
     };
@@ -174,6 +178,103 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
     }, 500); // Increased to 500ms delay before closing
     setHoverTimeout(timeout);
   };
+
+  const handleUserMouseEnter = () => {
+    if (userHoverTimeout) {
+      clearTimeout(userHoverTimeout);
+      setUserHoverTimeout(null);
+    }
+    // close other overlays that might cover the user menu
+    if (typeof console !== 'undefined' && console.debug) console.debug('handleUserMouseEnter fired');
+    setIsMegaMenuOpen(false);
+    setIsSearchDropdownOpen(false);
+    setIsUserMenuOpen(true);
+  };
+
+  const handleUserMouseLeave = () => {
+    if (typeof console !== 'undefined' && console.debug) console.debug('handleUserMouseLeave fired');
+    const timeout = setTimeout(() => {
+      setIsUserMenuOpen(false);
+    }, 300); // small delay before closing user menu
+    setUserHoverTimeout(timeout);
+  };
+
+  // Keep menu open while pointer is over button or the portaled menu (handles portal boundary)
+  useEffect(() => {
+    let rafId: number | null = null;
+
+    const padding = 8; // expand the interactive area to avoid tiny gaps causing flicker
+    const closeDelay = 400; // ms
+
+    const scheduleCheck = (e: PointerEvent) => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const x = e.clientX;
+        const y = e.clientY;
+
+        const btnRect = userButtonRef.current?.getBoundingClientRect();
+        const menuRect = userMenuRef.current?.getBoundingClientRect();
+
+        if (!btnRect && !menuRect) return;
+
+        const left = Math.min(btnRect ? btnRect.left : Infinity, menuRect ? menuRect.left : Infinity) - padding;
+        const top = Math.min(btnRect ? btnRect.top : Infinity, menuRect ? menuRect.top : Infinity) - padding;
+        const right = Math.max(btnRect ? btnRect.right : -Infinity, menuRect ? menuRect.right : -Infinity) + padding;
+        const bottom = Math.max(btnRect ? btnRect.bottom : -Infinity, menuRect ? menuRect.bottom : -Infinity) + padding;
+
+        const isInside = x >= left && x <= right && y >= top && y <= bottom;
+
+        if (isInside) {
+          if (userHoverTimeout) {
+            clearTimeout(userHoverTimeout);
+            setUserHoverTimeout(null);
+          }
+          if (!isUserMenuOpen) setIsUserMenuOpen(true);
+        } else {
+          if (!userHoverTimeout && isUserMenuOpen) {
+            const timeout = setTimeout(() => setIsUserMenuOpen(false), closeDelay);
+            setUserHoverTimeout(timeout);
+          }
+        }
+      });
+    };
+
+    window.addEventListener('pointermove', scheduleCheck);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener('pointermove', scheduleCheck);
+    };
+  }, [isUserMenuOpen, userHoverTimeout]);
+
+  const updateUserMenuPosition = () => {
+    const btn = userButtonRef.current;
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const newTop = Math.round(rect.bottom + window.scrollY + 8); // small offset so menu doesn't overlap button
+    const newLeft = Math.round(rect.left + window.scrollX);
+    if (typeof console !== 'undefined' && console.debug) console.debug('updateUserMenuPosition', { newTop, newLeft });
+    // Only update if position changed to avoid re-renders while hovering
+    setUserMenuStyle((prev) => {
+      if (!prev) return { top: newTop, left: newLeft };
+      if (Math.abs(prev.top - newTop) > 1 || Math.abs(prev.left - newLeft) > 1) {
+        return { top: newTop, left: newLeft };
+      }
+      return prev;
+    });
+  };
+
+  // Update position when menu opens and on resize/scroll
+  useEffect(() => {
+    if (!isUserMenuOpen) return;
+    updateUserMenuPosition();
+    const onResize = () => updateUserMenuPosition();
+      window.addEventListener('resize', onResize);
+      window.addEventListener('scroll', onResize, { passive: true });
+      return () => {
+        window.removeEventListener('resize', onResize);
+        window.removeEventListener('scroll', onResize);
+      };
+  }, [isUserMenuOpen]);
 
   // Listen for mega menu mouse events
   useEffect(() => {
@@ -227,7 +328,9 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
     { name: 'Make-up', href: '/categories/makeup' },
     { name: 'Electronic', href: '/categories/electronic' },
     { name: 'Discover', href: '/discover' },
-  ], [t]);
+  ], []);
+
+  console.log('isSearchDropdownOpen:', isSearchDropdownOpen);
 
   return (
     <>
@@ -468,25 +571,26 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setIsMobileUserMenuOpen(!isMobileUserMenuOpen);
+                    // close other overlays that might cover the button
+                    setIsMegaMenuOpen(false);
+                    setIsSearchDropdownOpen(false);
+                    setIsMobileUserMenuOpen(prev => !prev);
                   }}
-                  className="p-0.5 text-gray-600 hover:text-gray-900 transition-colors duration-200 -mx-1"
+                  className="md:hidden p-0.5 text-gray-600 hover:text-gray-900 relative transition-colors duration-200 -mx-1"
                 >
                   <User className="w-5 h-5" />
                 </button>
 
                 {/* Mobile User Dropdown */}
                 {isMobileUserMenuOpen && (
-                  <div className="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-[60]">
+                  <div className="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-[60]" style={{ zIndex: 11001 }}>
                     {user ? (
                       <>
                         <div className="px-4 py-2 border-b border-gray-200">
                           <p className="text-cosmt-sm font-medium text-gray-900">{userProfile?.full_name || user.email || 'User'}</p>
                           <p className="text-cosmt-xs text-gray-600">{userProfile?.email || user.email}</p>
                           {userProfile?.role === 'admin' && (
-                            <span className="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full mt-1">
-                              Admin
-                            </span>
+                            <span className="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full mt-1">Admin</span>
                           )}
                         </div>
                         <button
@@ -571,97 +675,122 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
               {/* Desktop icons */}
               <div className="hidden md:flex items-center space-x-4">
                 {/* User Menu */}
-                <div className="relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsUserMenuOpen(!isUserMenuOpen);
-                    }}
-                    className="flex items-center space-x-2 p-1.5 text-black transition-colors duration-200"
-                    style={{ color: 'inherit' }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = '#003d38'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = ''}
-                  >
-                    <User className="w-5 h-5" />
-                  </button>
+                <div
+                  className="relative"
+                  onMouseEnter={handleUserMouseEnter}
+                  onMouseLeave={handleUserMouseLeave}
+                >
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (typeof console !== 'undefined' && console.debug) {
+                          console.debug('desktop user button clicked', { isOpen: isUserMenuOpen });
+                        }
+                        // close other overlays that might cover the button
+                        setIsMegaMenuOpen(false);
+                        setIsSearchDropdownOpen(false);
+                        setIsUserMenuOpen(prev => !prev);
+                      }}
+                      onPointerDown={() => {
+                        if (typeof console !== 'undefined' && console.debug) console.debug('desktop user pointerdown');
+                      }}
+                      tabIndex={0}
+                      aria-haspopup="true"
+                      aria-expanded={isUserMenuOpen}
+                      className="flex items-center space-x-2 p-1.5 text-black transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#003d38] focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-md"
+                      style={{ zIndex: 11000, color: 'inherit' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#003d38'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = ''}
+                      ref={userButtonRef}
+                    >
+                      <User className="w-5 h-5" />
+                    </button>
 
-                  {/* User Dropdown */}
-                  {isUserMenuOpen && (
-                    <div className="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-[60]">
-                      {user ? (
-                        <>
-                          <div className="px-4 py-2 border-b border-gray-200">
-                            <p className="text-cosmt-sm font-medium text-gray-900">{userProfile?.full_name || user.email || 'User'}</p>
-                            <p className="text-cosmt-xs text-gray-600">{userProfile?.email || user.email}</p>
-                            {userProfile?.role === 'admin' && (
-                              <span className="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full mt-1">
-                                Admin
-                              </span>
-                            )}
-                          </div>
-                          <button
-                            onClick={() => {
-                              router.push('/account');
-                              setIsUserMenuOpen(false);
-                            }}
-                            className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
-                          >
-                            Settings
-                          </button>
-                          <button
-                            onClick={() => {
-                              router.push('/orders');
-                              setIsUserMenuOpen(false);
-                            }}
-                            className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
-                          >
-                            Order History
-                          </button>
-                          {(userProfile?.role === 'admin' || user.email === 'admin@cosmat.com') && (
+                  {/* User Dropdown (portal) */}
+                  {isMounted && isUserMenuOpen && userMenuStyle && createPortal(
+                    (
+                      <div
+                        ref={userMenuRef}
+                        className="w-48 bg-white rounded-lg border border-gray-200 py-2"
+                        style={{ position: 'absolute', top: `${userMenuStyle.top}px`, left: `${userMenuStyle.left}px`, zIndex: 11001, boxShadow: '0 20px 50px rgba(2,6,23,0.18)', pointerEvents: 'auto' }}
+                        onMouseEnter={handleUserMouseEnter}
+                        onMouseLeave={handleUserMouseLeave}
+                      >
+                        {user ? (
+                          <>
+                            <div className="px-4 py-2 border-b border-gray-200">
+                              <p className="text-cosmt-sm font-medium text-gray-900">{userProfile?.full_name || user.email || 'User'}</p>
+                              <p className="text-cosmt-xs text-gray-600">{userProfile?.email || user.email}</p>
+                              {userProfile?.role === 'admin' && (
+                                <span className="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full mt-1">
+                                  Admin
+                                </span>
+                              )}
+                            </div>
                             <button
                               onClick={() => {
-                                router.push('/admin');
+                                router.push('/account');
                                 setIsUserMenuOpen(false);
                               }}
                               className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
                             >
-                              Admin Dashboard
+                              Settings
                             </button>
-                          )}
-                          <button
-                            onClick={() => {
-                              signOut();
-                              setIsUserMenuOpen(false);
-                            }}
-                            className="w-full text-left px-4 py-2 text-cosmt-sm text-red-600 hover:bg-red-50 flex items-center"
-                          >
-                            <LogOut className="w-4 h-4 mr-2" />
-                            Sign Out
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => {
-                              router.push('/signin');
-                              setIsUserMenuOpen(false);
-                            }}
-                            className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
-                          >
-                            Sign In
-                          </button>
-                          <button
-                            onClick={() => {
-                              router.push('/signup');
-                              setIsUserMenuOpen(false);
-                            }}
-                            className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
-                          >
-                            Create Account
-                          </button>
-                        </>
-                      )}
-                    </div>
+                            <button
+                              onClick={() => {
+                                router.push('/orders');
+                                setIsUserMenuOpen(false);
+                              }}
+                              className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
+                            >
+                              Order History
+                            </button>
+                            {(userProfile?.role === 'admin' || user.email === 'admin@cosmat.com') && (
+                              <button
+                                onClick={() => {
+                                  router.push('/admin');
+                                  setIsUserMenuOpen(false);
+                                }}
+                                className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
+                              >
+                                Admin Dashboard
+                              </button>
+                            )}
+                            <button
+                              onClick={() => {
+                                signOut();
+                                setIsUserMenuOpen(false);
+                              }}
+                              className="w-full text-left px-4 py-2 text-cosmt-sm text-red-600 hover:bg-red-50 flex items-center"
+                            >
+                              <LogOut className="w-4 h-4 mr-2" />
+                              Sign Out
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => {
+                                router.push('/signin');
+                                setIsUserMenuOpen(false);
+                              }}
+                              className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
+                            >
+                              Sign In
+                            </button>
+                            <button
+                              onClick={() => {
+                                router.push('/signup');
+                                setIsUserMenuOpen(false);
+                              }}
+                              className="w-full text-left px-4 py-2 text-cosmt-sm text-gray-700 hover:bg-gray-50"
+                            >
+                              Create Account
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    ), document.body
                   )}
                 </div>
 
@@ -928,12 +1057,17 @@ export const MainNavigation: React.FC<MainNavigationProps> = ({
 
 
 
-      {/* Close dropdown when clicking outside */}
-      {isUserMenuOpen && (
+      {/* Close dropdown when clicking outside - portaled so it doesn't interfere with stacking contexts */}
+      {isMounted && isUserMenuOpen && createPortal(
         <div
-          className="fixed inset-0 z-40"
-          onClick={() => setIsUserMenuOpen(false)}
-        />
+          className="fixed inset-0"
+          style={{ zIndex: 11000, background: 'transparent', pointerEvents: 'auto' }}
+          onClick={() => {
+            if (typeof console !== 'undefined' && console.debug) console.debug('outsideOverlay clicked - closing user menu (portaled)');
+            setIsUserMenuOpen(false);
+          }}
+        />,
+        document.body
       )}
 
       {/* Close mobile user dropdown when clicking outside */}

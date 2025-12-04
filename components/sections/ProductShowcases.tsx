@@ -25,6 +25,9 @@ export const ProductShowcases: React.FC = () => {
   const { isRTL } = useRTL();
   const { t } = useLanguage();
   const [isMounted, setIsMounted] = useState(false);
+  // Feature flag: disable internal rendering of Best Sellers and New Products
+  // when the homepage renders them explicitly to avoid duplicates.
+  const renderLegacyProductSections = false;
   const bestSellersSwiperRef = useRef<SwiperType | null>(null);
   const newProductsSwiperRef = useRef<SwiperType | null>(null);
 
@@ -157,8 +160,10 @@ export const ProductShowcases: React.FC = () => {
       style={{ backgroundColor: 'var(--product-bg-color)' }}
     >
       <div className="cosmt-container">
-        {/* Best Sellers Section */}
-        <div className="mb-4">
+        {renderLegacyProductSections && (
+          <>
+            {/* Best Sellers Section */}
+            <div className="mb-4">
           <div className="relative group">
             {/* Slider container with centered title */}
             <div
@@ -349,7 +354,9 @@ export const ProductShowcases: React.FC = () => {
               )}
             </div>
           </div>
-        </div>
+            </div>
+          </>
+        )}
 
         {/* Mixed Promotional Banners - 3 Banners */}
         <div className="mb-4">
@@ -390,8 +397,10 @@ export const ProductShowcases: React.FC = () => {
           />
         </div>
 
-        {/* New Products Section */}
-        <div>
+        {renderLegacyProductSections && (
+          <>
+            {/* New Products Section */}
+            <div>
           <div className="relative group">
             {/* Slider container with centered title */}
             <div
@@ -582,7 +591,9 @@ export const ProductShowcases: React.FC = () => {
               )}
             </div>
           </div>
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

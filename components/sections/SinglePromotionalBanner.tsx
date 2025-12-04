@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRTL } from '../../contexts/UnifiedLanguageContext';
@@ -59,6 +59,8 @@ export const SinglePromotionalBanner: React.FC<PromoBannerProps> = ({
   };
 
   const sizeClasses = getSizeClasses();
+  const [hasImageError, setHasImageError] = useState(false);
+  const [didLogImageError, setDidLogImageError] = useState(false);
 
   return (
     <div className="py-2 space-y-4 lg:space-y-6">
@@ -77,16 +79,32 @@ export const SinglePromotionalBanner: React.FC<PromoBannerProps> = ({
         >
           <div className={`relative w-full h-full ${sizeClasses.container}`}>
             <div className="absolute inset-0 overflow-hidden rounded-2xl">
-              <Image
-                src={image}
-                alt={title}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-                sizes="100vw"
-                onError={(e) => {
-                  console.error('Image failed to load:', image);
-                }}
-              />
+              {!hasImageError ? (
+                <Image
+                  src={image}
+                  alt={title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="100vw"
+                  onError={(e) => {
+                    if (!didLogImageError) {
+                      // Log once to help debugging, avoid spamming console
+                      // Use warn instead of error to avoid treating this as a runtime error
+                      // eslint-disable-next-line no-console
+                      console.warn('Image failed to load:', image);
+                      setDidLogImageError(true);
+                    }
+                    setHasImageError(true);
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <div className="text-center px-4">
+                    <div className="text-sm text-gray-600">Image unavailable</div>
+                    <div className="text-xs text-gray-500">{title}</div>
+                  </div>
+                </div>
+              )}
               <div className={`absolute inset-0 ${
                 size === 'large' 
                   ? 'bg-gradient-to-r from-purple-900/70 via-pink-900/50 to-transparent'

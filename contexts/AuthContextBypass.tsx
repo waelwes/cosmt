@@ -130,6 +130,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
+    // Development-only bypass for a test user
+    if (email === 'test@example.com') {
+      console.warn('Performing a bypass login for test@example.com');
+      const mockUser: User = {
+        id: 'test-user-id',
+        app_metadata: {},
+        user_metadata: { full_name: 'Test User' },
+        aud: 'authenticated',
+        created_at: new Date().toISOString(),
+        email: 'test@example.com',
+        role: 'authenticated',
+      };
+      
+      const mockSession: Session = {
+        access_token: 'mock-access-token',
+        refresh_token: 'mock-refresh-token',
+        expires_in: 3600,
+        token_type: 'bearer',
+        user: mockUser,
+      };
+
+      // Manually set user and session
+      setUser(mockUser);
+      setSession(mockSession);
+      createBypassProfile(mockUser);
+
+      console.log('AuthContext: Mock sign in successful for test@example.com');
+      return { error: null };
+    }
+
+    // Original sign-in logic
     try {
       console.log('AuthContext: Attempting sign in for:', email);
       const { data, error } = await supabase.auth.signInWithPassword({

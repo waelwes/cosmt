@@ -1,4 +1,4 @@
-'use client';
+
 
 import React from 'react';
 import { Header } from './Header';
@@ -12,7 +12,7 @@ interface PageLayoutProps {
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ children, className = '' }) => {
   return (
-    <div className={`min-h-screen ${className}`} style={{backgroundColor: '#fbfbfb'}}>
+    <div className={`min-h-screen ${className}`} style={{ backgroundColor: '#fbfbfb' }}>
       <Header />
       <main>
         {children}

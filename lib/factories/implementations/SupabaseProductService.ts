@@ -28,15 +28,15 @@ export class SupabaseProductService implements IProductService {
 
   async getProducts(): Promise<Product[]> {
     this.checkSupabaseConnection();
-    
+
     // Use request deduplication to prevent multiple simultaneous calls
     return await requestDeduplicator.deduplicate('getProducts', async () => {
       try {
         console.log('🔍 ProductService: getProducts - Starting...');
-      // Step 1: fetch products with optimized query and limiting
-      const { data: products, error: productsError } = await this.supabase
-        .from('products')
-        .select(`
+        // Step 1: fetch products with optimized query and limiting
+        const { data: products, error: productsError } = await this.supabase
+          .from('products')
+          .select(`
           id, name, brand, price, original_price, stock, status,
           rating, reviews, image, is_best_seller, is_on_sale, description,
           category_id, child_category_id,
@@ -44,32 +44,42 @@ export class SupabaseProductService implements IProductService {
           child_categories:categories!products_child_category_id_fkey(id, name, slug, parent_id),
           created_at, updated_at
         `)
-        .eq('status', 'active')
-        .order('name')
-        .limit(100); // Limit to prevent fetching too many products
+          .eq('status', 'active')
+          .order('name')
+          .limit(100); // Limit to prevent fetching too many products
 
-      console.log('🔍 ProductService: Query result - products:', products?.length, 'error:', productsError);
+        console.log('🔍 ProductService: Query result - products:', products?.length, 'error:', productsError);
 
-      if (productsError) {
-        console.error('❌ Error fetching products:', productsError);
+        if (productsError) {
+          console.error('❌ Error fetching products (Full Object):', JSON.stringify(productsError, null, 2));
+          console.error('❌ Error details:', {
+            message: (productsError as any).message,
+            details: (productsError as any).details,
+            hint: (productsError as any).hint,
+            code: (productsError as any).code
+          });
+          return [];
+        }
+
+        if (!products) {
+          console.warn('⚠️ No products returned and no error reported from Supabase.');
+        }
+
+        const baseProducts = products || [];
+        console.log('🔍 ProductService: Raw products count:', baseProducts.length);
+
+        console.log('🔍 ProductService: Returning', baseProducts.length, 'products');
+        return baseProducts as any;
+      } catch (error) {
+        console.error('❌ Exception in getProducts:', error);
         return [];
       }
-
-      const baseProducts = products || [];
-      console.log('🔍 ProductService: Raw products count:', baseProducts.length);
-
-      console.log('🔍 ProductService: Returning', baseProducts.length, 'products');
-      return baseProducts as any;
-    } catch (error) {
-      console.error('❌ Exception in getProducts:', error);
-      return [];
-    }
     });
   }
 
   async getProductById(id: number): Promise<Product | null> {
     this.checkSupabaseConnection();
-    
+
     try {
       // Fetch base product
       const { data: product, error: productError } = await this.supabase
@@ -102,7 +112,7 @@ export class SupabaseProductService implements IProductService {
 
   async getProductsByCategory(categoryId: number): Promise<Product[]> {
     this.checkSupabaseConnection();
-    
+
     try {
       const { data: products, error } = await this.supabase
         .from('products')
@@ -132,7 +142,7 @@ export class SupabaseProductService implements IProductService {
 
   async getProductsBySubcategory(subcategoryId: number): Promise<Product[]> {
     this.checkSupabaseConnection();
-    
+
     try {
       const { data: products, error } = await this.supabase
         .from('products')
@@ -162,7 +172,7 @@ export class SupabaseProductService implements IProductService {
 
   async getProductsByCategories(categoryIds: number[]): Promise<Product[]> {
     this.checkSupabaseConnection();
-    
+
     try {
       const { data: products, error } = await this.supabase
         .from('products')

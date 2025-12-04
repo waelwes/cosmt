@@ -336,10 +336,13 @@
 
 /* Sidebar Theme - Darker Green Design */
 [data-admin="true"] .admin-sidebar {
-  background-color: #002A25 !important;
-  overflow-y: auto; /* Enable scrolling */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  background-color: #001a17 !important;
+  overflow-y: auto;
+  /* Enable scrolling */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
 }
 
 /* Hide scrollbar for admin sidebar */
@@ -349,16 +352,13 @@
 
 /* Ultimate sidebar darker green override - nuclear option */
 [data-admin="true"] .admin-sidebar,
-[data-admin="true"] .admin-sidebar *,
-[data-admin="true"] .admin-sidebar > *,
-[data-admin="true"] .admin-sidebar > * > *,
 [data-admin="true"] .admin-sidebar nav,
 [data-admin="true"] .admin-sidebar ul,
 [data-admin="true"] .admin-sidebar li,
 [data-admin="true"] .admin-sidebar div,
 [data-admin="true"] .admin-sidebar section {
-  background-color: #002A25 !important;
-  background: #002A25 !important;
+  background-color: #001a17 !important;
+  background: #001a17 !important;
 }
 
 [data-admin="true"] .admin-sidebar a,
@@ -366,17 +366,21 @@
   color: #ffffff !important;
   border-radius: var(--admin-radius) !important;
   transition: all 0.2s ease;
+  background-color: #001a17 !important;
+  background: #001a17 !important;
 }
 
 [data-admin="true"] .admin-sidebar a:hover,
 [data-admin="true"] .admin-sidebar button:hover {
-  background-color: #003A35 !important;
+  background-color: #003d38 !important;
+  background: #003d38 !important;
   color: #ffffff !important;
 }
 
 [data-admin="true"] .admin-sidebar a.active,
 [data-admin="true"] .admin-sidebar button.active {
-  background-color: #003A35 !important;
+  background-color: #001a17 !important;
+  background: #001a17 !important;
   color: #ffffff !important;
 }
 
@@ -417,6 +421,7 @@
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
@@ -458,16 +463,17 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+
   [data-admin="true"] .analytics-card,
   [data-admin="true"] .dashboard-card {
     margin: 0.5rem;
     border-radius: var(--admin-radius) !important;
   }
-  
+
   [data-admin="true"] h1 {
     font-size: 1.5rem;
   }
-  
+
   [data-admin="true"] h2 {
     font-size: 1.25rem;
   }
@@ -505,6 +511,109 @@ html body div[data-admin="true"] .admin-sidebar a:hover {
   background-color: #003A35 !important;
   background: #003A35 !important;
 }
+
+/* ULTIMATE OVERRIDE - Force #001a17 on all sidebar buttons and links (Default State) */
+html body div[data-admin="true"] .admin-sidebar button,
+html body div[data-admin="true"] .admin-sidebar a,
+html body div[data-admin="true"] .admin-sidebar button:focus,
+html body div[data-admin="true"] .admin-sidebar a:focus,
+html body div[data-admin="true"] .admin-sidebar nav button,
+html body div[data-admin="true"] .admin-sidebar nav a,
+html body div[data-admin="true"] .admin-sidebar nav div button,
+html body div[data-admin="true"] .admin-sidebar nav div a,
+html body div[data-admin="true"] .admin-sidebar nav div div button,
+html body div[data-admin="true"] .admin-sidebar nav div div a,
+html body div[data-admin="true"] .admin-sidebar nav div div div button,
+html body div[data-admin="true"] .admin-sidebar nav div div div a {
+  background-color: #001a17 !important;
+  background: #001a17 !important;
+}
+
+/* Force #003d38 on ACTIVE states (SUBTABS ONLY) */
+html body div[data-admin="true"] .admin-sidebar .ms-6 a.active {
+  background-color: #003d38 !important;
+  background: #003d38 !important;
+}
+
+/* Force #001a17 on MAIN TABS even when active (unless hovered) */
+html body div[data-admin="true"] .admin-sidebar>nav>div>div>button.active,
+html body div[data-admin="true"] .admin-sidebar>nav>div>div>a.active {
+  background-color: #001a17 !important;
+  background: #001a17 !important;
+}
+
+/* ULTIMATE OVERRIDE - Force #003d38 on HOVER states (including active items) */
+html body div[data-admin="true"] .admin-sidebar button:hover,
+html body div[data-admin="true"] .admin-sidebar a:hover,
+html body div[data-admin="true"] .admin-sidebar button.active:hover,
+html body div[data-admin="true"] .admin-sidebar a.active:hover,
+html body div[data-admin="true"] .admin-sidebar .ms-6 a:hover,
+html body div[data-admin="true"] .admin-sidebar nav div div a:hover,
+html body div[data-admin="true"] .admin-sidebar>nav>div>div>button:hover,
+html body div[data-admin="true"] .admin-sidebar>nav>div>div>a:hover,
+html body div[data-admin="true"] .admin-sidebar>nav>div>div>button.active:hover,
+html body div[data-admin="true"] .admin-sidebar>nav>div>div>a.active:hover {
+  background-color: #003d38 !important;
+  background: #003d38 !important;
+}
+
+/* Ensure child elements have transparent background */
+html body div[data-admin="true"] .admin-sidebar button *,
+html body div[data-admin="true"] .admin-sidebar a *,
+html body div[data-admin="true"] .admin-sidebar button:hover *,
+html body div[data-admin="true"] .admin-sidebar a:hover * {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+/* NUCLEAR OPTION - Override everything including Tailwind classes */
+[data-admin="true"] .admin-sidebar button,
+[data-admin="true"] .admin-sidebar a,
+[data-admin="true"] .admin-sidebar button:focus,
+[data-admin="true"] .admin-sidebar a:focus,
+[data-admin="true"] .admin-sidebar button:active,
+[data-admin="true"] .admin-sidebar a:active {
+  background-color: #001a17 !important;
+  background: #001a17 !important;
+}
+
+/* Hover states with lighter color */
+[data-admin="true"] .admin-sidebar button:hover,
+[data-admin="true"] .admin-sidebar a:hover {
+  background-color: #003d38 !important;
+  background: #003d38 !important;
+}
+
+/* ULTRA SPECIFIC - Force subtabs/child links to #001a17 (EXCEPT ACTIVE) */
+[data-admin="true"] .admin-sidebar .ms-6,
+[data-admin="true"] .admin-sidebar .ms-6 a:not(.active),
+[data-admin="true"] .admin-sidebar .ms-6 a:not(.active):focus,
+[data-admin="true"] .admin-sidebar .ms-6 a:not(.active):active,
+[data-admin="true"] .admin-sidebar nav div div,
+[data-admin="true"] .admin-sidebar nav div div a:not(.active),
+[data-admin="true"] .admin-sidebar nav div div a:not(.active):focus,
+[data-admin="true"] .admin-sidebar nav div div a:not(.active):active {
+  background-color: #001a17 !important;
+  background: #001a17 !important;
+}
+
+/* Subtab hover states with lighter color */
+[data-admin="true"] .admin-sidebar .ms-6 a:hover,
+[data-admin="true"] .admin-sidebar nav div div a:hover {
+  background-color: #003d38 !important;
+  background: #003d38 !important;
+}
+
+/* Force subtab container background */
+[data-admin="true"] .admin-sidebar .space-y-1,
+[data-admin="true"] .admin-sidebar div.ms-6,
+[data-admin="true"] .admin-sidebar div.space-y-1 {
+  background-color: #001a17 !important;
+  background: #001a17 !important;
+}
+
+
+
 
 /* Analytics page border fixes - Remove vertical lines */
 [data-admin="true"] .analytics-card .border-t {
@@ -560,8 +669,8 @@ html body div[data-admin="true"] .admin-sidebar a:hover {
 }
 
 /* Remove vertical lines from grid items */
-[data-admin="true"] .grid > div:not(:last-child),
-[data-admin="true"] .flex > div:not(:last-child) {
+[data-admin="true"] .grid>div:not(:last-child),
+[data-admin="true"] .flex>div:not(:last-child) {
   border-right: none !important;
   border-left: none !important;
 }

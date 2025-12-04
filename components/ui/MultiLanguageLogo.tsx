@@ -16,7 +16,7 @@ interface MultiLanguageLogoProps {
 }
 
 export const MultiLanguageLogo: React.FC<MultiLanguageLogoProps> = ({
-  width = 90,
+  width = 130,
   height = 30,
   className = '',
   href = '/',
@@ -25,12 +25,12 @@ export const MultiLanguageLogo: React.FC<MultiLanguageLogoProps> = ({
   size = 'md'
 }) => {
   const [imageError, setImageError] = React.useState(false);
-  
+
   // Debug: Log the current state
   React.useEffect(() => {
     console.log('Logo component rendered, imageError:', imageError);
   }, [imageError]);
-  
+
   // Always call the hook - it has built-in fallback handling
   const context = useRTL();
   const { isRTL, language } = context;
@@ -91,9 +91,8 @@ export const MultiLanguageLogo: React.FC<MultiLanguageLogoProps> = ({
         alt={getAltText()}
         width={finalWidth}
         height={finalHeight}
-        className={`h-auto hover:opacity-80 transition-opacity duration-200 ${
-          isRTL ? 'ml-2' : 'mr-2'
-        }`}
+        className={`h-auto hover:opacity-80 transition-opacity duration-200 ${isRTL ? 'ml-2' : 'mr-2'
+          }`}
         onError={(e) => {
           console.error('Logo failed to load:', e);
           setImageError(true);
@@ -109,7 +108,7 @@ export const MultiLanguageLogo: React.FC<MultiLanguageLogoProps> = ({
           verticalAlign: 'top'
         }}
       />
-      
+
       {showText && (
         <span className={`font-semibold text-gray-800 dark:text-gray-200 ${config.textSize}`}>
           {getBrandText()}

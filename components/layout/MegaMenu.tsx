@@ -502,12 +502,14 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, categoryNam
   ];
   const displayCategories = useStaticData ? staticDataArray : [...mainCategories, STATIC_BRANDS_DATA];
 
-  // Log which data source is being used
-  if (useStaticData) {
-    console.log('Using static category data');
-  } else {
-    console.log('Using database categories:', mainCategories.length);
-  }
+  // Log which data source is being used (only when it changes)
+  useEffect(() => {
+    if (useStaticData) {
+      console.debug('MegaMenu: using static category data');
+    } else {
+      console.debug('MegaMenu: using database categories:', mainCategories.length);
+    }
+  }, [useStaticData, mainCategories.length]);
 
   if (!isOpen) return null;
 

@@ -7,6 +7,8 @@ interface ApiResponse<T> {
   data?: T;
   error?: string;
   total?: number;
+  page?: number;
+  totalPages?: number;
 }
 
 // Generic hook for API calls
@@ -29,17 +31,17 @@ export function useApiCall<T>(
       setLoading(false);
       return;
     }
-    
+
     // Prevent concurrent fetches
     if (isFetchingRef.current) {
       console.warn('⚠️ Fetch already in progress, skipping duplicate request');
       return;
     }
-    
+
     // Abort any previous request
     if (abortControllerRef.current) {
       console.log('🛑 Aborting previous request');
-      abortControllerRef.current.abort();
+      abortControllerRef.current.abort('New request started');
     }
 
     // Ensure URL is properly formatted
@@ -50,7 +52,7 @@ export function useApiCall<T>(
     } else {
       // Relative URL - ensure it starts with /
       fetchUrl = url.startsWith('/') ? url : `/${url}`;
-      
+
       // In browser, we can also try absolute URL as fallback
       // But start with relative as it's more efficient
     }
@@ -58,33 +60,33 @@ export function useApiCall<T>(
     try {
       setLoading(true);
       setError(null);
-      
+
       console.log('🔄 Loading data from:', fetchUrl);
       console.log('🔄 Full URL:', typeof window !== 'undefined' ? window.location.origin + fetchUrl : fetchUrl);
       const startTime = Date.now();
-      
+
       const controller = new AbortController();
       abortControllerRef.current = controller;
       isFetchingRef.current = true;
-      
+
       const timeoutId = setTimeout(() => {
         console.log('⏰ API call timeout after 30 seconds');
-        controller.abort();
+        controller.abort('Request timed out');
       }, 30000); // 30 second timeout
-      
+
       let response: Response;
       try {
         // Validate fetchUrl before attempting fetch
         if (!fetchUrl || typeof fetchUrl !== 'string') {
           throw new Error(`Invalid URL: ${fetchUrl}`);
         }
-        
+
         // Ensure we have a valid URL format
         const isValidUrl = fetchUrl.startsWith('http') || fetchUrl.startsWith('/');
         if (!isValidUrl) {
           throw new Error(`Invalid URL format: ${fetchUrl}. URL must start with 'http' or '/'`);
         }
-        
+
         // Use a more explicit fetch configuration for Next.js 15
         const fetchOptions: RequestInit = {
           method: options?.method || 'GET',
@@ -97,7 +99,7 @@ export function useApiCall<T>(
           cache: 'no-store', // Prevent caching issues in Next.js 15
           credentials: 'same-origin', // Ensure cookies are sent
         };
-        
+
         // Merge other options but ensure signal takes precedence
         if (options) {
           Object.keys(options).forEach(key => {
@@ -107,22 +109,22 @@ export function useApiCall<T>(
           });
         }
         fetchOptions.signal = controller.signal; // Always use our abort controller
-        
+
         console.log('🔄 Attempting fetch:', {
           url: fetchUrl,
           method: fetchOptions.method,
           hasSignal: !!fetchOptions.signal,
           headers: fetchOptions.headers,
         });
-        
+
         // Simple, direct fetch call
         try {
           console.log('🔄 Fetching:', fetchUrl);
           console.log('🔄 Full URL:', typeof window !== 'undefined' ? `${window.location.origin}${fetchUrl}` : fetchUrl);
-          
+
           // Direct fetch call - let it fail naturally if there's an issue
           response = await fetch(fetchUrl, fetchOptions);
-          
+
           console.log('✅ Fetch completed, status:', response.status);
         } catch (syncError) {
           // This catches errors that happen synchronously (before the promise resolves)
@@ -139,12 +141,12 @@ export function useApiCall<T>(
         }
       } catch (fetchError) {
         clearTimeout(timeoutId);
-        
+
         // Handle network errors (CORS, connection refused, etc.)
         const errorName = fetchError instanceof Error ? fetchError.name : 'Unknown';
         const errorMessage = fetchError instanceof Error ? fetchError.message : String(fetchError);
         const errorStack = fetchError instanceof Error ? fetchError.stack : undefined;
-        
+
         console.error('❌ Fetch error details:', {
           error: fetchError,
           name: errorName,
@@ -156,13 +158,22 @@ export function useApiCall<T>(
           isTypeError: errorName === 'TypeError',
           windowLocation: typeof window !== 'undefined' ? window.location.href : 'N/A',
         });
-        
+
         if (fetchError instanceof Error) {
           if (errorName === 'AbortError') {
-            throw new Error('Request timed out after 30 seconds. The server might be slow. Please try again.');
+            // Check if it was a timeout or a manual abort
+            // @ts-ignore - reason property exists in modern environments
+            const abortReason = controller.signal.reason;
+
+            if (abortReason === 'Request timed out') {
+              throw new Error('Request timed out after 30 seconds. The server might be slow. Please try again.');
+            } else {
+              // It was aborted due to component unmount or new request - ignore silently
+              return;
+            }
           } else if (
-            errorMessage.includes('Failed to fetch') || 
-            errorMessage.includes('NetworkError') || 
+            errorMessage.includes('Failed to fetch') ||
+            errorMessage.includes('NetworkError') ||
             errorMessage.includes('Network request failed') ||
             errorMessage.includes('fetch failed') ||
             (errorName === 'TypeError' && errorMessage.includes('fetch'))
@@ -176,25 +187,25 @@ export function useApiCall<T>(
         }
         throw fetchError;
       }
-      
+
       clearTimeout(timeoutId);
-      
+
       const loadTime = Date.now() - startTime;
       console.log(`⏱️ API call completed in ${loadTime}ms`);
 
       if (!response.ok) {
         console.error(`❌ API Error: ${response.status} for URL: ${fetchUrl}`);
         console.error(`❌ Response headers:`, Object.fromEntries(response.headers.entries()));
-        
+
         let errorText = '';
         try {
           errorText = await response.text();
         } catch (textError) {
           console.error('❌ Failed to read error response:', textError);
         }
-        
+
         let errorMessage = `HTTP error! status: ${response.status}`;
-        
+
         try {
           if (errorText) {
             const errorData = JSON.parse(errorText);
@@ -207,7 +218,7 @@ export function useApiCall<T>(
           console.error('❌ Failed to parse error response:', parseError);
           console.error('❌ Raw error response:', errorText);
         }
-        
+
         // For 404 errors, don't retry automatically - let the page handle it
         if (response.status === 404) {
           if (url.includes('/products')) {
@@ -216,12 +227,12 @@ export function useApiCall<T>(
             errorMessage = 'Resource not found. Please check the URL.';
           }
         }
-        
+
         throw new Error(errorMessage);
       }
 
       const result: ApiResponse<T> = await response.json();
-      
+
       if (result.success) {
         // For products API, transform the data structure
         if (url.includes('/products')) {
@@ -231,7 +242,7 @@ export function useApiCall<T>(
             page: result.page || 1,
             totalPages: result.totalPages || 1
           };
-          setData(transformedData);
+          setData(transformedData as any);
         } else {
           setData(result.data || null);
         }
@@ -240,7 +251,7 @@ export function useApiCall<T>(
       }
     } catch (err) {
       console.error('Error fetching data:', err);
-      
+
       // Retry logic for network errors (max 2 retries)
       if (retryCountRef.current < 2 && (
         (err instanceof Error && err.name === 'AbortError') ||
@@ -251,7 +262,7 @@ export function useApiCall<T>(
         setTimeout(() => fetchData(), 2000); // Retry after 2 seconds
         return;
       }
-      
+
       if (err instanceof Error && err.name === 'AbortError') {
         setError('Request timed out after 30 seconds. The server might be slow. Please try again.');
       } else if (err instanceof Error && (err.message.includes('Failed to fetch') || err.message.includes('Network error') || err.message.includes('Network request failed'))) {
@@ -260,7 +271,7 @@ export function useApiCall<T>(
         console.error('❌ Network Error Diagnostics:', diagnostics);
         console.error('❌ Failed URL:', fetchUrl);
         console.error('❌ Full Error:', err);
-        
+
         // Try to test the API connection
         testApiConnection(fetchUrl).then((testResult) => {
           console.error('❌ API Connection Test Result:', testResult);
@@ -271,7 +282,7 @@ export function useApiCall<T>(
         }).catch((testErr) => {
           console.error('❌ Connection test threw error:', testErr);
         });
-        
+
         // Provide actionable error message
         const fullUrl = typeof window !== 'undefined' ? `${window.location.origin}${fetchUrl}` : fetchUrl;
         const errorMsg = `Failed to fetch from ${fullUrl}\n\nPossible causes:\n1. Dev server not running - Run: npm run dev\n2. Wrong port - Check if server is on a different port\n3. API route error - Check server console for errors\n4. Network issue - Check browser network tab\n\nCheck the browser console for detailed diagnostics.`;
@@ -291,7 +302,7 @@ export function useApiCall<T>(
     if (typeof window === 'undefined') {
       return;
     }
-    
+
     // Simple approach: wait for page to be ready, then fetch
     const doFetch = () => {
       if (document.readyState === 'complete') {
@@ -307,14 +318,14 @@ export function useApiCall<T>(
         }, { once: true });
       }
     };
-    
+
     // Small delay to ensure React has finished rendering
     const timer = setTimeout(doFetch, 100);
-    
+
     return () => {
       clearTimeout(timer);
       if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
+        abortControllerRef.current.abort('Component unmounted or dependency changed');
         abortControllerRef.current = null;
       }
       isFetchingRef.current = false;
@@ -341,7 +352,7 @@ export function useProducts(params?: {
   limit?: number;
 }) {
   const searchParams = new URLSearchParams();
-  
+
   if (params?.search) searchParams.set('search', params.search);
   if (params?.category) searchParams.set('category', params.category);
   if (params?.status) searchParams.set('status', params.status);
@@ -351,7 +362,7 @@ export function useProducts(params?: {
   if (params?.limit) searchParams.set('limit', params.limit.toString());
 
   const url = `/api/admin/products${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
-  
+
   return useApiCall<{
     products: any[];
     total: number;
@@ -369,7 +380,7 @@ export function useOrders(params?: {
   sortOrder?: string;
 }) {
   const searchParams = new URLSearchParams();
-  
+
   if (params?.search) searchParams.set('search', params.search);
   if (params?.status) searchParams.set('status', params.status);
   if (params?.dateRange) searchParams.set('dateRange', params.dateRange);
@@ -377,7 +388,7 @@ export function useOrders(params?: {
   if (params?.sortOrder) searchParams.set('sortOrder', params.sortOrder);
 
   const url = `/api/admin/orders${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
-  
+
   return useApiCall<any[]>(url);
 }
 
@@ -390,7 +401,7 @@ export function useCustomers(params?: {
   sortOrder?: string;
 }) {
   const searchParams = new URLSearchParams();
-  
+
   if (params?.search) searchParams.set('search', params.search);
   if (params?.status) searchParams.set('status', params.status);
   if (params?.tier) searchParams.set('tier', params.tier);
@@ -398,7 +409,7 @@ export function useCustomers(params?: {
   if (params?.sortOrder) searchParams.set('sortOrder', params.sortOrder);
 
   const url = `/api/admin/customers${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
-  
+
   return useApiCall<any[]>(url);
 }
 
@@ -420,7 +431,7 @@ export function useCrudOperations<T>(
       });
 
       const result: ApiResponse<T> = await response.json();
-      
+
       if (result.success) {
         onSuccess?.();
         return result.data;
@@ -446,7 +457,7 @@ export function useCrudOperations<T>(
       });
 
       const result: ApiResponse<T> = await response.json();
-      
+
       if (result.success) {
         onSuccess?.();
         return result.data;
@@ -470,7 +481,7 @@ export function useCrudOperations<T>(
       });
 
       const result: ApiResponse<any> = await response.json();
-      
+
       if (result.success) {
         onSuccess?.();
         return true;

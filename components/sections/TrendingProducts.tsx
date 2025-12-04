@@ -120,7 +120,7 @@ export const TrendingProducts: React.FC = () => {
 
             <Swiper
               key={`trending-${isRTL ? 'rtl' : 'ltr'}-${isMounted}`}
-              modules={[Navigation, Autoplay]}
+              modules={[Navigation]}
               spaceBetween={16}
               slidesPerView={2}
               navigation={{

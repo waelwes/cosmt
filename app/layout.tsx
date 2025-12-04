@@ -39,12 +39,16 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/images/logos/cosmt-icon.svg', type: 'image/svg+xml' },
+      { url: '/images/logos/COSMT.png', sizes: '1024x1024', type: 'image/png' },
+      { url: '/images/logos/COSMT.png', sizes: '512x512', type: 'image/png' },
+      { url: '/images/logos/COSMT.png', sizes: '256x256', type: 'image/png' },
+      { url: '/images/logos/COSMT.png', sizes: '128x128', type: 'image/png' },
       { url: '/images/logos/COSMT.png', sizes: '32x32', type: 'image/png' },
       { url: '/images/logos/COSMT.png', sizes: '16x16', type: 'image/png' },
     ],
-    shortcut: '/favicon.svg',
-    apple: '/images/logos/COSMT.png',
+    shortcut: { url: '/images/logos/COSMT.png', sizes: '1024x1024', type: 'image/png' },
+    apple: { url: '/images/logos/COSMT.png', sizes: '180x180', type: 'image/png' },
   },
   openGraph: {
     title: "COSMAT - Premium Beauty & Hair Care Products",

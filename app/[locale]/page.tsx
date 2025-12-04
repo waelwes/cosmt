@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { PageLayout } from '../../components/layout/PageLayout';
 import { HeroSlider } from '../../components/sections/HeroSlider';
 import { TrendingProducts } from '../../components/sections/TrendingProducts';
+import { BestSellers } from '../../components/sections/BestSellers';
+import { NewArrivals } from '../../components/sections/NewArrivals';
 import { BrandSections } from '../../components/sections/BrandSections';
 import { ProductShowcases } from '../../components/sections/ProductShowcases';
 import { PromotionalBanners } from '../../components/sections/PromotionalBanners';
@@ -53,71 +55,38 @@ export default async function LocaleHomePage({
             buttonText: 'Read More',
             size: 'small'
           },
-          {
-            id: 3,
-            image: '/images/hero/fino-cover.jpg',
-            title: 'New Arrivals',
-            subtitle: 'Latest Products',
-            description: 'Fresh beauty essentials',
-            link: '/categories',
-            buttonText: 'Shop Now',
-            size: 'medium'
-          }
+
         ]}
       />
 
       {/* Trending Products */}
       <TrendingProducts />
 
-      {/* Promotional Banner 2 - Best Sellers */}
+      {/* Promotional banner below Trending Products */}
       <SinglePromotionalBanner
-        image="/images/PROM/GIRL.png"
-        title="Best Sellers"
-        subtitle="Top Rated"
-        description="Customer favorites"
+        image="/images/PROM/TRENDING_BANNER.jpg"
+        title="Trending Now — Limited Offer"
+        subtitle="Best Picks"
+        description="Hot deals on trending products"
         link="/categories"
-        buttonText="Shop Now"
-        size="medium"
+        buttonText="Shop Trending"
+        size="large"
       />
 
-      {/* Mixed Promotional Banners - 3 Banners */}
-      <MixedPromotionalBanners
-        banners={[
-          {
-            id: 1,
-            image: '/images/hero/fino-cover.jpg',
-            title: 'Makeup',
-            subtitle: 'Trending Now',
-            description: 'Latest makeup trends',
-            link: '/categories',
-            buttonText: 'Explore',
-            size: 'small'
-          },
-          {
-            id: 2,
-            image: '/images/hero/fino-cover.jpg',
-            title: 'Premium Products',
-            subtitle: 'Luxury Collection',
-            description: 'High-end beauty essentials',
-            link: '/categories',
-            buttonText: 'Discover',
-            size: 'medium'
-          },
-          {
-            id: 3,
-            image: '/images/PROM/GIRL.png',
-            title: 'Skincare',
-            subtitle: 'Daily Routine',
-            description: 'Essential care products',
-            link: '/categories',
-            buttonText: 'Shop Now',
-            size: 'small'
-          }
-        ]}
-      />
+      {/* Best Sellers */}
+      <BestSellers />
+      {/* New Arrivals (placed directly after Best Sellers to match spacing) */}
+      <NewArrivals />
+      {/* New Arrivals (moved below to appear above Summer Sale) */}
+
+
+
+      
 
       {/* Product Showcases */}
       <ProductShowcases />
+
+      {/* New Arrivals (moved earlier) - removed duplicate here */}
 
       {/* Single Promotional Banner - Summer Sale */}
       <SinglePromotionalBanner

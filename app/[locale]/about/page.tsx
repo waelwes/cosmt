@@ -1,3 +1,5 @@
+'use client';
+
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { PageLayout } from '../../../components/layout/PageLayout';
@@ -123,7 +125,7 @@ const aboutContent = {
 export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
   const { locale } = params;
   const content = aboutContent[locale as keyof typeof aboutContent] || aboutContent.en;
-  
+
   return {
     title: content.title,
     description: content.description,
@@ -139,7 +141,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
 export default function AboutPage({ params }: { params: { locale: string } }) {
   const { locale } = params;
   const content = aboutContent[locale as keyof typeof aboutContent] || aboutContent.en;
-  
+
   return (
     <PageLayout>
       {/* Hero Section */}

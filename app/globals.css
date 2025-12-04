@@ -45,7 +45,7 @@ input[type="checkbox"]:checked::before {
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
   scrollbar-width: none;  /* Firefox */
 }
-.scrollbar-hide::-webkit-scrollbar { 
+.scrollbar-hide::-webkit-scrollbar {
   display: none;  /* Safari and Chrome */
 }
 
@@ -53,7 +53,7 @@ input[type="checkbox"]:checked::before {
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
   scrollbar-width: none;  /* Firefox */
 }
-.hide-scrollbar::-webkit-scrollbar { 
+.hide-scrollbar::-webkit-scrollbar {
   display: none;  /* Safari and Chrome */
 }
 
@@ -78,7 +78,7 @@ input[type="checkbox"]:checked::before {
   --cosmt-gray-200: #e5e7eb;
   --cosmt-border: #eef2f6;
   --main-bg: #f8fafc;
-  
+
   /* Customizable section variables */
   --hero-bg-color: #ffffff;
   --hero-height: 350px;
@@ -94,12 +94,12 @@ input[type="checkbox"]:checked::before {
   --color-foreground: var(--cosmt-text);
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono);
-  
+
   /* Brand Colors */
   --color-cosmt-primary: var(--cosmt-primary-soft);
   --color-cosmt-primary-dark: var(--cosmt-primary-soft-dark);
   --color-cosmt-primary-light: var(--cosmt-primary-light);
-  
+
   /* Dark Mode Configuration */
   --color-dark-bg: #111827;
   --color-dark-surface: #1f2937;
@@ -199,76 +199,6 @@ html[dir="rtl"] .flex-row-reverse {
   flex-direction: row !important;
 }
 
-/* Fix for admin header controls */
-html[dir="rtl"] .space-x-4 > * + * {
-  margin-left: 0 !important;
-  margin-right: 1rem !important;
-}
-
-html[dir="rtl"] .space-x-2 > * + * {
-  margin-left: 0 !important;
-  margin-right: 0.5rem !important;
-}
-
-/* Fix for admin sidebar navigation - using logical properties */
-
-html[dir="rtl"] .pl-3 {
-  padding-left: 0 !important;
-  padding-right: 0.75rem !important;
-}
-
-html[dir="rtl"] .pr-3 {
-  padding-right: 0 !important;
-  padding-left: 0.75rem !important;
-}
-
-html[dir="rtl"] .pl-4 {
-  padding-left: 0 !important;
-  padding-right: 1rem !important;
-}
-
-html[dir="rtl"] .pr-4 {
-  padding-right: 0 !important;
-  padding-left: 1rem !important;
-}
-
-html[dir="rtl"] .pl-6 {
-  padding-left: 0 !important;
-  padding-right: 1.5rem !important;
-}
-
-html[dir="rtl"] .pr-6 {
-  padding-right: 0 !important;
-  padding-left: 1.5rem !important;
-}
-
-html[dir="rtl"] .left-0 {
-  left: auto !important;
-  right: 0 !important;
-}
-
-html[dir="rtl"] .right-0 {
-  right: auto !important;
-  left: 0 !important;
-}
-
-html[dir="rtl"] .justify-start {
-  justify-content: flex-end !important;
-}
-
-html[dir="rtl"] .justify-end {
-  justify-content: flex-start !important;
-}
-
-/* Additional RTL fixes */
-html[dir="rtl"] .flex-row {
-  flex-direction: row-reverse !important;
-}
-
-html[dir="rtl"] .flex-row-reverse {
-  flex-direction: row !important;
-}
-
 html[dir="rtl"] .items-start {
   align-items: flex-end !important;
 }
@@ -345,7 +275,7 @@ textarea {
 }
 
 /* Specific admin header styling */
-[data-admin="true"] .bg-white.dark\\:bg-gray-800 {
+[data-admin="true"] .bg-white.dark\:bg-gray-800 {
   background-color: #ffffff !important;
 }
 
@@ -490,7 +420,9 @@ div[data-admin="true"] .admin-header {
 
 /* Hide scrollbars when not needed */
 .overflow-x-auto {
+  overflow-x: auto;
   scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
 }
 
 .overflow-x-auto::-webkit-scrollbar {
@@ -1019,7 +951,7 @@ html body div[data-admin="true"] header.admin-header.w-full.bg-white {
   --tw-ring-offset-width: 0 !important;
 }
 
-/* Force remove green borders on ALL sidebar elements */
+/* Force remove all borders from sidebar elements */
 [data-admin="true"] .admin-sidebar button,
 [data-admin="true"] .admin-sidebar a,
 [data-admin="true"] .admin-sidebar div,
@@ -1726,7 +1658,7 @@ body:not([data-admin="true"]) .rounded-lg {
 /* Admin Card Border Radius - 6px (only for admin pages, exclude dashboard cards) */
 [data-admin="true"] .rounded-lg:not(.rounded-2xl),
 [data-admin="true"] .bg-white.rounded-lg:not(.rounded-2xl),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg:not(.rounded-2xl),
+[data-admin="true"] .bg-white.dark\:bg-gray-800.rounded-lg:not(.rounded-2xl),
 [data-admin="true"] [class*="bg-white"].rounded-lg:not(.rounded-2xl),
 [data-admin="true"] [class*="bg-gray-800"].rounded-lg:not(.rounded-2xl),
 [data-admin="true"] .border.rounded-lg:not(.rounded-2xl),
@@ -1740,20 +1672,20 @@ body:not([data-admin="true"]) .rounded-lg {
 
 /* Admin Cards Background Color - #f9f9f9 (exclude dashboard cards, sidebar, categories page, and buttons) */
 [data-admin="true"] .bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .bg-white.dark\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
 [data-admin="true"] [class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
 [data-admin="true"] .bg-white.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .bg-white.dark\:bg-gray-800.rounded-lg:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
 [data-admin="true"] .border.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
 [data-admin="true"] .border-gray-200.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
 [data-admin="true"] .border-gray-700.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
 [data-admin="true"] div.bg-white:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
-[data-admin="true"] div.bg-white.dark\\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] div.bg-white.dark\:bg-gray-800:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
 [data-admin="true"] div[class*="bg-white"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *) {
   background-color: #f9f9f9 !important;
 }
 
-/* More specific admin card background override (exclude dashboard cards, sidebar, categories page, and buttons) */
+/* More specific admin card override (exclude dashboard cards, sidebar, categories page, and buttons) */
 [data-admin="true"] div[class*="bg-white"][class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
 [data-admin="true"] div[class*="bg-white"][class*="border"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
 [data-admin="true"] .bg-white[class*="rounded-lg"]:not(.rounded-md):not(.admin-sidebar):not(.admin-sidebar *):not(.categories-page *):not(button):not(button *),
@@ -1762,12 +1694,12 @@ body:not([data-admin="true"]) .rounded-lg {
 }
 
 /* Force admin cards background - highest specificity (exclude dashboard cards, categories page, and buttons) */
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700:not(.rounded-md):not(.categories-page *):not(button):not(button *) {
+[data-admin="true"] .bg-white.dark\:bg-gray-800.rounded-lg.border.border-gray-200.dark\:border-gray-700:not(.rounded-md):not(.categories-page *):not(button):not(button *) {
   background-color: #f9f9f9 !important;
 }
 
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-4:not(.rounded-md):not(.categories-page *):not(button):not(button *),
-[data-admin="true"] .bg-white.dark\\:bg-gray-800.rounded-lg.border.border-gray-200.dark\\:border-gray-700.p-6:not(.rounded-md):not(.categories-page *):not(button):not(button *) {
+[data-admin="true"] .bg-white.dark\:bg-gray-800.rounded-lg.border.border-gray-200.dark\:border-gray-700.p-4:not(.rounded-md):not(.categories-page *):not(button):not(button *),
+[data-admin="true"] .bg-white.dark\:bg-gray-800.rounded-lg.border.border-gray-200.dark\:border-gray-700.p-6:not(.rounded-md):not(.categories-page *):not(button):not(button *) {
   background-color: #f9f9f9 !important;
 }
 
@@ -1978,7 +1910,6 @@ body:not([data-admin="true"]) .rounded-lg {
 [data-admin="true"] input[type="number"]:focus,
 [data-admin="true"] input[type="tel"]:focus,
 [data-admin="true"] input[type="url"]:focus,
-[data-admin="true"] input[type="search"]:focus,
 [data-admin="true"] input[type="date"]:focus,
 [data-admin="true"] input[type="time"]:focus,
 [data-admin="true"] input[type="datetime-local"]:focus,
@@ -2044,12 +1975,12 @@ body:not([data-admin="true"]) .rounded-lg {
 }
 
 /* Override dark mode background classes on inputs */
-[data-admin="true"] input.dark\\:bg-gray-700,
-[data-admin="true"] input.dark\\:bg-gray-800,
-[data-admin="true"] select.dark\\:bg-gray-700,
-[data-admin="true"] select.dark\\:bg-gray-800,
-[data-admin="true"] textarea.dark\\:bg-gray-700,
-[data-admin="true"] textarea.dark\\:bg-gray-800,
+[data-admin="true"] input.dark\:bg-gray-700,
+[data-admin="true"] input.dark\:bg-gray-800,
+[data-admin="true"] select.dark\:bg-gray-700,
+[data-admin="true"] select.dark\:bg-gray-800,
+[data-admin="true"] textarea.dark\:bg-gray-700,
+[data-admin="true"] textarea.dark\:bg-gray-800,
 [data-admin="true"] input[class*="dark:bg-gray-700"],
 [data-admin="true"] input[class*="dark:bg-gray-800"],
 [data-admin="true"] select[class*="dark:bg-gray-700"],
@@ -2090,12 +2021,12 @@ body:not([data-admin="true"]) .rounded-lg {
 }
 
 /* Specific override for inputs with dark mode classes */
-[data-admin="true"] input.bg-white.dark\\:bg-gray-700,
-[data-admin="true"] input.bg-white.dark\\:bg-gray-800,
-[data-admin="true"] select.bg-white.dark\\:bg-gray-700,
-[data-admin="true"] select.bg-white.dark\\:bg-gray-800,
-[data-admin="true"] textarea.bg-white.dark\\:bg-gray-700,
-[data-admin="true"] textarea.bg-white.dark\\:bg-gray-800 {
+[data-admin="true"] input.bg-white.dark\:bg-gray-700,
+[data-admin="true"] input.bg-white.dark\:bg-gray-800,
+[data-admin="true"] select.bg-white.dark\:bg-gray-700,
+[data-admin="true"] select.bg-white.dark\:bg-gray-800,
+[data-admin="true"] textarea.bg-white.dark\:bg-gray-700,
+[data-admin="true"] textarea.bg-white.dark\:bg-gray-800 {
   background-color: #ffffff !important;
   background: #ffffff !important;
 }
@@ -2186,9 +2117,9 @@ body:not([data-admin="true"]) .rounded-lg {
   background: #ffffff !important;
 }
 
-[data-admin="true"] .dark\\:bg-gray-700,
-[data-admin="true"] .dark\\:bg-gray-800,
-[data-admin="true"] .dark\\:bg-gray-900 {
+[data-admin="true"] .dark\:bg-gray-700,
+[data-admin="true"] .dark\:bg-gray-800,
+[data-admin="true"] .dark\:bg-gray-900 {
   background-color: #ffffff !important;
   background: #ffffff !important;
 }
@@ -2201,8 +2132,8 @@ body:not([data-admin="true"]) .rounded-lg {
   border-color: #eef2f6 !important;
 }
 
-[data-admin="true"] .dark\\:border-gray-600,
-[data-admin="true"] .dark\\:border-gray-700 {
+[data-admin="true"] .dark\:border-gray-600,
+[data-admin="true"] .dark\:border-gray-700 {
   border-color: #eef2f6 !important;
 }
 
@@ -2217,19 +2148,19 @@ body:not([data-admin="true"]) .rounded-lg {
 
 /* Force table styling consistency */
 [data-admin="true"] table thead.bg-gray-50,
-[data-admin="true"] table thead.dark\\:bg-gray-700 {
+[data-admin="true"] table thead.dark\:bg-gray-700 {
   background-color: #f8fafc !important;
   background: #f8fafc !important;
 }
 
 [data-admin="true"] table tbody.bg-white,
-[data-admin="true"] table tbody.dark\\:bg-gray-800 {
+[data-admin="true"] table tbody.dark\:bg-gray-800 {
   background-color: #ffffff !important;
   background: #ffffff !important;
 }
 
-[data-admin="true"] table tr.hover\\:bg-gray-50,
-[data-admin="true"] table tr.dark\\:hover\\:bg-gray-700 {
+[data-admin="true"] table tr.hover\:bg-gray-50,
+[data-admin="true"] table tr.dark\:hover\:bg-gray-700 {
   background-color: #f8fafc !important;
   background: #f8fafc !important;
 }
@@ -2885,9 +2816,7 @@ input[type="reset"][class*="rounded"] {
 .tab-navigation button[class*="text-green-600"],
 .tab-navigation button[class*="text-[#00514B]"],
 [data-admin="true"] .tab-navigation button[class*="text-green-600"],
-[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"],
-.tab-navigation button.active,
-[data-admin="true"] .tab-navigation button.active {
+[data-admin="true"] .tab-navigation button[class*="text-[#00514B]"] {
   border: none !important;
   border-bottom: 2px solid #003d38 !important;
   border-color: #003d38 !important;
@@ -3230,9 +3159,9 @@ button[class*="text-[#00514B]"].tab-navigation,
 
 /* Categories Page - Force white background with highest specificity */
 [data-admin="true"] .categories-page .bg-white,
-[data-admin="true"] .categories-page .bg-white.dark\\:bg-gray-800\\/50,
+[data-admin="true"] .categories-page .bg-white.dark\:bg-gray-800\/50,
 [data-admin="true"] .categories-page .analytics-card.bg-white,
-[data-admin="true"] .categories-page .analytics-card.bg-white.dark\\:bg-gray-800\\/50 {
+[data-admin="true"] .categories-page .analytics-card.bg-white.dark\:bg-gray-800\/50 {
   background-color: #ffffff !important;
   background: #ffffff !important;
   border: 1px solid #eef2f6 !important;
@@ -3378,6 +3307,7 @@ button[class*="text-[#00514B]"].tab-navigation,
 /* RTL card content alignment */
 [dir="rtl"] .dashboard-card {
   direction: rtl;
+  text-align: right;
 }
 
 [dir="rtl"] .dashboard-card h1,

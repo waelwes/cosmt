@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { ApiConnectionTest } from '@/components/debug/ApiConnectionTest';
 import { 
   Plus, 
   Search, 
@@ -866,11 +865,6 @@ name,brand,price,originalPrice,stock,status,rating,reviews,image,isBestSeller,is
 
   return (
     <div className="space-y-4">
-
-      
-      {/* API Connection Test - Remove this after debugging */}
-      <ApiConnectionTest />
-      
       {/* Single Combined Card */}
       <div className="analytics-card p-0">
         {/* Header */}

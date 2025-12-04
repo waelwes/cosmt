@@ -5,16 +5,16 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useRTL } from '../../contexts/UnifiedLanguageContext';
 import Image from 'next/image';
-import { 
-  LayoutDashboard, 
-  Package, 
-  ShoppingCart, 
-  Users, 
-  Warehouse, 
-  Megaphone, 
-  FileText, 
-  Settings, 
-  Grid3X3, 
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  Warehouse,
+  Megaphone,
+  FileText,
+  Settings,
+  Grid3X3,
   HelpCircle,
   X,
   BarChart3,
@@ -66,7 +66,7 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
   const pathname = usePathname();
   const { isRTL, isArabic, direction } = useRTL();
   const [expandedTabs, setExpandedTabs] = React.useState<string[]>(['Dashboard']);
-  
+
   // Prevent body scroll when sidebar is open on mobile
   React.useEffect(() => {
     if (isOpen) {
@@ -74,17 +74,17 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
     } else {
       document.body.classList.remove('sidebar-open');
     }
-    
+
     // Cleanup on unmount
     return () => {
       document.body.classList.remove('sidebar-open');
     };
   }, [isOpen]);
-  
+
 
   const toggleTab = (tabTitle: string) => {
-    setExpandedTabs(prev => 
-      prev.includes(tabTitle) 
+    setExpandedTabs(prev =>
+      prev.includes(tabTitle)
         ? prev.filter(tab => tab !== tabTitle)
         : [...prev, tabTitle]
     );
@@ -125,7 +125,7 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
       adminUser: { en: 'Admin User', ar: 'مستخدم الإدارة' },
       adminEmail: { en: 'admin@cosmat.com', ar: 'admin@cosmat.com' }
     };
-    
+
     return translations[key] ? translations[key][isArabic ? 'ar' : 'en'] : key;
   };
 
@@ -255,144 +255,123 @@ export function AdminSidebar({ isOpen, onClose, isDarkMode, toggleDarkMode }: Ad
     <>
       {/* Mobile overlay */}
       {isOpen && (
-        <div 
+        <div
           className="mobile-sidebar-overlay lg:hidden"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar Container */}
-      <div 
-        className={`fixed inset-y-0 z-[70] w-64 transform transition-transform duration-300 ease-in-out ${
-          isRTL 
-            ? `right-0 ${isOpen ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0`
-            : `left-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`
-        }`}
+      <div
+        className={`fixed inset-y-0 z-[70] w-64 transform transition-transform duration-300 ease-in-out ${isRTL
+          ? `right-0 ${isOpen ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0`
+          : `left-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`
+          }`}
       >
         {/* Sidebar */}
-        <div 
+        <div
           className={`admin-sidebar w-full h-full flex flex-col bg-black dark:bg-black ${isOpen ? 'open' : ''}`}
-          style={{ 
-            backgroundColor: '#000000',
-            direction: direction,
-            textAlign: isRTL ? 'right' : 'left'
-          }}
         >
-        {/* Header Section - Logo Only */}
-        <div className="px-4 py-4 relative">
-          {/* Close button - positioned absolutely */}
-          <button
-            onClick={onClose}
-            className="lg:hidden absolute right-4 top-1/2 transform -translate-y-1/2 p-3 text-white hover:bg-gray-700 transition duration-150 touch-manipulation"
-            style={{ borderRadius: '0.25rem', minWidth: '44px', minHeight: '44px' }}
-            title="Close Navigation Menu"
-          >
-            <X className="w-6 h-6" />
-          </button>
-          
-          {/* Logo aligned with navigation items */}
-          <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-            <Link href="/admin/dashboard" className="flex items-center px-3">
-              <Image
-                src="/images/logos/COSMT.png"
-                alt="COSMT Logo"
-                width={80}
-                height={24}
-                className="h-6 w-auto"
-              />
-            </Link>
-          </div>
-        </div>
+          {/* Header Section - Logo Only */}
+          <div className="px-4 py-4 relative">
+            {/* Close button - positioned absolutely */}
+            <button
+              onClick={onClose}
+              className="lg:hidden absolute right-4 top-1/2 transform -translate-y-1/2 p-3 text-white hover:bg-gray-700 transition duration-150 touch-manipulation"
+              style={{ borderRadius: '0.25rem', minWidth: '44px', minHeight: '44px' }}
+              title="Close Navigation Menu"
+            >
+              <X className="w-6 h-6" />
+            </button>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto sidebar-scrollbar">
-          {menuItems.map((item) => (
-            <div key={item.title}>
-              {/* Parent Item */}
-              <div className="mb-1">
-                {item.children ? (
-                  <button
-                    onClick={() => toggleTab(item.title)}
-                    className={`w-full flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} justify-between px-3 py-2 text-sm font-medium transition-colors duration-200 text-white`}
-                    style={{
-                      backgroundColor: isActive(item.href) || isParentActive(item.children) ? '#2e2e33' : 'transparent',
-                      borderRadius: '0.25rem'
-                    }}
-                  >
-                    <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                      <item.icon className="w-5 h-5 me-3" />
-                      {item.title}
-                    </div>
-                    <ChevronDown 
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        expandedTabs.includes(item.title) ? 'rotate-180' : ''
-                      }`} 
-                    />
-                  </button>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className={`w-full flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} px-3 py-2 text-sm font-medium transition-colors duration-200 text-white`}
-                    style={{
-                      backgroundColor: isActive(item.href) ? '#2e2e33' : 'transparent',
-                      borderRadius: '0.25rem'
-                    }}
-                  >
-                    <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                      <item.icon className="w-5 h-5 me-3" />
-                      {item.title}
-                    </div>
-                  </Link>
+            {/* Logo aligned with navigation items */}
+            <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+              <Link href="/admin/dashboard" className="flex items-center px-3">
+                <Image
+                  src="/images/logos/COSMT.png"
+                  alt="COSMT Logo"
+                  width={80}
+                  height={24}
+                  className="h-6 w-auto"
+                />
+              </Link>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto sidebar-scrollbar">
+            {menuItems.map((item) => (
+              <div key={item.title}>
+                {/* Parent Item */}
+                <div className="mb-1">
+                  {item.children ? (
+                    <button
+                      onClick={() => toggleTab(item.title)}
+                      className={`w-full flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} justify-between px-3 py-2 text-sm font-medium transition-colors duration-200 text-white rounded-md ${isActive(item.href) || isParentActive(item.children) ? 'active' : ''}`}
+                    >
+                      <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+                        <item.icon className="w-5 h-5 me-3" />
+                        {item.title}
+                      </div>
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-200 ${expandedTabs.includes(item.title) ? 'rotate-180' : ''
+                          }`}
+                      />
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className={`w-full flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} px-3 py-2 text-sm font-medium transition-colors duration-200 text-white rounded-md ${isActive(item.href) ? 'active' : ''}`}
+                    >
+                      <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+                        <item.icon className="w-5 h-5 me-3" />
+                        {item.title}
+                      </div>
+                    </Link>
+                  )}
+                </div>
+
+                {/* Children Items */}
+                {expandedTabs.includes(item.title) && item.children && (
+                  <div className="ms-6 space-y-1">
+                    {item.children.map((child, index) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className={`block ps-5 pe-2 py-1.5 text-sm transition-colors duration-200 text-white rounded-md ${isActive(child.href) ? 'font-medium active' : 'font-normal'}`}
+                      >
+                        {child.title}
+                      </Link>
+                    ))}
+                  </div>
                 )}
               </div>
+            ))}
+          </nav>
 
-              {/* Children Items */}
-              {expandedTabs.includes(item.title) && item.children && (
-                <div className="ms-6 space-y-1">
-                  {item.children.map((child, index) => (
-                    <Link 
-                      key={child.href} 
-                      href={child.href}
-                      className="block ps-5 pe-2 py-1.5 text-sm transition-colors duration-200 text-white"
-                      style={{
-                        backgroundColor: isActive(child.href) ? '#2e2e33' : 'transparent',
-                        fontWeight: isActive(child.href) ? '500' : undefined,
-                        borderRadius: '0.25rem'
-                      }}
-                    >
-                      {child.title}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </nav>
+          {/* Back to Site */}
+          <div className="px-4 py-3">
+            <a
+              href="/"
+              className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} px-3 py-2 text-sm text-white transition-colors duration-200 rounded-md`}
+            >
+              <ExternalLink className="w-4 h-4 me-3" />
+              {getTranslation('backToSite')}
+            </a>
+          </div>
 
-        {/* Back to Site */}
-        <div className="px-4 py-3">
-          <a
-            href="/"
-            className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'} px-3 py-2 text-sm text-white transition-colors duration-200`}
-            style={{ borderRadius: '0.25rem' }}
-          >
-            <ExternalLink className="w-4 h-4 me-3" />
-            {getTranslation('backToSite')}
-          </a>
-        </div>
-
-        {/* Footer */}
-        <div className="p-4">
-          <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-            <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center">
-              <UserCog className="w-5 h-5 text-gray-300" />
-            </div>
-            <div className="ms-3">
-              <p className="text-sm font-medium text-gray-100">{getTranslation('adminUser')}</p>
-              <p className="text-xs text-gray-400">{getTranslation('adminEmail')}</p>
+          {/* Footer */}
+          <div className="p-4">
+            <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+              <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center">
+                <UserCog className="w-5 h-5 text-gray-300" />
+              </div>
+              <div className="ms-3">
+                <p className="text-sm font-medium text-gray-100">{getTranslation('adminUser')}</p>
+                <p className="text-xs text-gray-400">{getTranslation('adminEmail')}</p>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </>
